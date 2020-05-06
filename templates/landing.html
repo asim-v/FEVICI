@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>FEVICI</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/landing-style.css')}}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">        
+</head>
+
+<body>
+    <!-- partial:index.partial.html -->
+    <canvas id=c></canvas>
+    <!-- partial -->
+    <script  src="{{ url_for('static',filename='js/landing-script.js') }}"></script>
+    <header class=fancy>
+        <div class="container">
+            <div class="header fancy">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="desc">Si tienes entre 13 y 18 años, nos encantaría que te unas a nosotros para compartir tus mejores ideas con el mundo...</div><br>
+                        <a href="{{url_for('dashboard')}}" class="btn btn-primary" style="  background-color: transparent;
+  border-color: #ccc; font-size: 20px;border-radius: 20px;" >Regisrarse</a>
+                    </div>       
+                    <div class="col-lg-6">
+                        <div class="ul">
+                            <div class="row"><h1 class="title"><e class="purple">F</e>eria</h1></div>
+                            <div class="row"><h1 class="title"><e class="purple">V</e>irtual de</h1></div>
+                            <div class="row"><h1 class="title"><e class="purple">C</e>iencias e </h1></div>
+                            <div class="row"><h1 class="title"><e class="purple">I</e>ngenierias </h1></div>
+                            <div class="row"><h1 class="title"><e class="purple weak float-right">2020</e></h1></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    
+</body>s
+</html>

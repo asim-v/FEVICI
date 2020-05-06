@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="es" >
+<head>
+  <meta charset="UTF-8">
+  <title>FEVICI</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/dashboard-style.css')}}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<head>
+		<title></title>
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+		<div id="et_social_wrapper" class="et_social">
+			<div id="et_social_header">
+				<div id="et_social_logo" href="{{url_for('index')}}" ><img src="{{url_for('static', filename='img/white.png')}}" style="height:100%;" class="et_social_button"></div>
+				<ul>
+                    <li><a href="#" id="et_social_tab_content_importexport" class="et_social_icon_importexport et_social_icon"><span>Registrarse</span></a></li>               
+					
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+			<div id="et_social_navigation">
+				<ul>
+					<li><a href="#" class="et_social_icon_networks et_social_icon"><span>Social Sharing</span></a>
+						<ul class="et_social_sharing_nav current_section">
+							<li><a href="#" id="et_social_tab_content_locations" class="et_social_icon_locations et_social_icon current"><span>Locations</span></a></li>
+							<li><a href="#" id="et_social_tab_content_networks_share" class="et_social_icon_networks et_social_icon"><span>Networks</span></a></li>
+							<li><a href="#" id="et_social_tab_content_sidebar" class="et_social_icon_sidebar et_social_icon"><span>Sidebar</span></a></li>
+							<li><a href="#" id="et_social_tab_content_inline" class="et_social_icon_inline et_social_icon"><span>Inline</span></a></li>
+							<li><a href="#" id="et_social_tab_content_popup" class="et_social_icon_popup et_social_icon"><span>Pop Up</span></a></li>
+							<li><a href="#" id="et_social_tab_content_flyin" class="et_social_icon_flyin et_social_icon"><span>Fly In</span></a></li>
+							<li><a href="#" id="et_social_tab_content_media" class="et_social_icon_image et_social_icon"><span>On Media</span></a></li>
+						</ul>
+					</li>
+					<li><a href="#" class="et_social_icon_follow et_social_icon"><span>Social Follow</span></a>
+						<ul class="et_social_follow_nav">
+							<li><a href="#" id="et_social_tab_content_networks_follow" class="et_social_icon_networks et_social_icon"><span>Networks</span></a></li>
+							<li><a href="#" id="et_social_tab_content_widget" class="et_social_icon_widget et_social_icon"><span>Widget</span></a></li>
+							<li><a href="#" id="et_social_tab_content_shortcode" class="et_social_icon_shortcode et_social_icon"><span>Shortcode</span></a></li>
+						</ul>
+					</li>
+
+					<li><a href="#" class="et_social_icon_importexport et_social_icon"><span>Graphs</span></a>
+						<ul class="et_social_follow_nav">
+							<li><a href="#" id="et_social_tab_content_stats" class="et_social_icon_stats et_social_icon"><span>Ingresar</span></a></li>           
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div id="et_social_content">
+				<form>
+
+					<div class="et_social_tab_content et_social_tab_content_locations et_tab_selected">
+						<div class="et_social_row">
+							<h1>Manage Locations</h1>
+							<p>You can select any combination of the four placements below.</p>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<div class="et_social_location et_social_multi_selectable  et_social_icon"><div class="et_social_location_tile"><h1>Sidebar</h1><div class="et_social_location_content"></div><div class="et_social_location_icons et_social_location_icons_sidebar"></div></div><input class="et_social_toggle" type="hidden" id="et_check_location_sidebar" name="location_sidebar" value="off"></div>
+							<div class="et_social_location et_social_multi_selectable  et_social_icon"><div class="et_social_location_tile"><h1>Inline</h1><div class="et_social_location_content et_social_location_content_inline"></div><div class="et_social_location_icons et_social_location_icons_inline"></div></div><input class="et_social_toggle" type="hidden" id="et_check_location_inline" name="location_inline" value="off"></div>
+							<div class="et_social_location et_social_multi_selectable  et_social_icon"><div class="et_social_location_tile"><h1>Pop Up</h1><div class="et_social_location_content"><div class="et_social_location_icons et_social_location_icons_popup"></div></div></div><input class="et_social_toggle" type="hidden" id="et_check_location_popup" name="location_popup" value="off"></div>
+							<div class="et_social_location et_social_multi_selectable  et_social_icon"><div class="et_social_location_tile"><h1>Fly In</h1><div class="et_social_location_content"></div><div class="et_social_location_icons et_social_location_icons_flyin"></div></div><input class="et_social_toggle" type="hidden" id="et_check_location_flyin" name="location_flyin" value="off"></div>
+							<div class="et_social_location et_social_multi_selectable  et_social_icon"><div class="et_social_location_tile"><h1>Media</h1><div class="et_social_location_content et_social_location_content_media"><div class="et_social_location_icons et_social_location_icons_media"></div><i class="et_social_icon_image et_social_icon"></i></div></div><input type="hidden" class="et_social_toggle" id="et_check_location_media" name="location_media" value="off"></div>
+						</div>
+						<div class="et_social_row">
+							<h2>Note: <span><p>Selected locations will use the display settings defined from the menu on the left.</p></span></h2>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_networks_share">
+						 <div class="et_social_row">
+							<h1>Manage Networks</h1>
+							<p>Add and rearrange any combination of social networks below.</br> You can define the Network Label and Username to the right of each.</p>
+						</div>
+						<div class="et_social_networks et_social_row et_social_sortable">
+							<button class="et_social_icon et_social_addnetwork">Add Network</button>
+							<div class="et_social_network et_social_icon"><span class="et_social_facebook"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Facebook" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_twitter"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Twitter" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_googleplus"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Google+" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_buffer"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Buffer" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_netvibes"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Netvibes" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_rss"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="RSS" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+						</div>
+						<div class="et_social_row">
+							<h2>Note: <span><p>Selected networks apply to all selected locations in 'Locations' Settings.</p></span></h2>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_sidebar">
+						<div class="et_social_row">
+							<h1>Configure Sidebar Share Icons</h1>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_sidebar_style et_social_sidebar_style et_social_sidebar_flip et_social_icon et_social_single_selectable">
+								<ul>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_inline_style_1" value="on">
+							</div>
+							<div class="et_social_sidebar_style et_social_sidebar_border et_social_icon et_social_single_selectable">
+								<ul>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_inline_style_2" value="off">
+							</div>
+							<div class="et_social_sidebar_style et_social_sidebar_grow et_social_icon et_social_single_selectable">
+								<ul>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_inline_style_3" value="off">
+							</div>
+							<div class="et_social_sidebar_style et_social_sidebar_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_inline_style_4" value="off">
+							</div>
+							<div class="et_social_sidebar_style et_social_sidebar_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+									<li class="et_social_sidebar_style_tile et_social_icon"></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_inline_style_5" value="off">
+							</div>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_inline_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_inline_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_inline_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<!-- <li class="select"><p>Choose Location</p>
+									<select>
+										<option value="left" selected>Left</option>
+										<option value="right">Right</option>
+									</select>
+								</li> -->
+								<li class="select"><p>Intro Animation</p>
+									<select>
+										<option value="fadein">Fade In</option>
+										<option value="slideright" selected>Slide Right</option>
+										<option value="slideup">Slide Up</option>
+										<option value="slidedown">Slide Down</option>
+									</select>
+								</li>
+								<li class="et_social_checkbox clearfix"><p>Display Share Counts</p><input type="checkbox" id="checkbox_sharecounts_sidebar" name="sharecounts"><label for="checkbox_sharecounts_sidebar"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Shares</p><input type="checkbox" id="checkbox_totalshares_sidebar" name="totalshares"><label for="checkbox_totalshares_sidebar"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_sidebar" name="spacedicons"><label for="checkbox_spaced_sidebar"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Hide On Mobile Devices</p><input type="checkbox" id="checkbox_mobile_sidebar" name="mobileshare"><label for="checkbox_mobile_sidebar"></label></li>
+								<div style="clear:both;"></div>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Post Type Settings<span><p>Select the post types to display sidebar share icons</p></span></h2>
+							<ul class="inline">
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_posts_sidebar" name="sharecounts"><label for="checkbox_posts_sidebar"></label><p>Posts</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_pages_sidebar" name="totalshares"><label for="checkbox_pages_sidebar"></label><p>Pages</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_projects_sidebar" name="networknames"><label for="checkbox_projects_sidebar"></label><p>Projects</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_products_sidebar" name="stickysharebar"><label for="checkbox_products_sidebar"></label><p>Products</p></li>
+								<div style="clear:both;"></div>
+							</ul>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_inline">
+						<div class="et_social_row et_social_selection">
+							<h1>Configure Inline Share Icons</h1>
+						</div>
+						<div class="et_social_row">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_style et_social_flip et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_sidebar_style_1" value="on">
+							</div>
+							<div class="et_social_style et_social_darken et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_sidebar_style_2" value="off">
+							</div>
+							<div class="et_social_style et_social_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_sidebar_style_3" value="off">
+							</div>
+							<div class="et_social_style et_social_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_sidebar_style_4" value="off">
+							</div>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_sidebar_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_sidebar_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_sidebar_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Custom Title / Message</h2>
+							<textarea placeholder="Insert Text" rows="2"></textarea>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<li class="select"><p>Choose Location</p>
+									<select>
+										<option value="abovecontent" selected>Above Content</option>
+										<option value="belowcontent">Below Content</option>
+										<option value="abovebelowcontent">Above + Below</option>
+									</select>
+								</li>
+								<li class="select"><p>Icon Alignment</p>
+									<select>
+										<option value="left" selected>Left</option>
+										<option value="centered">Centered</option>
+										<option value="right">Right</option>
+									</select>
+								</li>
+								<li class="select"><p>Number of Columns</p>
+									<select>
+										<option value="autowidth" selected>Auto Width</option>
+										<option value="1col">1</option>
+										<option value="2col">2</option>
+										<option value="3col">3</option>
+										<option value="4col">4</option>
+										<option value="5col">5</option>
+										<option value="6col">6</option>
+									</select>
+								</li>
+								<li class="select"><p>Intro Animation</p>
+									<select>
+										<option value="fadein" selected>Fade In</option>
+										<option value="slideright">Slide Right</option>
+										<option value="slideup">Slide Up</option>
+										<option value="slidedown">Slide Down</option>
+									</select>
+								</li>
+								<li class="et_social_checkbox clearfix"><p>Display Share Counts</p><input type="checkbox" id="checkbox_sharecounts_inline" name="sharecounts"><label for="checkbox_sharecounts_inline"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Shares</p><input type="checkbox" id="checkbox_totalshares_inline" name="totalshares"><label for="checkbox_totalshares_inline"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display Network Names</p><input type="checkbox" id="checkbox_networknames_inline" name="networknames"><label for="checkbox_networknames_inline"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_inline" name="spacedicons" checked><label for="checkbox_spaced_inline"></label></li>
+								<!-- <li class="et_social_checkbox clearfix"><p>Enable Sticky Share Bar</p><input type="checkbox" id="checkbox_stickybar_inline" name="networknames"><label for="checkbox_stickybar_inline"></label></li> -->
+								<li class="et_social_checkbox clearfix"><p>Display On Mobile</p><input type="checkbox" id="checkbox_mobile_inline" name="mobileshare" checked><label for="checkbox_mobile_inline"></label></li>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Post Type Settings<span><p>Select the post types to display sidebar share icons</p></span></h2>
+							<ul class="inline">
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_posts_inline" name="sharecounts"><label for="checkbox_posts_inline"></label><p>Posts</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_pages_inline" name="totalshares"><label for="checkbox_pages_inline"></label><p>Pages</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_projects_inline" name="networknames"><label for="checkbox_projects_inline"></label><p>Projects</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_products_inline" name="stickysharebar"><label for="checkbox_products_inline"></label><p>Products</p></li>
+								<div style="clear:both;"></div>
+							</ul>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_popup">
+						<div class="et_social_row">
+							<h1>Configure Social Sharing Pop Up/h1>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_style et_social_flip et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_popup_style_1" value="on">
+							</div>
+							<div class="et_social_style et_social_darken et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_popup_style_2" value="off">
+							</div>
+							<div class="et_social_style et_social_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_popup_style_3" value="off">
+							</div>
+							<div class="et_social_style et_social_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_popup_style_4" value="off">
+							</div>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_popup_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_popup_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_popup_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Title</h2>
+							<textarea placeholder="Share This" rows="1"></textarea>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Message</h2>
+							<textarea placeholder="Insert Text" rows="2"></textarea>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<li class="select"><p>Text Alignment</p>
+									<select>
+										<option value="left" selected>Left</option>
+										<option value="centered">Centered</option>
+										<option value="right">Right</option>
+									</select>
+								</li>
+								<li class="select"><p>Number of Columns</p>
+									<select>
+										<option value="autowidth" selected>Auto Width</option>
+										<option value="1col">1</option>
+										<option value="2col">2</option>
+										<option value="3col">3</option>
+										<option value="4col">4</option>
+										<option value="5col">5</option>
+										<option value="6col">6</option>
+									</select>
+								</li>
+								<li class="select"><p>Intro Animation</p>
+									<select>
+										<option value="fadein" selected>Fade In</option>
+										<option value="slideright">Slide Right</option>
+										<option value="slideup">Slide Up</option>
+										<option value="slidedown">Slide Down</option>
+									</select>
+								</li>
+								<li class="et_social_checkbox clearfix"><p>Enable Automatic Pop Up</p><input type="checkbox" id="checkbox_auto_popup" name="autopopup"><label for="checkbox_auto_popup"></label></li>
+								<li class="input clearfix"><p>Pop Up Delay ( in seconds)</p><input placeholder="10" type="text" name="delay"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Trigger on Page Leave</p><input type="checkbox" id="checkbox_leavetrigger_popup" name="leavetrigger"><label for="checkbox_leavetrigger_popup"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Trigger at Bottom of Post</p><input type="checkbox" id="checkbox_bottomtrigger_popup" name="bottomtrigger"><label for="checkbox_bottomtrigger_popup"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display Share Counts</p><input type="checkbox" id="checkbox_sharecounts_popup" name="sharecounts"><label for="checkbox_sharecounts_popup"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Shares</p><input type="checkbox" id="checkbox_totalshares_popup" name="totalshares"><label for="checkbox_totalshares_popup"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display Network Names</p><input type="checkbox" id="checkbox_networknames_popup" name="networknames"><label for="checkbox_networknames_popup"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_popup" name="spacedicons" checked><label for="checkbox_spaced_popup"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display On Mobile</p><input type="checkbox" id="checkbox_mobile_popup" name="mobileshare" checked><label for="checkbox_mobile_popup"></label></li>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Post Type Settings<span><p>Select the post types to display sidebar share icons</p></span></h2>
+							<ul class="inline">
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_posts_popup" name="sharecounts"><label for="checkbox_posts_popup"></label><p>Posts</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_pages_popup" name="totalshares"><label for="checkbox_pages_popup"></label><p>Pages</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_projects_popup" name="networknames"><label for="checkbox_projects_popup"></label><p>Projects</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_products_popup" name="stickysharebar"><label for="checkbox_products_popup"></label><p>Products</p></li>
+								<div style="clear:both;"></div>
+							</ul>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_flyin">
+						<div class="et_social_row">
+							<h1>Configure Social Sharing Flyin/h1>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_style et_social_flip et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_flyin_style_1" value="on">
+							</div>
+							<div class="et_social_style et_social_darken et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_flyin_style_2" value="off">
+							</div>
+							<div class="et_social_style et_social_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_flyin_style_3" value="off">
+							</div>
+							<div class="et_social_style et_social_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_flyin_style_4" value="off">
+							</div>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_flyin_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_flyin_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_flyin_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Title</h2>
+							<textarea placeholder="Share This" rows="1"></textarea>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Message</h2>
+							<textarea placeholder="Insert Text" rows="2"></textarea>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<li class="select"><p>Choose Location</p>
+									<select>
+										<option value="bottomright" selected>Bottom Right</option>
+										<option value="bottomleft">Bottom Left</option>
+									</select>
+								</li>
+								<li class="select"><p>Text Alignment</p>
+									<select>
+										<option value="left" selected>Left</option>
+										<option value="centered">Centered</option>
+										<option value="right">Right</option>
+									</select>
+								</li>
+								<li class="select"><p>Number of Columns</p>
+									<select>
+										<option value="autowidth">Auto Width</option>
+										<option value="1col">1</option>
+										<option value="2col" selected>2</option>
+										<option value="3col">3</option>
+									</select>
+								</li>
+								<li class="select"><p>Intro Animation</p>
+									<select>
+										<option value="fadein">Fade In</option>
+										<option value="slideright">Slide Right</option>
+										<option value="slideup" selected>Slide Up</option>
+										<option value="slidedown">Slide Down</option>
+									</select>
+								</li>
+								<li class="et_social_checkbox clearfix"><p>Enable Automatic Pop Up</p><input type="checkbox" id="checkbox_auto_flyin" name="autoflyin"><label for="checkbox_auto_flyin"></label></li>
+								<li class="input clearfix"><p>Fly In Delay ( in seconds)</p><input placeholder="10" type="text" name="delay"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Trigger on Page Leave</p><input type="checkbox" id="checkbox_leavetrigger_flyin" name="leavetrigger"><label for="checkbox_leavetrigger_flyin"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Trigger at Bottom of Post</p><input type="checkbox" id="checkbox_bottomtrigger_flyin" name="bottomtrigger"><label for="checkbox_bottomtrigger_flyin"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display Share Counts</p><input type="checkbox" id="checkbox_sharecounts_flyin" name="sharecounts"><label for="checkbox_sharecounts_flyin"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Shares</p><input type="checkbox" id="checkbox_totalshares_flyin" name="totalshares"><label for="checkbox_totalshares_flyin"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display Network Names</p><input type="checkbox" id="checkbox_networknames_flyin" name="networknames"><label for="checkbox_networknames_flyin"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_flyin" name="spacedicons" checked><label for="checkbox_spaced_flyin"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display On Mobile</p><input type="checkbox" id="checkbox_mobile_flyin" name="mobileshare" checked><label for="checkbox_mobile_flyin"></label></li>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Post Type Settings<span><p>Select the post types to display sidebar share icons</p></span></h2>
+							<ul class="inline">
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_posts_flyin" name="sharecounts"><label for="checkbox_posts_flyin"></label><p>Posts</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_pages_flyin" name="totalshares"><label for="checkbox_pages_flyin"></label><p>Pages</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_projects_flyin" name="networknames"><label for="checkbox_projects_flyin"></label><p>Projects</p></li>
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_products_flyin" name="stickysharebar"><label for="checkbox_products_flyin"></label><p>Products</p></li>
+								<div style="clear:both;"></div>
+							</ul>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_media">
+						<div class="et_social_row">
+							<h1>Configure Media Sharing Icons</h1>
+							<p>Media sharing is only applied to blog post content.</p>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_style et_social_flip et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_media_style_1" value="off">
+							</div>
+							<div class="et_social_style et_social_darken et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_media_style_2" value="off">
+							</div>
+							<div class="et_social_style et_social_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_media_style_3" value="off">
+							</div>
+							<div class="et_social_style et_social_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_media_style_4" value="on">
+							</div>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_media_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_media_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_media_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<li class="et_social_checkbox clearfix"><p>Display Share Counts</p><input type="checkbox" id="checkbox_sharecounts_media" name="sharecounts"><label for="checkbox_sharecounts_media"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Shares</p><input type="checkbox" id="checkbox_totalshares_media" name="totalshares"><label for="checkbox_totalshares_media"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display Network Names</p><input type="checkbox" id="checkbox_networknames_media" name="networknames"><label for="checkbox_networknames_media"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_media" name="spacedicons" checked><label for="checkbox_spaced_media"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display On Mobile</p><input type="checkbox" id="checkbox_mobile_media" name="mobileshare" checked><label for="checkbox_mobile_media"></label></li>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Post Type Settings<span><p>Media sharing is only available for blog post content</p></span></h2>
+							<ul class="inline">
+								<li class="et_social_checkbox"><input type="checkbox" id="checkbox_posts_media" name="sharecounts" checked><label for="checkbox_posts_media"></label><p>Posts</p></li>
+								<div style="clear:both;"></div>
+							</ul>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_networks_follow">
+						 <div class="et_social_row">
+							<h1>Manage Networks</h1>
+							<p>Add and rearrange any combination of social networks below.</br> You can define the Network Label and Username to the right of each.</p>
+						</div>
+						<div class="et_social_networks et_social_row et_social_sortable">
+							<button class="et_social_icon et_social_addnetwork">Add Network</button>
+							<div class="et_social_network et_social_icon"><span class="et_social_facebook"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Facebook" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_twitter"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Twitter" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_googleplus"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Google+" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_buffer"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Buffer" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_netvibes"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Netvibes" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_rss"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="RSS" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+							<div class="et_social_network et_social_icon"><span class="et_social_googleplus et_social_icon_googleplus"><a href="#" class="et_social_deletenetwork"></a></span><input type="text" placeholder="Google+" name="networklabel"><input type="text" placeholder="username" name="networkusername"></div>
+						</div>
+						<div class="et_social_row">
+							<h2>Note: <span><p>Selected networks apply to all widgets and shortcodes defined in the menu on the left.</p></span></h2>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_widget">
+						<div class="et_social_row">
+							<h1>Configure Social Follow Widget</h1>
+							<p>Any Monarch widget added to a widget area will use the following settings.</p>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_style et_social_flip et_social_icon et_social_single_selectable selected">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_widget_style_1" value="on">
+							</div>
+							<div class="et_social_style et_social_darken et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_widget_style_2" value="off">
+							</div>
+							<div class="et_social_style et_social_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_widget_style_3" value="off">
+							</div>
+							<div class="et_social_style et_social_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_widget_style_4" value="off">
+							</div>
+						</div>
+						<div class="et_social_row et_social_selection">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable selected"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_widget_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_widget_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_widget_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<li class="select"><p>Icon Placement</p>
+									<select>
+										<option value="top" selected>Top</option>
+										<option value="left">Left</option>
+									</select>
+								</li>
+								<li class="select"><p>Choose Number of Columns</p>
+									<select>
+										<option value="1col">1</option>
+										<option value="2col">2</option>
+										<option value="3col" selected>3</option>
+										<option value="4col">4</option>
+										<option value="autowidth">Auto Width</option>
+									</select>
+								</li>
+								<li class="et_social_checkbox clearfix"><p>Display Follow Counts</p><input type="checkbox" id="checkbox_followcounts_widget" name="sharecounts"><label for="checkbox_followcounts_widget"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Follows</p><input type="checkbox" id="checkbox_totalfollows_widget" name="totalfollows"><label for="checkbox_totalfollows_widget"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_widget" name="spacedicons" checked><label for="checkbox_spaced_widget"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display on Mobile</p><input type="checkbox" id="checkbox_mobile_widget" name="totalfollows"><label for="checkbox_mobile_widget"></label></li>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_shortcode">
+						<div class="et_social_row">
+							<h1>Configure Social Follow Shortcode</h1>
+							<p>Define settings and generate a unique shortcode below</p>
+						</div>
+						<div class="et_social_row">
+							<h2>Choose Icon Style</h2>
+							<div class="et_social_style et_social_flip et_social_icon et_social_single_selectable selected">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_shortcode_style_1" value="on">
+							</div>
+							<div class="et_social_style et_social_darken et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_shortcode_style_2" value="off">
+							</div>
+							<div class="et_social_style et_social_slide et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_shortcode_style_3" value="off">
+							</div>
+							<div class="et_social_style et_social_simple et_social_icon et_social_single_selectable">
+								<ul>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>100</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>200</span></section></section><span class="et_social_overlay"></span></li>
+									<li><i class="et_social_icon"></i><section class="network_label"><section class="et_social_count"><span>300</span></section></section><span class="et_social_overlay"></span></li>
+								</ul>
+								<input type="hidden" class="et_social_toggle" name="et_social_shortcode_style_4" value="off">
+							</div>
+						</div>
+						<div class="et_social_row">
+							<h2>Choose Icon Shape</h2>
+							<div class="et_social_shape et_social_icon et_social_single_selectable selected"><div class="et_social_shape_tile et_social_icon et_social_shape_rectangle"></div><input type="hidden" class="et_social_toggle" name="et_social_shortcode_shape_square" value="on"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_rounded"></div><input type="hidden" class="et_social_toggle" name="et_social_shortcode_shape_rounded" value="off"></div>
+							<div class="et_social_shape et_social_icon et_social_single_selectable"><div class="et_social_shape_tile et_social_icon et_social_shape_circle"></div><input type="hidden" class="et_social_toggle" name="et_social_shortcode_shape_circle" value="off"></div>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Display Settings</h2>
+							<ul>
+								<li class="select"><p>Icon Placement</p>
+									<select>
+										<option value="top" selected>Top</option>
+										<option value="left">Left</option>
+									</select>
+								</li>
+								<li class="select"><p>Choose Number of Columns</p>
+									<select>
+										<option value="1col">1</option>
+										<option value="2col">2</option>
+										<option value="3col">3</option>
+										<option value="4col" selected>4</option>
+										<option value="5col">5</option>
+										<option value="6col">6</option>
+										<option value="autowidth">Auto Width</option>
+									</select>
+								</li>
+								<li class="et_social_checkbox clearfix"><p>Display Follow Counts</p><input type="checkbox" id="checkbox_followcounts_shortcode" name="sharecounts"><label for="checkbox_followcounts_shortcode"></label></li>
+								<li class="input clearfix"><p>Minimum Count Display</p><input placeholder="0" type="text" name="mincount"><span class="more_info et_social_icon"></span></li>
+								<li class="et_social_checkbox clearfix"><p>Display Total Follows</p><input type="checkbox" id="checkbox_totalfollows_shortcode" name="totalfollows"><label for="checkbo_totalfollows_shortcode"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Add Icon Spacing</p><input type="checkbox" id="checkbox_spaced_shortcode" name="spacedicons" checked><label for="checkbox_spaced_shortcode"></label></li>
+								<li class="et_social_checkbox clearfix"><p>Display on Mobile</p><input type="checkbox" id="checkbox_mobile_shortcode" name="totalfollows" checked><label for="checkbox_mobile_shortcode"></label></li>
+							</ul>
+						</div>
+						<div class="et_social_form et_social_row">
+							<h2>Color Settings</h2>
+						</div>
+						<div class="et_social_shortcode_gen et_social_form et_social_row">
+							<button class="et_social_icon">Generate shortcode</button>
+							<textarea placeholder="Click the button above to generate your shortcode here" rows="6"></textarea>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_stats">
+						<div class="et_social_row">
+							<h1>Social Sharing Stats</h1>
+						</div>
+						<div id="et_social_globalstats" class="et_social_row">
+							<div class="et_social_globalstat et_social_globalstat_shares"><span>234</span><span class="et_social_globalstat_label"><p>Total Shares</p></span></div>
+							<div class="et_social_globalstat et_social_globalstat_likes"><span>234</span><span class="et_social_globalstat_label"><p>Total Likes</p></span></div>
+							<div class="et_social_globalstat et_social_globalstat_follows"><span>234</span><span class="et_social_globalstat_label"><p>Total Follows</p></span></div>
+						</div>
+						<div class="et_social_row">
+							<h2>Past 7 Days <span><p>230 Total Shares</p></h2>
+							<ul class="et_social_graph_week et_social_graph">
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="35"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li class="et_social_graph_last">
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+							</ul>
+							<h2>Past 30 Days <span><p>230 Total Shares</p></h2>
+							<ul class="et_social_graph_month et_social_graph">
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="35"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="35"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="35"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="35"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li class="et_social_graph_last">
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+							</ul>
+							<h2>Past 12 Months <span><p>230 Total Shares</p></h2>
+							<ul class="et_social_graph_year et_social_graph">
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="35"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="589">
+										<div type="facebook" value="200"></div>
+										<div type="twitter" value="160" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="69"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="523">
+										<div type="facebook" value="160"></div>
+										<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="425">
+										<div type="facebook" value="130"></div>
+										<div type="twitter" value="105" ></div>
+										<div type="googleplus" value="50"></div>
+										<div type="pinterest" value="75"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="25"></div>
+									</div>
+								</li>
+								<li>
+									<div value="245">
+										<div type="facebook" value="80"></div>
+										<div type="twitter" value="50" ></div>
+										<div type="googleplus" value="40"></div>
+										<div type="pinterest" value="30"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="15"></div>
+									</div>
+								</li>
+								<li>
+									<div value="137">
+										<div type="facebook" value="50"></div>
+										<div type="twitter" value="30" ></div>
+										<div type="googleplus" value="20"></div>
+										<div type="pinterest" value="17"></div>
+										<div type="dribbble" value="10"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+								<li>
+									<div value="367">
+										<div type="facebook" value="150"></div>
+										<div type="twitter" value="60" ></div>
+										<div type="googleplus" value="57"></div>
+										<div type="pinterest" value="40"></div>
+										<div type="dribbble" value="40"></div>
+										<div type="rss" value="20"></div>
+									</div>
+								</li>
+								<li class="et_social_graph_last">
+									<div value="523">
+                                        <div type="facebook" value="160"></div>
+								 		<div type="twitter" value="140" ></div>
+										<div type="googleplus" value="120"></div>
+										<div type="pinterest" value="63"></div>
+										<div type="dribbble" value="30"></div>
+										<div type="rss" value="10"></div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="et_social_tab_content et_social_tab_content_importexport">
+						<div class="et_social_row">
+							<h1>Import & Export</h1>
+						</div>
+					</div>
+
+					<div class="et_social_row et_social_save_changes">
+						<button class="et_social_icon">Save Changes</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+<!-- partial -->
+    <script  src="{{ url_for('static',filename='js/dashboard-js.js')}}"></script>
+
+</body>
+</html>
