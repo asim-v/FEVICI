@@ -2,8 +2,8 @@
 FROM python:3.6
 
 # 2
-RUN pip install Flask gunicorn sqlalchemy flask_session
-
+RUN pip install werkzeug==0.16.0
+RUN pip install Flask gunicorn sqlalchemy flask_session psycopg2
 # 3
 COPY / /app
 WORKDIR /app
