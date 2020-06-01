@@ -6,6 +6,7 @@
 <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase-auth.js"></script>
 <script src="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.js"></script>
 {% block scripts %}{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/dashboard-style.css')}}">
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
 {% block styles %}{% endblock %}
 {% if firebase_auth.api_key %}
@@ -25,7 +26,7 @@ ui.start("#firebaseui-auth-container", {
     signInSuccess: function(user, credential, redirectUrl) {
       user.getIdToken().then(function(token) {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "{{ firebase_auth.url_for('sign_in') }}", true);
+        xhr.open("POST", " http://127.0.0.1:5000/auth/sign-in", true);
         xhr.setRequestHeader("Content-Type", "application/jwt");
         xhr.onreadystatechange = function() {
           if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
