@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_session import Session
 from flask_firebase import FirebaseAuth
-from flask_login import LoginManager, UserMixin, login_user, logout_user
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 
 #import proyectos
@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/fevici.db'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['FIREBASE_API_KEY'] = ''
 app.config['FIREBASE_PROJECT_ID'] = ''
-app.config['FIREBASE_AUTH_SIGN_IN_OPTIONS'] = 'email'
+app.config['FIREBASE_AUTH_SIGN_IN_OPTIONS'] = 'email,google'
 
 
 
@@ -35,12 +35,12 @@ db.create_all()
 auth = FirebaseAuth(app)
 login_manager = LoginManager()
 
-login_manager.init_app(app)
 sess = Session()
 app.register_blueprint(auth.blueprint, url_prefix='/auth')
 #Session(app)
 
 sess.init_app(app)
+login_manager.init_app(app)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -59,8 +59,11 @@ class User(UserMixin, db.Model):
 def production_sign_in(token):
     account = User.query.filter_by(firebase_user_id=token['sub']).one_or_none()
     if account is None:
-        account = User(firebase_user_id=token['sub'])
+        print('save')
+        account = User(firebase_user_id=token['sub'], email=token['email'], email_verified=token['email_verified'],
+                       name=token['name'])
         db.session.add(account)
+        db.session.commit()
     account.email = token['email']
     account.email_verified = token['email_verified']
     account.name = token.get('name')
@@ -75,7 +78,6 @@ def sign_out():
 
 @login_manager.user_loader
 def load_user(account_id):
-    print(User.query.get(account_id))
     return User.query.get(account_id)
 
 
@@ -86,10 +88,10 @@ def authentication_required():
 
 @app.route('/')#Which page you want to request
 def index():#Any name
-	mensaje = "Saludos"
-	return render_template("landing.html",mensaje = mensaje)
+	return render_template("landing.html",mensaje = '')
 
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
     return render_template("dashboard.html")
