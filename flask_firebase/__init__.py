@@ -60,9 +60,7 @@ class FirebaseAuth:
     def init_app(self, app):
         app.extensions['firebase_auth'] = self
         self.debug = app.debug
-        print(self.debug)
         self.api_key = app.config.get('FIREBASE_API_KEY')
-        print(self.api_key)
         if self.api_key is None:
             return
         self.project_id = app.config['FIREBASE_PROJECT_ID']

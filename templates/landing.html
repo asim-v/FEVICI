@@ -22,8 +22,16 @@
                         <div class="desc">
                             {{ mensaje }}
                         </div><br>
-                        <a href="{{url_for('firebase_auth.widget')}}" class="btn btn-primary" style="  background-color: transparent;
-  border-color: #ccc; font-size: 20px;border-radius: 20px;" >Registrarse</a>
+                        {% if current_user.is_authenticated %}
+                         <h5 style="color: white"> Hola {{ current_user.name }}! </h5>
+                             <a href="{{url_for('firebase_auth.sign_out')}}" class="btn btn-primary" style="  background-color: transparent;
+  border-color: #ccc; font-size: 20px;border-radius: 20px;" >Salir</a>
+                             <a href="{{url_for('dashboard')}}" class="btn btn-primary" style="  background-color: transparent;
+  border-color: #ccc; font-size: 20px;border-radius: 20px;" >Dashboard</a>
+                        {% else %}
+                            <a href="{{url_for('firebase_auth.widget')}}" class="btn btn-primary" style="  background-color: transparent;
+  border-color: #ccc; font-size: 20px;border-radius: 20px;" >Entrar</a>
+                        {% endif %}
                     </div>       
                     <div class="col-lg-6">
                         <div class="ul">
