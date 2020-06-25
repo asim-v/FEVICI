@@ -5,7 +5,7 @@
    Create a new chat  
   */
   function create_new_note() {
-    $("#btn-create-new-chat").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating ...');
+    $("#btn-create-new-chat").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creando ...');
     fetch("/new-chat/create")
       .then((data) => {
         console.log(data);
@@ -18,7 +18,7 @@
         });
   }
   function project(){
-    $("#btn-go-to-project").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating ...');
+    $("#btn-go-to-project").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
     fetch("/project")
       .then((data) => {
         console.log(data);
@@ -78,7 +78,7 @@
             <h7 class="card-title">Users :</h7>
             <p class="card-text">{{ ', '.join(chat.get("users")) }}</p>
             <a href="/chat/{{ chat.get('nid') }}" class="btn btn-primary">Open</a> 
-            <a href="/chat/leave/{{ chat.get('nid') }}" class="btn btn-warning">Leave</a>
+            <a href="/chat/leave/{{ chat.get('nid') }}" id="leave" onclick="cancel()" class="btn btn-warning">Leave</a>
           </div>
         </div>
         {% endfor %}
@@ -89,6 +89,12 @@
 
   </div>
 
+<script type="text/javascript">
+function cancel(){
+  $("#leave").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Borrando ...');
+}
+
+</script>
 
 </div>
 {% endblock %}

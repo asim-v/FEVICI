@@ -5,12 +5,13 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <!-- Navigation --> 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;">FEVICI</a>
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;"><img src="static/img/logo.png" style="max-height: 40px"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -19,12 +20,77 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     </ul>
-    <p style="margin:5px"> {{ user_email }}</p>
-    <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 2px 12px; border-radius: 15px;"> <a href="/logout">Log out</a></p>
+    {% if auth!=False %}
+      <p style="margin:5px;color:white;background-color:rgba(43,43,43,.5);padding: 2px 12px; border-radius: 15px;"> {{ user_email }}</p>
+      <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 2px 12px; border-radius: 15px;"> <a href="/logout">Cerrar Sesión</a></p>
+    {%endif%}
   </div>
 </nav>
 {% block content %}
 {% endblock %}
+
+
+<!-- CUSTOM STYLES -->
+<style type="text/css">
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+  .card{
+    background-color: #f4f2ff;
+    border:none !important;
+  }
+  .btn{
+    border:none !important;
+  }
+  .btn-success{
+    background-color: #67FBD1 !important;
+    color: #2B2B2B !important;
+  }
+  .btn-primary{
+    background-color: #6772E5 !important;
+  }
+  .btn-warning{
+    background-color: #002284!important
+  }
+  .btn-secondary{
+    background-color: #2B2B2B !important; 
+  }
+  .input-group{
+    font-weight: 500 !important;
+  }
+  body{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500 !important;
+    background-color: #F9F8FF !important;
+  }
+    
+  nav{
+    background-color: #6772e5;
+    box-shadow: 0px 0px 5px 1px;
+
+  }
+  a{
+  color: white !important;
+  }  
+  .shadowed{
+    box-shadow:5px 5px 10px 1px lightgrey !important;
+    border: 0px !important; 
+  }
+  .btn{
+    font-weight: 600 !important;
+  }  
+  .pill{
+    margin:5px !important;
+    color:white !important;
+    padding: 2px 12px !important;
+    border-radius: 15px !important;
+  }
+  .pill-large{
+    margin:10px !important;
+    color:white !important;
+    padding: 10px 10px !important;
+    border-radius: 30px !important;
+  }
+</style>
+<!-- CUSTOM STYLES -->
 
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="/__/firebase/7.15.4/firebase-app.js"></script>

@@ -35,6 +35,8 @@ chats_coll = db.collection(u"notes")
 #Project collection 
 projects_coll = db.collection(u"projects")
 
+limit = "30 de Junio"
+
 # read web api key from file
 WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"
 
@@ -113,7 +115,7 @@ def user_login():
                 flash_msg = "Something is wrong!!"
         flash(flash_msg)
     # return login page for GET request
-    return render_template("login.html")
+    return render_template("login.html",auth = False)
     
 
 @app.route('/register', methods=["GET", "POST"])
@@ -133,9 +135,11 @@ def user_register():
             session['session_id'] = user_session_cookie
 
             # add user document to users collection
+            session["id"] = user_recode.get('localId')
             users_coll.add({"name": user_name,
                             "email": user_email,
-                            "connected_chats": []
+                            "connected_chats": [],
+                            "project": []
             }, user_recode.get('localId'))
             
             # if registration is valid then redirect to index page
@@ -181,32 +185,38 @@ def user_chat(chatid):
         if (chatid not in chats_watch_list):
             chat_watch = chat_doc.on_snapshot(_on_snapshot_callback)
 
-        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid))
+        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"]))
     except:
         return (redirect(url_for('user_login')))
 
 @app.route("/project")
 def project():
-    return (render_template("project.html",user_email=session["email_addr"]))
+            # then append chat_doc to user's connected chats
+    proj = users_coll.document(session['user_id']).get().to_dict()
+    proj = proj["project"]
+    return render_template("project.html",user_email=session["email_addr"],project = proj,limit=limit)
 
 @app.route("/update", methods=["GET","POST"])
 def update():    
+
     if (request.method == "POST"):
-        project_cat = request.form['userEmail']
-        project_subcat = request.form['userPassword']
-        abstract = request.form['category']        
+        project_cat = request.form['category']
+        project_subcat = request.form['subcategory']
+        abstract = request.form['abstract']        
         data = {
-            "Category":str(project_cat),
-            "SubCat":str(project_subcat),
-            "Abstract":str(abstract)
+            "project":{
+                "Category":str(project_cat),
+                "SubCat":str(project_subcat),
+                "Abstract":str(abstract)}
         }
 
         try:
-            proj = users_coll.document(session["user_id"])
-            proj.set(data)
 
+            # then append chat_doc to user's connected chats
+            user_doc = users_coll.document(session['user_id'])
+            user_doc.update(data, option=None)
 
-            redirect(url_for("project"))   
+            return redirect(url_for("project"))   
 
         except Exception as e:
             msg = "Session expired"+str(e)
