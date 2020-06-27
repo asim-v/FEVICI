@@ -87,26 +87,25 @@ def index_page():
             session['user_id'] = decoded_clamis['user_id']
             #session variable to indicate errors
             session["status"]  = None
+            
 
-            #
-            # Trying to implement users connected chats list
-            #
+            # Trying to implement users connected chats list            
             user_doc = users_coll.document(decoded_clamis['user_id'])
             user_details = user_doc.get().to_dict()
             connected_chats = user_details.get("connected_chats")
+            session["user_name"] = user_details.get("user_name")
             #flash(decoded_clamis)
 
             connected_chats_list = []
             for i in connected_chats:
                 connected_chats_list.append(i.get().to_dict())
             
-            return render_template("index.html", user_email=session["email_addr"], chats_list=connected_chats_list[::-1])
+            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"], chats_list=connected_chats_list[::-1])
         except Exception as e:
             # if unable to verify session_id for any reason
             # maybe invalid or expired, redirect to login
             flash_msg = "Your session is expired!"
-            flash(flash_msg)
-            return redirect(url_for("user_login"))   
+            return "INDEX EXCEPTION" + str(e)
 
     flash_msg = "Please Log In"
     flash(flash_msg)
@@ -159,13 +158,13 @@ def user_register():
             # this will automatically create secure cookies under the hood
             user_session_cookie = auth.create_session_cookie(user_id_token, expires_in=datetime.timedelta(days=14))           
             session['session_id'] = user_session_cookie
-
             # add user document to users collection
             session["id"] = user_recode.get('localId')
             users_coll.add({"name": user_name,
                             "email": user_email,
                             "connected_chats": [],
-                            "project_desc":[]
+                            "project_desc":[],
+                            "project_file":[]
             }, user_recode.get('localId'))
             
             # if registration is valid then redirect to index page
@@ -222,7 +221,7 @@ def project():
     '''
     proj = users_coll.document(session['user_id']).get().to_dict()
     proj = proj["project_desc"]
-    return render_template("project.html",user_email=session["email_addr"],project = proj,limit=limit,status = session['status'])
+    return render_template("project.html",user_name=session["user_name"],project = proj,limit=limit,status = session['status'])
 
 def save_json(data,uid = None):
     '''
@@ -237,6 +236,17 @@ def save_file(file,uid = None):
     '''
         Dado objeto file, guardar en base de datos fevici en proyectos
     '''
+    # gets the id of he old file to delete it
+    user_doc = users_coll.document(session['user_id'])
+    user_details = user_doc.get().to_dict()
+    # return user_details   DEBUG
+    try:
+        project = user_details.get("project_file")['project_id']
+        blob = bucket.blob(project) 
+        blob.delete()
+    except:pass
+    # gets the old file and deletes it
+
     filename = ''.join([str(int(random.random()*1000000))])                    
     blob = bucket.blob(filename) 
     blob.upload_from_file(file)    
@@ -255,14 +265,15 @@ def update():
         try: 
 
             data = {}
+            file_data = {}
             form = request.form
+
 
             for field in form: 
                 try:
                     if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
                         data[field[0].upper()+field[1:]] = request.form[field]
                 except Exception as e:return str(e)#;print(str(request.form[field]))
-            #return str(data)
 
             if request.files['file'] and not allowed_file(request.files['file'].filename):
                 save_json({"project_desc":data})
@@ -271,8 +282,9 @@ def update():
                 return redirect(url_for("project"))  
 
             else:
-                data["project_id"] = save_file(request.files['file'])  #Save file devuelve el id del archivo que se guarda
-                save_json({"project_desc":data})  #Guardar el nuevo data con el id agregado
+                file_data["project_id"] = save_file(request.files['file'])  #Save file devuelve el id del archivo que se guarda
+                #return save_file(request.files['file']) #DEBUG
+                save_json({"project_file":file_data})  #Guardar el nuevo data con el id agregado
                 
                 session["status"] = "Success"
                 return redirect(url_for("project"))  
