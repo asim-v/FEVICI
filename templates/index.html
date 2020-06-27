@@ -9,12 +9,12 @@
     fetch("/new-chat/create")
       .then((data) => {
         console.log(data);
-        $("#btn-create-new-chat").html("Created!");
+        $("#btn-create-new-chat").html("Listo!");
         window.location = data['url'];
       },
         (error) => {
           console.log(error);
-          $("#btn-create-new-chat").html("There is an error. Please try again.");
+          $("#btn-create-new-chat").html("Hubo un error.");
         });
   }
   function project(){
@@ -26,15 +26,15 @@
       },
         (error) => {
           console.log(error);
-          $("#btn-go-to-project").html("There is an error. Please try again.");
+          $("#btn-go-to-project").html("Hubo un error.");
         });
   }
   
 </script>
 
 
-<div class="container" style="margin-top: 40px">
-  <div class="row">
+<div class="container" style="margin-top: 100px">
+  <div class="row pt">
     <div class="col-lg">
     </div>
     <div class="col-lg text-center">
@@ -48,12 +48,12 @@
         {% endif %}
       {% endwith %}
       <div class="col-lg text-center">
-        <button id="btn-create-new-chat" type="button" onclick="create_new_note()" class="btn btn-success  btn-block">
-          Create chat
+        <button id="btn-create-new-chat" type="button" onclick="create_new_note()" class="btn btn-primary  btn-block">
+          Crear Chat
         </button>
       </div><br>       
       <div class="col-lg text-center">
-        <button id="btn-go-to-project" type="button" onclick="project()" class="btn btn-success  btn-block">
+        <button id="btn-go-to-project" type="button" onclick="project()" class="btn btn-primary  btn-block">
           Proyecto
         </button>
       </div>
@@ -67,18 +67,18 @@
     <div class="col-lg-3"></div>
       <div class="col-lg-6">
       {% if chats_list %}
-      <label> Your recent chats:</label>
+      <label> Tus chats:</label>
       {% endif %}
       {% for chat in chats_list %}
-        <div class="card" style="margin-bottom: 20px;">
+        <div class="card shadowed" >
           <div class="card-header">
             Chat : {{ chat.get("nid") }}
           </div>
           <div class="card-body">
             <h7 class="card-title">Users :</h7>
             <p class="card-text">{{ ', '.join(chat.get("users")) }}</p>
-            <a href="/chat/{{ chat.get('nid') }}" class="btn btn-primary">Open</a> 
-            <a href="/chat/leave/{{ chat.get('nid') }}" id="leave" onclick="cancel()" class="btn btn-warning">Leave</a>
+            <a href="/chat/{{ chat.get('nid') }}" class="btn btn-primary">Abrir</a> 
+            <a href="/chat/leave/{{ chat.get('nid') }}" id="{{chat.get('nid')}}" onclick="cancel(this.id)" class="btn btn-secondary float-right">Salir</a>
           </div>
         </div>
         {% endfor %}
@@ -90,8 +90,9 @@
   </div>
 
 <script type="text/javascript">
-function cancel(){
-  $("#leave").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Borrando ...');
+function cancel(clicked_id){
+  console.log(clicked_id.toString());
+  $("#"+clicked_id).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saliendo ...');   //SOLAMENTE CAMBIA EL ESTILO MIENTRAS QUE HREF HACE EL BACKEND
 }
 
 </script>

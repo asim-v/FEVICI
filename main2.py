@@ -1,11 +1,18 @@
 # imports for flask
 from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify
+#For File Management
+from werkzeug.utils import secure_filename
 
 # imports for firebase
-from firebase_admin import credentials, firestore, auth
+from firebase_admin import credentials, firestore, auth, storage
 import firebase_admin
+import firebase
+import google.cloud.storage as gstorage
+
+
 
 import sys#DEBUG
+import os#DEBUG
 
 # custom lib
 import firebase_user_auth
@@ -17,34 +24,51 @@ import requests
 import datetime
 import random
 
+
+ALLOWED_EXTENSIONS = {'pdf'}
+limit = "30 de Junio"
+editable = True
+WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"# read web api key from file
+
+
+# firebase user auth init
+user_auth = firebase_user_auth.initialize(WEB_API_KEY)
+# keeping already watching list
+chats_watch_list = {}
+
+
+
 app = Flask(__name__)
 app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# firebase-admin init
-cred = credentials.Certificate('firebase-config.json')
-default_app = firebase_admin.initialize_app(cred)
-# firestore db reference
-db = firestore.client()
-# users collection reference
-users_coll = db.collection(u"users")
 
+# initializes fb with bucket name
+cred = credentials.Certificate('firebase-config.json')
+default_app = firebase_admin.initialize_app(cred,{
+    'storageBucket': 'fevici.appspot.com'
+})
+# configure buckets
+client = gstorage.Client()
+bucket = client.get_bucket('fevici.appspot.com')
+# blob = bucket.blob('my-test-file.txt')
+# blob.upload_from_string('this is test content!')
+
+
+
+#Db references
+db = firestore.client()
+# users collection reference 
+users_coll = db.collection(u"users")
 # notes collection reference
 chats_coll = db.collection(u"notes")
 
-#Project collection 
-projects_coll = db.collection(u"projects")
 
-limit = "30 de Junio"
 
-# read web api key from file
-WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"
 
-# firebase user auth init
-user_auth = firebase_user_auth.initialize(WEB_API_KEY)
 
-# keeping already watching list
-chats_watch_list = {}
+
+
 
 def _on_snapshot_callback(doc_snapshot, changes, readtime):
     # need to send requried event to required people
@@ -61,6 +85,8 @@ def index_page():
             #flash(decoded_clamis)
             session['email_addr'] = decoded_clamis['email']
             session['user_id'] = decoded_clamis['user_id']
+            #session variable to indicate errors
+            session["status"]  = None
 
             #
             # Trying to implement users connected chats list
@@ -139,7 +165,7 @@ def user_register():
             users_coll.add({"name": user_name,
                             "email": user_email,
                             "connected_chats": [],
-                            "project": []
+                            "project_desc":[]
             }, user_recode.get('localId'))
             
             # if registration is valid then redirect to index page
@@ -191,39 +217,68 @@ def user_chat(chatid):
 
 @app.route("/project")
 def project():
-            # then append chat_doc to user's connected chats
+    '''
+        Renderiza el proyecto con el id del usuario en la sesion actual
+    '''
     proj = users_coll.document(session['user_id']).get().to_dict()
-    proj = proj["project"]
-    return render_template("project.html",user_email=session["email_addr"],project = proj,limit=limit)
+    proj = proj["project_desc"]
+    return render_template("project.html",user_email=session["email_addr"],project = proj,limit=limit,status = session['status'])
 
-@app.route("/update", methods=["GET","POST"])
+def save_json(data,uid = None):
+    '''
+        INPUT = dict
+        Guardar data json en id[default el de la sesion] de la bd, se hace la asignacion de este modo para evitar el sessionoutofcontext error
+    '''
+    u_id = session['user_id'] if (uid == None) else uid
+    user_doc = users_coll.document(u_id)
+    user_doc.update(data)
+
+def save_file(file,uid = None):
+    '''
+        Dado objeto file, guardar en base de datos fevici en proyectos
+    '''
+    filename = ''.join([str(int(random.random()*1000000))])                    
+    blob = bucket.blob(filename) 
+    blob.upload_from_file(file)    
+
+    return filename
+
+def allowed_file(filename):
+    '''
+        Extensión en extensiones permitidas?
+    '''
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/update", methods=["POST"])
 def update():    
+    if request.method == "POST":
+        try: 
 
-    if (request.method == "POST"):
-        project_cat = request.form['category']
-        project_subcat = request.form['subcategory']
-        abstract = request.form['abstract']        
-        data = {
-            "project":{
-                "Category":str(project_cat),
-                "SubCat":str(project_subcat),
-                "Abstract":str(abstract)}
-        }
+            data = {}
+            form = request.form
 
-        try:
+            for field in form: 
+                try:
+                    if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
+                        data[field[0].upper()+field[1:]] = request.form[field]
+                except Exception as e:return str(e)#;print(str(request.form[field]))
+            #return str(data)
 
-            # then append chat_doc to user's connected chats
-            user_doc = users_coll.document(session['user_id'])
-            user_doc.update(data, option=None)
+            if request.files['file'] and not allowed_file(request.files['file'].filename):
+                save_json({"project_desc":data})
+                
+                session["status"] = "Se guardaron los datos pero el archivo subido no es compatible, los formatos aceptados son PDF,DOCX"
+                return redirect(url_for("project"))  
 
-            return redirect(url_for("project"))   
+            else:
+                data["project_id"] = save_file(request.files['file'])  #Save file devuelve el id del archivo que se guarda
+                save_json({"project_desc":data})  #Guardar el nuevo data con el id agregado
+                
+                session["status"] = "Success"
+                return redirect(url_for("project"))  
 
-        except Exception as e:
-            msg = "Session expired"+str(e)
-            flash(msg)
-            return redirect(url_for("user_login")) 
-    else:return redirect(url_for("user_login"))   
-
+        except Exception as e:return "FORM EXCEPTION: "+str(e)
+    else: return 
 
 @app.route("/new-chat")
 def new_chat():
@@ -277,8 +332,6 @@ def leave_chat(chatid):
         return redirect(url_for("index_page"))   
     except Exception as e:
         return (str(e))
-
-
 
 
 if (__name__ == "__main__"):

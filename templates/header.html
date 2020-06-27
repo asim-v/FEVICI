@@ -10,8 +10,8 @@
 </head>
 
 <!-- Navigation --> 
-<nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;"><img src="static/img/logo.png" style="max-height: 40px"></a>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;font-weight: 600;"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -32,63 +32,94 @@
 
 <!-- CUSTOM STYLES -->
 <style type="text/css">
+  @import url('https://fonts.googleapis.com/css2?family=Miriam+Libre&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-  .card{
-    background-color: #f4f2ff;
-    border:none !important;
-  }
+  .shadowed{
+    box-shadow:5px 5px 10px 1px lightgrey !important;
+    border: 0px !important; 
+  }  
   .btn{
+    font-weight: 600 !important;
+    border:none ;
+    color:white !important;
+    padding: 5px 15px !important;
+    border-radius: 20px !important;    
+  } 
+  .pill-large{
+    margin:10px !important;
+    color:white !important;
+    padding: 10px 10px !important;
+    border-radius: 30px !important;
+  }  
+  .card{
     border:none !important;
+    margin-bottom: 20px;    
+    border-radius: 15px;
+  }.card-header{
+    border-top-right-radius:15px !important;
+    border-top-left-radius:15px !important;
+    border-bottom: none;
+  }
+  .alert-success{
+    background-color: #8fffdf !important;
+    color: #00a677 !important;
   }
   .btn-success{
-    background-color: #67FBD1 !important;
     color: #2B2B2B !important;
+    background-color: #67FBD1 !important;
   }
   .btn-primary{
-    background-color: #6772E5 !important;
+    background-color: #FEFEDF !important;
+    color: #2B2B2B !important;
   }
   .btn-warning{
-    background-color: #002284!important
+    background-color: #DF4550!important
   }
   .btn-secondary{
     background-color: #2B2B2B !important; 
   }
+
   .input-group{
     font-weight: 500 !important;
+  }
+  .alert-warning{
+    background-color: #FEFEDF;
+  }
+  .form-control{
+    border:none !important;
+    background-color: #F9F8FF !important
+  }  
+  .alert{
+    margin-bottom: 0rem !important;
   }
   body{
     font-family: 'Montserrat', sans-serif;
     font-weight: 500 !important;
     background-color: #F9F8FF !important;
   }
-    
+  input{
+    font-weight: 400 !important;
+  }
+  select{
+    font-weight: 400 !important;
+    border:none !important;
+    background-color: #F9F8FF !important;
+  } 
   nav{
     background-color: #6772e5;
     box-shadow: 0px 0px 5px 1px;
 
   }
   a{
-  color: white !important;
+    color: white !important;
   }  
-  .shadowed{
-    box-shadow:5px 5px 10px 1px lightgrey !important;
-    border: 0px !important; 
+  textarea{
+    border-radius: 15px;
+    border:none;
+    padding:30px;
   }
-  .btn{
-    font-weight: 600 !important;
-  }  
-  .pill{
-    margin:5px !important;
-    color:white !important;
-    padding: 2px 12px !important;
-    border-radius: 15px !important;
-  }
-  .pill-large{
-    margin:10px !important;
-    color:white !important;
-    padding: 10px 10px !important;
-    border-radius: 30px !important;
-  }
+
+
 </style>
 <!-- CUSTOM STYLES -->
 
