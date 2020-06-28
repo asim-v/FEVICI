@@ -30,6 +30,7 @@
       {% endif %} -->
 
 
+
         <form method="POST" action="{{ url_for('update') }}" enctype=multipart/form-data>        
           <div class="modal-content borderless shadowed">
             <div class="modal-header">
@@ -37,8 +38,59 @@
             </div>
             <div class="modal-header">
               <h8 class="modal-title" id="exampleModalLabel">Esta parte del proyecto ayuda a los jueces a entenderlo mejor así que por favor se breve y específico.<br><br>Puedes guardar tu progreso y regresar las veces que necesites, antes de la fecha límite</h7>
-
             </div>     
+
+            <div class="modal-header" style="display: inline-block;">
+              <div class="label" style="padding-bottom: 10px;">Tu equipo</div>
+              {% for person in team_list %}
+                <span class="tooltip_container">
+                  <div class="tooltip">
+                    <button onclick="validate()" href="" class="teammate" style="background-color: {{person.color}}">{{person.initials}}</button>
+                    <span class="tooltiptext">{{person.name}}<br>{{person.email}}</span>
+                  </div>
+                </span>
+              {% endfor %}
+
+
+
+
+
+              <div class="tooltip">
+                <button onclick="invite()" class="teammate" id="invite_button" data-toggle="modal" data-target="#inviteModal" type="button">+</button>
+                <span class="tooltiptext">Invitar más personas al equipo</span>
+              </div>
+            </div>
+              <!-- Modal for Share  -->
+              <div class="modal fade shadowed" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <form method="POST" action="{{ url_for('send_invite') }}">        
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Compartir</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form">
+                            <input name="userEmail" placeholder="Your Email" type="text" autofocus class="form-control">
+                            <br>
+                            <input name="userPassword" placeholder="Your Password" class="form-control">
+                          </div>              
+                        <br>          
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                      <button type="submit" class="btn btn-success">Invitar</button>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+
+
+
+
               <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 El <strong>{{limit}}</strong> cierra la edición de proyectos!
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -462,8 +514,11 @@
 <div class="upload">
 
   <input type="file" name="file" title="file" class="drop-here">
-
-  <div class="text text-drop">Soltar archivo aqui</div>
+  {%if proj_file['project_name'] != '' %}
+    <div class="text text-drop">{{proj_file['project_name']}}</div>
+  {%else%}
+    <div class="text text-drop">Soltar archivo aqui</div>
+  {%endif%}
   <div class="text text-upload">Cargando...</div>
   <svg class="progress-wrapper" width="50" height="50">
     <circle class="progress" r="115" cx="150" cy="150"></circle>
@@ -524,6 +579,9 @@ function start() {
               {% endif %}
               
             </div>
+
+
+
           </div>
         </form>
 
@@ -535,10 +593,13 @@ function start() {
 <script type="text/javascript">
 
 //var strUser = e.options[e.selectedIndex].value;  
+function invite(){
+  $("#invite_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+}
 function validate(){
   $("#save_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando ...');
-
 }
+
 function cancel(){
   $("#cancel-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saliendo ...');
   fetch("/")

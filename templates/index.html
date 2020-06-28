@@ -29,6 +29,18 @@
           $("#btn-go-to-project").html("Hubo un error.");
         });
   }
+  function about(){
+  $("#btn-go-to-about").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
+  fetch("/about")
+    .then((data) => {
+      console.log(data);
+      window.location = data['url'];
+    },
+      (error) => {
+        console.log(error);
+        $("#btn-go-to-about").html("Hubo un error.");
+      });
+}
   
 </script>
 
@@ -48,6 +60,11 @@
         {% endif %}
       {% endwith %}
       <div class="col-lg text-center">
+        <button id="btn-go-to-about" type="button" onclick="about()" class="btn btn-primary  btn-block">
+          Sobre Mi
+        </button>
+      </div><br>
+      <div class="col-lg text-center">
         <button id="btn-create-new-chat" type="button" onclick="create_new_note()" class="btn btn-primary  btn-block">
           Crear Chat
         </button>
@@ -57,6 +74,7 @@
           Proyecto
         </button>
       </div>
+
      
     </div>
     <div class="col-lg text-center">

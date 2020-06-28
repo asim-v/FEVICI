@@ -27,7 +27,7 @@ nav{
 
 </style>
 
-
+<!-- SELECCIONADOR DE PAIS -->
 
 
 
@@ -39,7 +39,7 @@ nav{
     <div class="bg"></div>
 
 
-
+{% if visualization == 1 %}
 
 <!-- ADORNO -->
 <div id="container"></div>
@@ -290,6 +290,1324 @@ function render() {
 
 <!-- ADORNO -->
 
+{% elif visualization == 2 %}
+
+<style type="text/css">
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+} 
+</style>
+<canvas id="visualizer"></canvas>
+<script type="text/javascript">
+// CLICK TO START MUSIC
+// Music "Sirens" by H2x (Radik Khamatdinov) (http://h2xmusic.bandcamp.com)
+// 3D software fluid cube music visualization
+let { sin, cos, PI } = Math
+
+
+// Creating canvas and getting 2d context
+let c = document.querySelector('#visualizer').getContext('2d') 
+
+// Getting canvas from context
+let canvas = c.canvas
+
+// Common
+let frame = 0
+let vertices = []
+let cubeSize = 17
+
+// Creating HTMLAudioElement
+let audio = new Audio()
+audio.crossOrigin = "anonymous"
+
+// AudioContext, analyser and media element source, to make visualization
+let ac
+let an
+let sr
+
+// Spectrum array
+let spectrumData
+let spectrumRenderCount = 30 // How much lines of spectrum will render
+
+// Rendering visualization
+let loop = function () {
+  let rad = frame / 2 / 180 * PI
+  
+  // Resize canvas
+  if (canvas.width !== canvas.offsetWidth || canvas.height !== canvas.offsetHeight) {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+  }
+  
+  frame++
+  if (an) an.getByteFrequencyData(spectrumData)
+  c.fillStyle = `hsl(${frame + 90}deg, 100%, 3%)`
+  c.globalAlpha = 0.5
+  c.fillRect(0, 0, canvas.width, canvas.height)
+  c.globalAlpha = 1
+  
+  c.save()
+  c.translate(canvas.width / 2, canvas.height / 2)
+  
+  for (let i = 0; i < vertices.length; i++) {
+    let value = spectrumData ? spectrumData[i % spectrumRenderCount] / 10 + 1 : 0
+    let vertex = vertices[i]
+    let x = vertex[0]
+    let y = vertex[1]
+    let z = vertex[2]
+    
+    // Get distance to center
+    let dist = cubeSize / 2 - Math.sqrt(x ** 2 + y ** 2 + z ** 2)
+    
+    // Making sphere by removing unnecessary vertices
+    // if (dist < 0) continue // Uncomment here to make sphere
+    
+    // Rotation
+    // Rotation Y
+    let tx = x * cos(rad) + sin(rad) * z
+    let tz = -x * sin(rad) + cos(rad) * z
+    let ty = y
+    
+    // Apply transform
+    x = tx
+    y = ty
+    z = tz
+    
+    // Rotation Z
+    tx = x * cos(rad) - y * sin(rad)
+    ty = x * sin(rad) + y * cos(rad)
+    
+    // Apply transform
+    x = tx
+    y = ty
+    
+    // Translate cube
+    z -= 70
+    
+    // Make reaction on spectrum   
+    z += value 
+    y += value / 100
+    
+    // Distort animation
+    x += Math.cos(frame / 20 + y / 5)
+    y += Math.sin(frame / 20 + z / 3)
+    
+    // Make perspective
+    x /= z / canvas.height / 2
+    y /= z / canvas.height / 2
+    
+    // Drawing vertex
+    c.fillStyle = `hsl(${dist / 16 * 360 + frame}deg, 100%, 50%)`
+    c.fillRect(x - dist / 2, y - dist / 2, dist, dist)
+  }
+  
+  c.restore()
+  
+  requestAnimationFrame(loop)
+}
+
+// Connecting analyser to audio
+window.addEventListener('click', e => {
+  audio.src = "https://res.cloudinary.com/dlb3jof8w/video/upload/v1553475584/Radik_Khamatdinov_-_Sirens.mp3"
+    
+  audio.oncanplaythrough = function () {
+    ac = new AudioContext()
+    sr = ac.createMediaElementSource(audio)
+    an = ac.createAnalyser()
+
+    spectrumData =  new Uint8Array(an.frequencyBinCount)
+
+    // Setting analyser
+    an.fftSize = 128
+    an.smoothingTimeConstant = 0.9
+
+
+    sr.connect(an)
+    an.connect(ac.destination)
+    
+    audio.play()
+  }
+}, { once: true })
+
+// Generation cube
+
+for (let i = 0; i < cubeSize ** 3; i++) {
+  let x = (i % cubeSize)
+  let y = (i / cubeSize >> 0) % cubeSize
+  let z = (i / cubeSize ** 2 >> 0)
+  
+  // Offset
+  x -= cubeSize / 2 - 0.5
+  y -= cubeSize / 2 - 0.5
+  z -= cubeSize / 2 - 0.5
+  
+  vertices.push([x, y, z])
+}
+  
+// Launch visualization
+loop()
+  
+</script>
+
+{% elif visualization==3 %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style type="text/css">
+html, body {
+  font-size: 87.5%;
+  height: 100%;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  overflow: hidden;
+  -webkit-perspective: 1000px;
+          perspective: 1000px;
+}
+
+ul {
+  padding: 0 1em;
+  margin: 1em 0;
+}
+
+a {
+  color: #fff;
+}
+
+canvas {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  opacity: 1;
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+  -webkit-transition: opacity 250ms, -webkit-transform 250ms;
+  transition: opacity 250ms, -webkit-transform 250ms;
+  transition: opacity 250ms, transform 250ms;
+  transition: opacity 250ms, transform 250ms, -webkit-transform 250ms;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.description {
+  width: 24em;
+  padding: 1em;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.description__title {
+  font-size: 1em;
+} 
+</style>
+<main id="description" class="description">
+  <h1 class="description__title">The Evolution of Bacteria</h1> 
+  <ul>
+    <li>Canvas is divided into sections, each having requirements bacteria must fulfil to live</li>
+    <li>Each bacteria has offspring</li>
+    <li>Offspring has small chance of mutation</li>
+    <li>Gene diversity marked by different colours</li>
+  </ul>
+</main>
+
+<script src='https://cdn.rawgit.com/inexorabletash/polyfill/master/es5.js'></script>
+<script src='https://cdn.rawgit.com/inexorabletash/polyfill/master/es6.js'></script>
+<script type="text/javascript">
+  function getShuffledArray(array) {
+  const newArray = [...array];
+  let counter = newArray.length;
+
+  while (counter > 0) {
+    const index = Math.floor(Math.random() * counter);
+    counter--;
+
+    let temp = newArray[counter];
+    newArray[counter] = newArray[index];
+    newArray[index] = temp;
+  }
+
+  return newArray;
+}
+
+class Bacterium {
+  static createRandomDna() {
+    return Math.floor(Math.random() * Bacterium.DNA_MAX_VALUE) | 0b1;
+  }
+
+  static shouldMutate(mutationOdss) {
+    return Math.random() < mutationOdss;
+  }
+
+  static createDnaFromParent(parent, mutationOdds) {
+    if (!Bacterium.shouldMutate(mutationOdds)) return parent;
+
+    const mutationIndex = Math.floor(Math.random() * Bacterium.DNA_LENGTH);
+    const mutation = 0b1 << mutationIndex;
+
+    return parent ^ mutation | 0b1;
+  }
+
+  static getColorFromDna(dna) {
+    const seed = (dna.toString(2).match(/1/g) || []).length / Bacterium.DNA_LENGTH;
+    const hue = Math.floor(Bacterium.DNA_COLOR_HUE_MIN + (Bacterium.DNA_COLOR_HUE_MAX - Bacterium.DNA_COLOR_HUE_MIN) * seed);
+    return `hsl(${hue}, 60%, 40%)`;
+  }}
+
+
+Bacterium.DNA_LENGTH = 8;
+Bacterium.DNA_MAX_VALUE = Math.pow(2, Bacterium.DNA_LENGTH);
+Bacterium.DNA_COLOR_HUE_MIN = 180;
+Bacterium.DNA_COLOR_HUE_MAX = 0;
+
+class BacteriumPlane {
+  constructor(width, height) {
+    this.height = height;
+    this.width = width;
+
+    this.isFinished = false;
+    this.changes = [];
+
+    this.sections = [
+    dna => true,
+    dna => {
+      return (
+        dna & 0x1 << 1 &&
+        dna & 0x1 << 2 &&
+        dna & 0x1 << 3);
+
+    },
+    dna => {
+      return (
+        dna & 0x1 << 1 &&
+        dna & 0x1 << 2 &&
+        dna & 0x1 << 3 &&
+        dna & 0x1 << 4 &&
+        dna & 0x1 << 5);
+
+    },
+    dna => {
+      return (
+        dna & 0x1 << 1 &&
+        dna & 0x1 << 2 &&
+        dna & 0x1 << 3 &&
+        dna & 0x1 << 4 &&
+        dna & 0x1 << 5 &&
+        dna & 0x1 << 6);
+
+    }];
+
+
+    this.mutationOdds = 1 / 32;
+    this.clear();
+  }
+
+  clear() {
+    this.bacteria = new Uint8Array(this.height * this.width);
+
+    const initialBacteriumDna = Bacterium.createRandomDna();
+    const initialBacteriaCount = 4;
+
+    for (let i = 0; i < initialBacteriaCount; i++) {
+      const initialBacteriumIndex = this.getIndexByPosition(0, Math.floor((i + .5) / initialBacteriaCount * this.height));
+      this.setBacterium(initialBacteriumIndex, initialBacteriumDna);
+    }
+
+    this.isFinished = false;
+  }
+
+  getPositionByIndex(index) {
+    return {
+      x: index % this.width,
+      y: Math.floor(index / this.width) };
+
+  }
+
+  getIndexByPosition(x, y) {
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+      return;
+    }
+
+    return y * this.width + x;
+  }
+
+  isEmpty(index) {
+    return this.bacteria[index] === 0;
+  }
+
+  isValidIndex(index) {
+    return typeof index === 'number';
+  }
+
+  getBacteriumOffspringIndex(index) {
+    const position = this.getPositionByIndex(index);
+    const isValid = index => this.isValidIndex(index) && this.isEmpty(index);
+
+    const offspringIndexOptions = [
+    this.getIndexByPosition(position.x - 1, position.y),
+    this.getIndexByPosition(position.x + 1, position.y),
+    this.getIndexByPosition(position.x, position.y - 1),
+    this.getIndexByPosition(position.x, position.y + 1)].
+    filter(isValid);
+
+    // Cancel if no options are available
+    if (offspringIndexOptions.length === 0) return;
+    return getShuffledArray(offspringIndexOptions)[0];
+  }
+
+  canBacteriumSurviveAt(dna, index) {
+    const position = this.getPositionByIndex(index);
+    const sectionIndex = Math.floor(position.x / this.width * this.sections.length);
+
+    return this.sections[sectionIndex](dna);
+  }
+
+  setBacterium(index, dna) {
+    this.bacteria[index] = dna;
+    this.changes.push(index);
+  }
+
+  update() {
+    if (this.isFinished) return;
+
+    const bacteria = new Uint8Array(this.bacteria);
+
+    bacteria.forEach((dna, index) => {
+      if (this.isEmpty(index)) return;
+
+      const offspringIndex = this.getBacteriumOffspringIndex(index);
+      if (offspringIndex === undefined) return;
+
+      let offspringDna = Bacterium.createDnaFromParent(dna, this.mutationOdds);
+
+      if (this.canBacteriumSurviveAt(offspringDna, offspringIndex)) {
+        this.setBacterium(offspringIndex, offspringDna);
+      }
+    });
+  }
+
+  render(context) {
+    if (this.isFinished) return;
+
+    const changes = [...this.changes];
+    this.changes.length = 0;
+
+    changes.forEach(index => {
+      const dna = this.bacteria[index];
+      const position = this.getPositionByIndex(index);
+
+      context.fillStyle = Bacterium.getColorFromDna(dna);
+      context.fillRect(position.x, position.y, 1, 1);
+    });
+  }
+
+  updateIsFinished() {
+    this.isFinished = this.bacteria.every(dna => dna > 0);
+  }}
+
+
+class Simulation {
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.context = this.canvas.getContext('2d');
+  }
+
+  setSize(width, height) {
+    this.bacteria = new BacteriumPlane(width, height);
+    this.canvas.height = height;
+    this.canvas.width = width;
+  }
+
+  render() {
+    requestAnimationFrame(this.render.bind(this));
+
+    this.bacteria.update();
+    this.bacteria.render(this.context, this.scale);
+  }
+
+  reset() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.bacteria.clear();
+  }}
+
+
+let simScale = 3;
+const getSimHeight = () => Math.round(window.innerHeight / simScale);
+const getSimWidth = () => Math.round(window.innerWidth / simScale);
+
+const sim = new Simulation();
+sim.setSize(getSimWidth(), getSimHeight());
+sim.render();
+
+window.setInterval(sim.bacteria.updateIsFinished.bind(sim.bacteria), 1000);
+
+document.body.appendChild(sim.canvas);
+
+window.addEventListener('resize', () => {
+  sim.setSize(getSimWidth(), getSimHeight());
+  sim.reset();
+});
+
+window.addEventListener('load', () => {
+  const gui = new dat.GUI();
+  const config = {
+    mutationOdds: sim.bacteria.mutationOdds,
+    restart: sim.reset.bind(sim),
+    density: simScale };
+
+
+  gui.add(config, 'mutationOdds').min(0).max(.25).step(.0001).onChange(value => {
+    sim.bacteria.mutationOdds = value;
+  });
+
+  gui.add(config, 'density').min(1).max(8).step(1).onFinishChange(value => {
+    simScale = value;
+
+    sim.setSize(getSimWidth(), getSimHeight());
+    sim.reset();
+  });
+
+  gui.add(config, 'restart');
+});
+</script>
+
+</body>
+</html>
+
+
+{% elif visualization == 4 %}
+
+<canvas id='canvas' style="position: absolute;overflow: hidden;"></canvas>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js'></script>
+<script type="text/javascript">
+let {
+  min,
+  max,
+  cos,
+  sin,
+  floor,
+  PI } =
+Math;
+$(() => {
+  //near missajous
+  var $canvas = $('#canvas');
+  var canvas = $canvas[0];
+  var epoch = Date.now();
+  var scale = .5;
+  function draw(ctx, w, h) {
+    var t = (Date.now() - epoch) / 1000;
+    var xs = _.times(8, i => i);
+    var ys = _.times(8, i => i);
+    var X = w / xs.length;
+    var Y = h / ys.length;
+    var R = min(min(X, Y) / 2 - 5, 25);
+    var r = 5;
+    xs.forEach((x, i) => {
+      ys.forEach((y, j) => {
+        if (i == 0 && j > 0) {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(0, j * Y, X, Y);
+          ctx.strokeStyle = 'white';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(X / 2, Y * (j + .5), R, 0, 2 * Math.PI);
+          ctx.stroke();
+          ctx.fillStyle = 'green';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(X / 2 + R * cos(scale * y * t), Y * (j + .5) + R * sin(scale * y * t), r, 0, 2 * Math.PI);
+          ctx.fill();
+        } else
+        if (j == 0 && i > 0) {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(i * X, 0, X, Y);
+          ctx.strokeStyle = 'white';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(X * (i + .5), Y / 2, R, 0, 2 * Math.PI);
+          ctx.stroke();
+          ctx.fillStyle = 'red';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(X * (i + .5) + R * cos(scale * x * t), Y / 2 + R * sin(scale * x * t), r, 0, 2 * Math.PI);
+          ctx.fill();
+        } else
+        if (j > 0 && i > 0) {
+          ctx.fillStyle = 'rgba(0,0,0,.01)';
+          ctx.fillRect(i * X, j * Y, X, Y);
+          //*
+          var cr = i / xs.length,
+          cg = -cos(scale * (i * PI + j) * t) * .5 + .5,
+          cb = j / ys.length;
+          var cn = max(cr, max(cg, cb));
+          cr = floor(255 * cr / cn);
+          cg = floor(255 * cg / cn);
+          cb = floor(255 * cb / cn);
+          //*/
+          ctx.fillStyle = `rgb(${cr},${cg},${cb})`;
+          ctx.beginPath();
+          ctx.arc(X * (i + .5) + R * cos(scale * x * t), Y * (j + .5) + R * sin(scale * y * t), 1, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      });
+    });
+  }
+  var d;
+  function setSize() {
+    var w = $(window).width();
+    var h = $(window).height();
+    //$canvas.attr('width', $(window).width());
+    canvas.width = w;
+    //$canvas.attr('height', $(window).height());
+    canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    d = draw.bind(null, ctx, w, h);
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, w, h);
+  }
+  setSize();
+  $(window).resize(function () {
+    setSize();
+  });
+  window.setInterval(d, 1000. / 60);
+}); 
+</script>
+
+{% elif visualization == 5 %}
+
+<style type="text/css">
+body {
+  background: #333;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  z-index: -10 !important;
+}
+</style>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js'></script>
+<script type="text/javascript">
+  function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} 
+  const clone = array => {
+  return JSON.parse(JSON.stringify(array));
+};
+
+// Parent Render Class
+class Render {
+  constructor() {_defineProperty(this, "setViewport",
+    element => {
+      const canvasElement = element;
+      const dc = document.documentElement;
+      this.width = ~~(dc.clientWidth, window.innerWidth || 0);
+      this.height = ~~(dc.clientHeight, window.innerHeight || 0);
+      canvasElement.width = this.width;
+      canvasElement.height = this.height;
+    });_defineProperty(this, "createCanvas",
+
+    name => {
+      const canvasElement = document.createElement("canvas");
+      canvasElement.id = name;
+      this.setViewport(canvasElement);
+      document.body.appendChild(canvasElement);
+      this.surface = canvasElement.getContext("2d");
+      this.surface.scale(1, 1);
+      return canvasElement;
+    });_defineProperty(this, "resetCanvas",
+
+    () => {
+      window.cancelAnimationFrame(this.animation);
+      this.setViewport(this.canvas);
+      this.cols = ~~(this.width / this.grid);
+      this.rows = ~~(this.height / this.grid);
+      this.hue = ~~(Math.random() * 360);
+      this.bkg = [
+      ~~(Math.random() * 255),
+      ~~(Math.random() * 255),
+      ~~(Math.random() * 255)];
+
+      this.points = [];
+      this.generateCubics();
+      this.renderLoop();
+    });_defineProperty(this, "createGui",
+
+    () => {
+      this.options = {
+        grid: this.grid,
+        blur: this.blur };
+
+      this.gui = new dat.GUI();
+      const folderRender = this.gui.addFolder("Render Options");
+      folderRender.
+      add(this.options, "grid", 4, 40).
+      step(1).
+      onFinishChange(value => {
+        this.grid = value;
+        this.resetCanvas();
+      });
+      folderRender.
+      add(this.options, "blur", 1, 100).
+      step(0.01).
+      onFinishChange(value => {
+        this.blur = value;
+      });
+    });_defineProperty(this, "generateCubics",
+
+    () => {
+      for (let y = 0; y < this.rows; y++) {
+        for (let x = 0; x < this.cols; x++) {
+          this.points.push(Math.round(Math.random()));
+        }
+      }
+      this.clone = clone(this.points);
+    });_defineProperty(this, "drawSquare",
+
+    point => {
+      const offx = this.width / 2 - this.cols * this.grid / 2;
+      const offy = this.height / 2 - this.rows * this.grid / 2;
+
+      const x = point.x * this.grid;
+      const y = point.y * this.grid;
+      this.surface.beginPath();
+      this.surface.fillStyle = `hsla(${this.hue + this.frame * 0.15},100%,50%,1)`;
+      this.surface.strokeStyle = "rgba(0,0,0,0)";
+      this.surface.fillRect(offx + x, offy + y, this.grid, this.grid);
+      this.surface.fill();
+    });_defineProperty(this, "drawFrame",
+
+    () => {
+      const blr = 0.9 - this.blur * 0.01;
+      this.surface.fillStyle = `rgba(${this.bkg[0]},${this.bkg[1]},${this.bkg[2]},${blr})`;
+      this.surface.fillRect(0, 0, this.width, this.height);
+
+      for (let i = 0; i < this.points.length; i++) {
+        const x = i % this.cols;
+        const y = ~~((i - x) / this.cols);
+        //console.log(x,y);
+        if (this.points[i]) {
+          this.drawSquare({ x, y });
+        }
+      }
+      // const sw = 3.5 * Math.sin(this.frame*.05);
+      // this.surface.drawImage(
+      //   this.canvas,
+      //   2,
+      //   sw,
+      //   this.canvas.width + 2,
+      //   this.canvas.height+sw
+      // );
+    });_defineProperty(this, "addNeighboors",
+
+
+
+
+    (dx, dy) => {
+      let total = 0;
+      let holder = [];
+      const mypos = dy * this.cols + dx;
+
+      for (let y = -1; y < 2; y += 1) {
+        for (let x = -1; x < 2; x += 1) {
+          let myx = dx + x;
+          // -1, 0 ,1 + x then check for wrap around
+          if (myx < 0) {
+            myx = this.cols + x;
+          } else if (myx > this.cols - 1) {
+            myx = x - 1;
+          }
+
+          let myy = dy + y;
+          // -1, 0 ,1 + y then check for wrap around
+          if (myy < 0) {
+            myy = this.rows + y;
+          } else if (myy > this.rows - 1) {
+            myy = y - 1;
+          }
+          // add all values except center
+          const npos = myy * this.cols + myx;
+          if (mypos !== npos) {
+            total += this.clone[npos];
+          }
+        }
+      }
+
+      return total;
+    });_defineProperty(this, "updateFrame",
+
+    () => {
+      this.clone = clone(this.points);
+      for (let i = 0; i < this.points.length; i++) {
+        const x = i % this.cols;
+        const y = ~~((i - x) / this.cols);
+        const total = this.addNeighboors(x, y);
+        if (this.points[i] === 1) {
+          switch (total) {
+            case 0:
+            case 1:
+              this.points[i] = 0;
+              break;
+            case 2:
+              this.points[i] = 1;
+            case 3:
+              this.points[i] = 1;
+              break;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+              this.points[i] = 0;
+              break;
+            default:
+              this.points[i] = 0;}
+
+        }
+        if (this.points[i] === 0) {
+          switch (total) {
+            case 3:
+              this.points[i] = 1;
+              break;
+            default:
+              this.points[i] = 0;}
+
+
+          // to prevent total death - slight random life
+          if (Math.random() * 300 > 299.996) this.points[i] = 1;
+        }
+      }
+    });_defineProperty(this, "renderLoop",
+
+    () => {
+      this.frame++;
+
+      if (this.frame % 2 === 0) {
+        // just makes a bit smoother to watch generations
+        this.updateFrame();
+        this.drawFrame();
+      }
+
+      this.animation = window.requestAnimationFrame(this.renderLoop);
+    });this.frame = 0;
+    this.canvas = this.createCanvas("canvas");
+    this.animation = null;this.points = [];
+    this.hue = ~~(Math.random() * 360);
+    this.bkg = [~~(Math.random() * 255), ~~(Math.random() * 255), ~~(Math.random() * 255)];
+    this.blur = 87;this.grid = 5;
+    this.cols = ~~(this.width / this.grid);
+    this.rows = ~~(this.height / this.grid);
+    window.addEventListener("resize", this.resetCanvas);
+    this.canvas.style.position = "absolute";
+    this.canvas.addEventListener("click", this.resetCanvas);
+    this.generateCubics();this.renderLoop();}}
+
+
+const demo = new Render();    
+  </script>
+</body>
+</html>
+
+{% elif visualization==6 %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style type="text/css">
+  canvas {
+    display: block;
+    position: absolute;
+    z-index: -10;
+  }
+
+  .note {
+    width: 12em;
+    position: fixed;
+    right: 1em;
+    bottom: 0;
+    color: #eee;
+    text-align: right;
+  }
+
+  a {
+    color: #87e2d6;
+  }
+  a:hover, a:focus {
+    color: #5ed8c8;
+  }
+  a:active {
+    color: #35ceba;
+  } 
+</style>
+<aside class="note">
+  <h1>Mica</h1>
+  <p>Inspired by <a href="https://twitter.com/Mathew_Lucas/status/771237005216747520">a tweet posted by Lucas Matthew</a>.</p>
+  <p>Unfortunately, I couldn’t get the blobs to behave the same.</p>
+</aside>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js'></script>
+<script type="text/javascript">
+/**
+ * Creates the material for the layers
+ * @param {String} noiseShader - The shader part containing noise functions
+ * @return {THREE.ShaderMaterial} The newely created shader material
+ */
+function createLayerShaderMaterial(noiseShader, uniforms) {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+
+    uniforms: uniforms,
+    vertexShader: `
+    uniform vec3 scale;
+    varying vec3 vPosition;
+
+    void main() {
+      vPosition = position;
+
+      gl_Position = projectionMatrix *
+        modelViewMatrix *
+        vec4(position, 1.0);
+    }`,
+
+    fragmentShader: `${noiseShader}
+    uniform float time;
+    varying vec3 vPosition;
+    
+    void main() {
+      // Determine base colors
+      vec3 base = vec3(.55, .3, 1.0);
+      vec3 top = vec3(.53, .89, .84);
+
+      // Calculate offset
+      float timeMultiplier1 = .25;
+      vec3 offset1 = vec3(
+        time * timeMultiplier1,
+        time * timeMultiplier1,
+        time * timeMultiplier1
+      );
+      float timeMultiplier2 = .333;
+      vec3 offset2 = vec3(
+        time * -timeMultiplier2,
+        time * -timeMultiplier2,
+        time * -timeMultiplier2
+      );
+      
+      // Generate and normalize noise
+      float noiseScale = 1.5;
+      float random1 = snoise(vPosition * noiseScale + offset1);
+      float random2 = snoise(vPosition * noiseScale + offset2);
+      // Mix the two randoms, then normalize output
+      float random = ((random1 + random2) / 2.0) + 1.0 / 2.0;
+      
+      // Offset noise a little to create the intensity
+      float intensityOffset = .3;
+      float intensity = max(.0, floor(random + intensityOffset));
+      
+      // Calculate final color
+      vec3 color = base + (top - base) * vPosition.z + intensity * .1;
+
+      // Calculate final alpha
+      float alphaBase = .1;
+      float alphaMultiplier = 1.0 - alphaBase;
+      float alpha = intensity * alphaMultiplier + alphaBase;
+
+      gl_FragColor = vec4(color, alpha);
+    }` });
+
+}
+
+/**
+   * Creates a new layer
+   * @param {Number} y - The y-coordinate to position the layer at
+   * @param {THREE.Material} material - The layer material
+   * @return {THREE.Mesh} The newely created layer
+   */
+function createLayer(y, material) {
+  const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+  geometry.vertices = geometry.vertices.map(vertex => {
+    return new THREE.Vector3(vertex.x, vertex.y, y);
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = -Math.PI / 2;
+  return mesh;
+}
+
+/**
+   * Creates a complete scene
+   * 1. Loads assets
+   * 2. Creates new scene
+   * 3. Create shader material
+   * 4. Add the layers to the scene
+   * 5. Returns the scene
+   *
+   * @return {Promise}
+   */
+function createBox(layerShaderUniforms) {
+  const box = new THREE.Object3D();
+
+  return new Promise((resolve, reject) => {
+    fetch('https://raw.githubusercontent.com/ashima/webgl-noise/master/src/noise3D.glsl').
+    then(response => response.text()).
+    then(noiseShader => {
+      const layerMaterial = createLayerShaderMaterial(noiseShader, layerShaderUniforms);
+      const layerCount = 32;
+
+      for (let i = 0; i < layerCount; i++) {
+        box.add(createLayer(i / layerCount, layerMaterial));
+      }
+
+      resolve(box);
+    }).
+    catch(reject);
+  });
+}
+
+/**
+   * Get a proxy function to debounce a function call
+   */
+function getDebounceFunction(func, delay) {
+  let timeout;
+
+  return (...args) => {
+    if (timeout) {
+      window.clearTimeout(timeout);
+    }
+
+    timeout = window.setTimeout(func, delay, ...args);
+  };
+}
+
+/**
+   * Handle mouse movement
+   * @param {Event} e - The mouse event
+   */
+function mouseMoveHandler(e) {
+  const angle = e.clientX / window.innerWidth * Math.PI * 2;
+  setCameraPosition(angle);
+}
+
+/**
+   * Update camera position by angle
+   * @param {Number} angle - The angle, obviously
+   */
+function setCameraPosition(angle) {
+  // Add 45 degrees to angle, so it starts at the corner <:
+  angle += Math.PI / 4;
+
+  camera.position.set(
+  Math.cos(angle) * cameraDistance,
+  cameraDistance,
+  Math.sin(angle) * cameraDistance);
+
+
+  camera.lookAt(cameraTarget);
+}
+
+/**
+   * Resize the WebGL canvas to match current viewport
+   */
+function resize() {
+  const aspect = window.innerWidth / window.innerHeight;
+
+  camera.left = cameraWidth / -2 * aspect;
+  camera.right = cameraWidth / 2 * aspect;
+  camera.top = cameraHeight / 2;
+  camera.bottom = cameraHeight / -2;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(
+  window.innerWidth,
+  window.innerHeight);
+
+}
+
+/**
+   * Simply renders the WebGL canvas
+   */
+function render() {
+  layerShaderUniforms.time.value = time.getElapsedTime();
+  renderer.render(scene, camera);
+}
+
+/**
+   * Start the animation loop
+   */
+function loop() {
+  requestAnimationFrame(loop);
+  render();
+}
+
+let box;
+const cameraHeight = 2;
+const cameraWidth = 2;
+const cameraDistance = 4;
+const cameraTarget = new THREE.Vector3(0, .5, 0);
+const time = new THREE.Clock();
+
+// Initalize camera
+const camera = new THREE.OrthographicCamera(0, 0, 0, 0, 1, 1024);
+setCameraPosition(0);
+
+const scene = new THREE.Scene();
+
+// Initialize renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', getDebounceFunction(resize, 100));
+window.addEventListener('mousemove', mouseMoveHandler);
+
+const layerShaderUniforms = {
+  time: {
+    value: 0 },
+
+  scale: {
+    value: new THREE.Vector3(1, 1, 0) } };
+
+
+
+createBox(layerShaderUniforms).then(newBox => {
+  box = newBox;
+  scene.add(box);
+
+  resize();
+  loop();
+}); 
+</script>
+
+
+
+{% elif visualization == 7 %}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="./style.css">
+<style type="text/css">
+  canvas{
+    position: absolute !important;
+  }
+</style>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js'></script>
+<script type="text/javascript">
+class ShaderScene {
+  constructor(fragmentShader, vertexShader, uniforms = {}) {
+    this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 3);
+    this.camera.position.z = 2;
+
+    this.scene = new THREE.Scene();
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+
+    this.uniforms = uniforms;
+
+    this.plane = ShaderScene.createPlane(fragmentShader, vertexShader, this.uniforms);
+    this.plane.rotation.x = Math.PI / -2;
+    this.scene.add(this.plane);
+  }
+
+  setSize(width, height) {
+    this.renderer.setSize(width, height);
+  }
+
+  render() {
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  static createPlane(fragmentShader, vertexShader, uniforms) {
+    const geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
+    const material = new THREE.ShaderMaterial({
+      fragmentShader,
+      vertexShader,
+      uniforms,
+
+      defines: {
+        'RADIUS': '4.0' } });
+
+
+
+    return new THREE.Mesh(geometry, material);
+  }}
+
+
+const fragmentShader = `
+uniform float uAspect;
+uniform vec2 uOffset;
+
+varying vec2 vUv;
+
+const int ITERATIONS_MAX = 400;
+
+// https://raw.githubusercontent.com/hughsk/glsl-hsv2rgb/master/index.glsl
+vec3 hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+int isInMandelBrotSet(float cr, float ci) {
+  float zr = cr;
+  float zi = ci;
+
+  for (int i = 0; i < ITERATIONS_MAX; i++) {
+    if (zr * zr + zi * zi > RADIUS) {
+      return i;
+    }
+
+    float zrNew = (zr * zr) - (zi * zi) + cr;
+    float ziNew = (zr * zi) * 2.0 + ci;
+    
+    zr = zrNew;
+    zi = ziNew;
+  }
+
+  return ITERATIONS_MAX;
+}
+
+void main() {
+  float x = vUv.x * uAspect + uOffset.x;
+  float y = vUv.y + uOffset.y;
+
+  int iteration = isInMandelBrotSet(x, y);
+  
+  if (iteration == 0) {
+    discard;
+  }
+
+  float t = float(iteration) / float(ITERATIONS_MAX);
+  float tr = 1.0 - t;
+
+  float hue = 0.58 + tr * 0.2;
+  vec3 color = hsv2rgb(vec3(hue, 1.0, t));
+
+  gl_FragColor = vec4(color, 1.0);
+}
+`;
+
+const vertexShader = `
+uniform float uZoom;
+varying vec2 vUv;
+
+void main() {
+  vUv = position.xy / uZoom;
+
+  gl_Position = vec4(position, 1.0);
+}
+`;
+
+const updateSize = shader => {
+  const height = window.innerHeight;
+  const width = window.innerWidth;
+
+  shader.setSize(width, height);
+  shader.uniforms.uAspect.value = width / height;
+  shader.render();
+};
+
+const shader = new ShaderScene(fragmentShader, vertexShader, {
+  uOffset: {
+    value: new THREE.Vector2(-0.5, 0) },
+
+  uAspect: {
+    type: 'f',
+    value: 1 },
+
+  uZoom: {
+    type: 'f',
+    value: 0.5 } });
+
+
+
+const setPosition = (shader, x, y) => {
+  shader.uniforms.uOffset.value.x = x;
+  shader.uniforms.uOffset.value.y = y;
+};
+
+const setZoom = (shader, zoom) => {
+  shader.uniforms.uZoom.value = zoom;
+};
+
+const setPreset = (shader, preset) => {
+  setPosition(shader, preset[0], preset[1]);
+  setZoom(shader, preset[2]);
+};
+
+// Preset animation
+const presetAnimationStart = Date.now() / 1000;
+const presetAnimationDuration = 40;
+const presetStartZoom = 1 / 2;
+const presetStart = [0, 0, presetStartZoom];
+const presetAnimation = [
+presetStart,
+
+[0.3, 0.022, presetStartZoom],
+[0.3, 0.022, 1 / 0.005],
+[0.2995, 0.023, 1 / 0.00065],
+[0.2995, 0.023, presetStartZoom],
+
+[-0.745, 0.11, presetStartZoom],
+[-0.745, 0.11, 1 / 0.005],
+[-0.7453, 0.1127, 1 / 0.00065],
+[-0.7453, 0.1127, presetStartZoom],
+
+[-1.25, 0.0202, presetStartZoom],
+[-1.25, 0.0202, 1 / 0.005],
+[-1.25066, 0.02012, 1 / 0.0005],
+[-1.25066, 0.02012, presetStartZoom]];
+
+
+// Animation utils
+const ease = t => 1 - (Math.cos(t * Math.PI) + 1) / 2;
+const lerp = (a, b, t) => a + (b - a) * t;
+const lerpPreset = (a, b, t) => {
+  return [
+  lerp(a[0], b[0], t),
+  lerp(a[1], b[1], t),
+  lerp(a[2], b[2], t)];
+
+};
+
+const animate = () => {
+  requestAnimationFrame(animate);
+
+  const elapsed = Date.now() / 1000 - presetAnimationStart;
+  const progress = elapsed % presetAnimationDuration / presetAnimationDuration;
+  const presetStartIndex = Math.floor(progress * presetAnimation.length);
+  const presetEndIndex = (presetStartIndex + 1) % presetAnimation.length;
+  const tweenProgress = progress * presetAnimation.length - presetStartIndex;
+
+  setPreset(shader, lerpPreset(
+  presetAnimation[presetStartIndex],
+  presetAnimation[presetEndIndex],
+  ease(tweenProgress)));
+
+
+  shader.render();
+};
+
+window.addEventListener('resize', () => updateSize(shader));
+document.body.appendChild(shader.renderer.domElement);
+
+updateSize(shader);
+animate();  
+</script>
+
+{% endif %}
 
 
 
