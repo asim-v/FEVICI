@@ -495,7 +495,7 @@ def leave_chat(chatid):
         chat_details.get("users").remove(session.get("email_addr"))
         chat_doc.update(chat_details, option=None)
 
-        user_doc = users_coll.document(session["user_id"])
+        user_doc = users_coll.document(session["id"])
         user_details = user_doc.get().to_dict()
         user_details.get("connected_chats").remove(chat_doc)
         user_doc.update(user_details, option=None) 
