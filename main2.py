@@ -8,6 +8,7 @@ TODO:
     - Interfaz para chats y chats recientes
     - Colocar correctamente la dashboard o la página de inicio, parecido al templete
     - Colocar ventana de colaboradores,reglas, convocatoria, premios y recursos interactivos
+    - Terminar Landing Page
 
 EN PROGRESO:
     - Implementando funcionalidad para compartir proyecto (Link de vista pública y colaboradores)
