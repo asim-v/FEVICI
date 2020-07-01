@@ -9,6 +9,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-color: black;
 }
 nav{
   background-color: rgba(10,10,10,0.1) !important;
@@ -36,7 +37,7 @@ nav{
 
 
   <body>
-    <div class="bg"></div>
+    <div class="bg">
 
 
 {% if visualization == 1 %}
@@ -464,9 +465,7 @@ html, body {
 }
 
 body {
-  background-color: #000;
   color: #fff;
-  overflow: hidden;
   -webkit-perspective: 1000px;
           perspective: 1000px;
 }
@@ -790,7 +789,7 @@ window.addEventListener('load', () => {
 
 {% elif visualization == 4 %}
 
-<canvas id='canvas' style="position: absolute;overflow: hidden;"></canvas>
+<canvas id='canvas'></canvas>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js'></script>
@@ -1607,8 +1606,22 @@ updateSize(shader);
 animate();  
 </script>
 
+
 {% endif %}
 
+  <section id="four" style="position: absolute;z-index: 10000000;bottom:-17.8;width: 100%;transform: rotate(180deg);min-width: 500px;">
+      <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="120" viewBox="0.2 0 178 30" preserveAspectRatio="none">
+          <g transform="translate(-14.514284,-115.36352)">
+              <path style="fill:#8819ff;" d="m 14.74107,115.49581 h 178.02679 v 30.61607 h -29.10417 v -12.47321 h -10.58333 v -8.31548 h -13.98512 v 13.98512 h -20.41072 v -13.98512 h -8.31547 v 7.18155 h -7.18155 v 10.9613 H 85.422617 v -10.9613 H 68.791666 V 121.54343 H 51.40476 v 15.875 H 29.860117 v -9.82739 h -8.693452 v -7.55952 h -6.520089 v -4.53571 z" />
+              <path style="fill:#F9F8FF;" d="M 14.741071,112.54762 H 192.76786 v 30.61607 H 163.66369 V 130.69048 H 153.08036 V 122.375 h -13.98512 v 13.98512 H 118.68452 V 122.375 h -8.31547 v 7.18155 h -7.18155 v 10.9613 H 85.422617 v -10.9613 H 68.791666 V 118.59524 H 51.40476 v 15.875 H 29.860118 v -9.82739 h -8.693452 v -7.55952 h -6.520089 v -4.53571 z"/>
+          </g>
+      </svg>
+  </section>
+
+
+
+
+</div>
 
 
 
@@ -1620,30 +1633,43 @@ animate();
 
 
 
-      <div class="container" style="position: relative;z-index: 5;padding-top: 100px">
-      <div class="row">
-        <div class="col-lg">
+    <div class="container dark" style="position: relative;z-index: 5;padding-top: 100px">
+      <div class="col">
+        <div class="row" style="height: 100vh;">
+          <div class="col-lg">
+            <div class="row h-25"></div>
+            <div class="row"><h1 class="index-title">Feria Virtual Internacional de Ciencias e Ingenierías</h1></div>
+            <div class="row"><button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#registerModal">Registrarse</button></div>
+            <div class="row h-25"></div>
+          </div>
+
+          <div class="col-lg text-center">
+            <!-- <img src="static/img/locked.jpg" style="margin:20px;width:70%"> -->
+            {% with flash_messages = get_flashed_messages() %}
+            {% if flash_messages %}
+              {% for message in flash_messages %}
+              <div class="alert alert-danger" role="alert">
+                {{ message }}
+              </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %} 
+          
+
+
+
+          </div>
+
         </div>
-        <div class="col-lg text-center">
-          <!-- <img src="static/img/locked.jpg" style="margin:20px;width:70%"> -->
-          {% with flash_messages = get_flashed_messages() %}
-          {% if flash_messages %}
-            {% for message in flash_messages %}
-            <div class="alert alert-danger" role="alert">
-              {{ message }}
-            </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %} 
-        <button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#loginModal">Ingresar</button>
-        <button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#registerModal">Registrarse</button>
 
-
-        </div>
-        <div class="col-lg">
-        </div>
       </div>
     </div>
+
+
+<div class="container">
+
+</div>
+
     <!-- Modal for Login -->
     <div class="modal fade shadowed" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

@@ -87,12 +87,12 @@ mail.init_app(app)
 
 
 # initializes fb with bucket name
-cred = credentials.Certificate('firebase-config.json')
+cred = credentials.Certificate('creds/firebase-config.json')
 default_app = firebase_admin.initialize_app(cred,{
     'storageBucket': 'fevici.appspot.com'
 })
 # configure buckets
-client = gstorage.Client()
+client = gstorage.Client.from_service_account_json('creds/firebase-config.json')
 bucket = client.get_bucket('fevici.appspot.com')
 
 #SIRVE PARA PROBAR COMO GUARDAR FILES

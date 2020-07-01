@@ -32,8 +32,8 @@
   function about(){
   $("#btn-go-to-about").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
   fetch("/about")
-    .then((data) => {
-      console.log(data);
+    .then((data) => 
+{      console.log(data);
       window.location = data['url'];
     },
       (error) => {

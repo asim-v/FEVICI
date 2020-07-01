@@ -23,6 +23,8 @@
     {% if auth!=False %}
       <p style="margin:5px;color:white;background-color:rgba(43,43,43,.5);padding: 2px 12px; border-radius: 15px;"> {{ user_name }}</p>
       <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 2px 12px; border-radius: 15px;"> <a href="/logout">Cerrar Sesión</a></p>
+    {% else %}
+      <button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#loginModal">Ingresar</button>
     {%endif%}
   </div>
 </nav>
@@ -34,13 +36,16 @@
 <style type="text/css">
   @import url('https://fonts.googleapis.com/css2?family=Miriam+Libre&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
   .shadowed{
     box-shadow:5px 5px 10px 1px lightgrey !important;
     border: 0px !important; 
   }  
   .btn{
     font-weight: 600 !important;
+    font-family: 'Montserrat', sans-serif !important;
     border:none ;
+    max-width: 150px;
     color:white !important;
     padding: 5px 15px !important;
     border-radius: 20px !important;    
@@ -131,10 +136,22 @@
   .tooltip-container{
     position: relative;
   }
+  .index-title{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500 !important;
+    font-size: 50px;
+    color: white;
+    left: 0;
+    float: left;
+    text-shadow: 3px 3px 10px black;
+  }
+  .bg{
+    background-color: black;
+  }
   body{
     font-family: 'Montserrat', sans-serif;
     font-weight: 500 !important;
-    background-color: #F9F8FF !important;
+    background-color: #F9F8FF ;
   }
   input{
     font-weight: 400 !important;
@@ -156,6 +173,8 @@
     border-radius: 15px;
     border:none;
     padding:30px;
+  }canvas{
+    background-color: black;
   }
 
 
