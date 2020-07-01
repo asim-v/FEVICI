@@ -1,0 +1,23 @@
+{
+  "name": "FEVICI",
+  "version": "1.0.0",
+  "description": "Me trying to build a realtime chat system using firebase and flask.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asim-v/FEVICI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asim-v/FEVICI/issues"
+  },
+  "homepage": "https://github.com/asim-v/FEVICI#readme",
+  "devDependencies": {
+    "firebase-tools": "^8.4.3"
+  }
+}

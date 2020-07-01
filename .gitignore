@@ -1,4 +1,5 @@
 firebase-config.json
+node_modules
 WEB_API_KEY
 .*.swp
 /.vscode
