@@ -195,7 +195,7 @@ def user_login():
     # 7 - Mandelbrot set
     # 8 - Stars
 
-    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8,9]))
+    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8]))
     
 
 @app.route('/register', methods=["GET", "POST"])

@@ -10,8 +10,8 @@
 </head>
 
 <!-- Navigation --> 
-<nav class="navbar fixed-top navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;font-weight: 600;"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>
+<nav class="navbar fixed-top navbar-expand-sm navbar-light">
+  <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -20,11 +20,17 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     </ul>
+    <!-- Diferentes jqueries para el carousel, funciona solamente con jquery 2 aun que el dashboard ocupa el 3 -->
     {% if auth!=False %}
       <p style="margin:5px;color:white;background-color:rgba(43,43,43,.5);padding: 2px 12px; border-radius: 15px;"> {{ user_name }}</p>
       <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 2px 12px; border-radius: 15px;"> <a href="/logout">Cerrar Sesión</a></p>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     {% else %}
-      <button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#loginModal">Ingresar</button>
+      <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/18zJl4U1Hrir_VxdAv2g_XpBlj-BIcwK8rcP9E7iq_gw/edit?usp=sharing'">Académicos</button>
+      <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href='#comoayudar'">Instituciones</button>
+      <button type="button" class="btn lightgreen btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/1gNJxCRYtt1v42T6lJ7u7_ghNTsaX0urrf7kIQ6ilPao/edit?usp=sharing'">Convocatoria</button>      
+      <!-- <button type="button" class="btn purple btn-block pill-large" data-toggle="modal" data-target="#loginModal">Ingresar</button> -->
+      <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
     {%endif%}
   </div>
 </nav>
@@ -35,8 +41,7 @@
 <!-- CUSTOM STYLES -->
 <style type="text/css">
   @import url('https://fonts.googleapis.com/css2?family=Miriam+Libre&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
   .shadowed{
     box-shadow:5px 5px 10px 1px lightgrey !important;
     border: 0px !important; 
@@ -51,6 +56,12 @@
     padding: 5px 15px !important;
     border-radius: 20px !important;    
   } 
+  .purple{
+    background-color: #8819ff;
+  }
+  .lightgreen{
+    background-color: #67FBD1;
+  }
   .pill-large{
     margin:10px !important;
     color:white !important;
@@ -142,25 +153,37 @@
   .tooltip-container{
     position: relative;
   }
+  .bg{
+    background-color: black;
+  }
+  .content{
+    position: relative;
+    height: 40vh;
+    z-index: 10;
+  }
+  .index-image{
+    max-width: 450px;
+    width: 100%;
+  }  
+  .vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }  
   .index-title{
     margin-top: auto;
     margin-bottom: auto;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 600 !important;
+    font-weight: 500 !important;
     font-size: 50px;
     color: white;
     left: 0;
     float: left;
     text-shadow: 3px 3px 6px black;
   }
-  @media only screen and (max-width:600px){
-    .index-title{
-        font-size: 30px;
-    }    
-  };
-  .bg{
-    background-color: black;
-  }
+
   body{
     font-family: 'Montserrat', sans-serif;
     font-weight: 500 !important;
@@ -176,6 +199,7 @@
     background-color: #F9F8FF !important;
   } 
   nav{
+    z-index: 15;
     background-color: #8819ff;
     box-shadow: 0px 0px 5px 1px;
 
@@ -191,9 +215,37 @@
     top: 0;
     background-color: black;
     position: absolute;
+  }h2{
+    z-index: 100;
+    border-radius: 50px;
+    padding: 1vh;
+    background-color: #2B2B2B;
+    color: white;
+    max-width: 450px
+  }h4{
+    color: #404040;
+    line-height: 1.5;
+    font-weight: 500;
+  }h3{
+    font-weight: 600;
   }
-
-
+  @media only screen and (max-width:1500px){
+  }.content{
+      height: 60vh;
+    }
+  @media only screen and (max-width:600px){
+    .index-title{
+        font-size: 30px;
+    }    
+    h4{
+      color: #404040;
+      line-height: 1.5;
+      font-size: 15;
+      font-weight: 500;
+    }.content{
+      height: 80vh;
+    }
+  }
 </style>
 <!-- CUSTOM STYLES -->
 
@@ -207,6 +259,6 @@
 <!-- Initialize Firebase -->
 <script src="/__/firebase/init.js"></script>
 <!-- Optional JavaScript -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
