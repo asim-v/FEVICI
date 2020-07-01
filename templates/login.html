@@ -15,7 +15,6 @@ nav{
   background-color: rgba(10,10,10,0.1) !important;
   box-shadow: 0px 0px 1px 1px rgba(10,10,10,0.1)  !important;
   backdrop-filter:blur(5px);
-  position: absolute !important;
   width: 100%; 
   padding:0.5rem;
   z-index: 10 !important;;
@@ -52,7 +51,6 @@ nav{
 
   canvas {
     position: absolute;
-    overflow:hidden;
     z-index: -10;
     display: block;
   }
@@ -789,103 +787,75 @@ window.addEventListener('load', () => {
 
 {% elif visualization == 4 %}
 
-<canvas id='canvas'></canvas>
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
 <script type="text/javascript">
-let {
-  min,
-  max,
-  cos,
-  sin,
-  floor,
-  PI } =
-Math;
-$(() => {
-  //near missajous
-  var $canvas = $('#canvas');
-  var canvas = $canvas[0];
-  var epoch = Date.now();
-  var scale = .5;
-  function draw(ctx, w, h) {
-    var t = (Date.now() - epoch) / 1000;
-    var xs = _.times(8, i => i);
-    var ys = _.times(8, i => i);
-    var X = w / xs.length;
-    var Y = h / ys.length;
-    var R = min(min(X, Y) / 2 - 5, 25);
-    var r = 5;
-    xs.forEach((x, i) => {
-      ys.forEach((y, j) => {
-        if (i == 0 && j > 0) {
-          ctx.fillStyle = 'black';
-          ctx.fillRect(0, j * Y, X, Y);
-          ctx.strokeStyle = 'white';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(X / 2, Y * (j + .5), R, 0, 2 * Math.PI);
-          ctx.stroke();
-          ctx.fillStyle = 'green';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(X / 2 + R * cos(scale * y * t), Y * (j + .5) + R * sin(scale * y * t), r, 0, 2 * Math.PI);
-          ctx.fill();
-        } else
-        if (j == 0 && i > 0) {
-          ctx.fillStyle = 'black';
-          ctx.fillRect(i * X, 0, X, Y);
-          ctx.strokeStyle = 'white';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(X * (i + .5), Y / 2, R, 0, 2 * Math.PI);
-          ctx.stroke();
-          ctx.fillStyle = 'red';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(X * (i + .5) + R * cos(scale * x * t), Y / 2 + R * sin(scale * x * t), r, 0, 2 * Math.PI);
-          ctx.fill();
-        } else
-        if (j > 0 && i > 0) {
-          ctx.fillStyle = 'rgba(0,0,0,.01)';
-          ctx.fillRect(i * X, j * Y, X, Y);
-          //*
-          var cr = i / xs.length,
-          cg = -cos(scale * (i * PI + j) * t) * .5 + .5,
-          cb = j / ys.length;
-          var cn = max(cr, max(cg, cb));
-          cr = floor(255 * cr / cn);
-          cg = floor(255 * cg / cn);
-          cb = floor(255 * cb / cn);
-          //*/
-          ctx.fillStyle = `rgb(${cr},${cg},${cb})`;
-          ctx.beginPath();
-          ctx.arc(X * (i + .5) + R * cos(scale * x * t), Y * (j + .5) + R * sin(scale * y * t), 1, 0, 2 * Math.PI);
-          ctx.fill();
-        }
-      });
-    });
+// Inspired by:
+// - https://codepen.io/pimskie/pen/aWNbBw
+// - http://paulbourke.net/fractals/henonphase
+
+const birand = () => (Math.random() * 2) - 1;
+const lerp = (min, max, t) => min + (t * (max - min));
+
+const canvas = document.createElement('canvas');
+canvas.height = window.innerHeight * window.devicePixelRatio;
+canvas.width = window.innerWidth * window.devicePixelRatio;
+const context = canvas.getContext('2d');
+context.globalCompositeOperation = 'lighter';
+context.globalAlpha = .25;
+
+const canvasSizeMin = Math.min(canvas.width, canvas.height);
+const scale = canvasSizeMin / 3;
+
+const a = 1.2;
+const acos = Math.cos(a);
+const asin = Math.sin(a);
+const radiusMax = 3;
+
+let x = birand();
+let y = birand();
+let n = 0;
+
+const render = () => {
+  x = birand();
+  y = birand();
+  
+  for (let i = 0; i < 1000; i++) {
+    const radius = (x * x) + (y * y);
+
+    if (radius > radiusMax) break;
+    
+    const tRadius = radius / radiusMax;
+    
+    const b = y - (x * x);
+    const xNew = (x * acos) - (b * asin);
+    const yNew = (x * asin) + (b * acos);
+    
+    x = xNew;
+    y = yNew;
+
+    context.save();
+    
+    const hue = lerp(180, 240, Math.sqrt(tRadius));
+    context.fillStyle = `hsl(${hue}, 100%, 50%)`;
+    
+    context.translate(canvas.width * 0.3, canvas.height * 0.5);
+    context.beginPath();
+    context.arc(x * scale, y * scale, 0.5, 0, Math.PI * 2, false);
+    context.fill();
+
+    context.restore();
   }
-  var d;
-  function setSize() {
-    var w = $(window).width();
-    var h = $(window).height();
-    //$canvas.attr('width', $(window).width());
-    canvas.width = w;
-    //$canvas.attr('height', $(window).height());
-    canvas.height = h;
-    var ctx = canvas.getContext('2d');
-    d = draw.bind(null, ctx, w, h);
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, w, h);
-  }
-  setSize();
-  $(window).resize(function () {
-    setSize();
-  });
-  window.setInterval(d, 1000. / 60);
-}); 
+  
+  if (++n < 1000) requestAnimationFrame(render);
+};
+
+document.body.appendChild(canvas);
+render();  
 </script>
+
+
 
 {% elif visualization == 5 %}
 
@@ -896,13 +866,19 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   position: absolute;
   z-index: -10 !important;
 }
 </style>
 
+<style type="text/css">
 
+  canvas{
+    position: absolute;
+    z-index: -10;
+  }
+
+</style>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js'></script>
 <script type="text/javascript">
   function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} 
@@ -1605,14 +1581,609 @@ document.body.appendChild(shader.renderer.domElement);
 updateSize(shader);
 animate();  
 </script>
+{% elif visualization == 8 %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js'></script>
+<script type="text/javascript">
+function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}class BackgroundMaterial extends THREE.RawShaderMaterial {
+  constructor() {
+    super(BackgroundMaterial.shader);_defineProperty(this, "resize",
 
+
+
+
+
+    () => {
+      this.uniforms.resolution.value.set(
+      window.innerWidth * window.devicePixelRatio,
+      window.innerHeight * window.devicePixelRatio);
+
+    });_defineProperty(this, "loop",
+
+    timestamp => {
+      requestAnimationFrame(this.loop);
+      this.uniforms.globalTime.value = timestamp / 1000;
+    });addEventListener('resize', this.resize);requestAnimationFrame(this.loop);}}_defineProperty(BackgroundMaterial, "shader", { vertexShader: `
+      attribute vec3 position;
+
+      uniform mat4 projectionMatrix;
+      uniform mat4 modelViewMatrix;
+
+      void main() {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+      }
+    `, fragmentShader: `
+      #ifdef GL_ES
+      precision mediump float;
+      #endif
+
+      #define OCTAVES 2
+      #define RGB(r, g, b) vec3(float(r) / 255.0, float(g) / 255.0, float(b) / 255.0)
+
+      uniform vec2 resolution;
+      uniform float globalTime;
+
+      float random(vec2 co) {
+          return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+      }
+
+      vec2 rand2(vec2 p) {
+          p = vec2(dot(p, vec2(12.9898,78.233)), dot(p, vec2(26.65125, 83.054543))); 
+          return fract(sin(p) * 43758.5453);
+      }
+
+      float rand(vec2 p) {
+          return fract(sin(dot(p.xy ,vec2(54.90898,18.233))) * 4337.5453);
+      }
+
+
+
+      //
+      // Description : Array and textureless GLSL 2D simplex noise function.
+      //      Author : Ian McEwan, Ashima Arts.
+      //  Maintainer : ijm
+      //     Lastmod : 20110822 (ijm)
+      //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+      //               Distributed under the MIT License. See LICENSE file.
+      //               https://github.com/ashima/webgl-noise
+      //
+
+      vec3 mod289(vec3 x) {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+      }
+
+      vec2 mod289(vec2 x) {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+      }
+
+      vec3 permute(vec3 x) {
+        return mod289(((x*34.0)+1.0)*x);
+      }
+
+      float snoise(vec2 v) {
+        const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                            0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                           -0.577350269189626,  // -1.0 + 2.0 * C.x
+                            0.024390243902439); // 1.0 / 41.0
+        vec2 i  = floor(v + dot(v, C.yy) );
+        vec2 x0 = v -   i + dot(i, C.xx);
+
+        vec2 i1;
+        i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+        vec4 x12 = x0.xyxy + C.xxzz;
+        x12.xy -= i1;
+
+        i = mod289(i); // Avoid truncation effects in permutation
+        vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+          + i.x + vec3(0.0, i1.x, 1.0 ));
+
+        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+        m = m*m ;
+        m = m*m ;
+
+        vec3 x = 2.0 * fract(p * C.www) - 1.0;
+        vec3 h = abs(x) - 0.5;
+        vec3 ox = floor(x + 0.5);
+        vec3 a0 = x - ox;
+
+        m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+
+        vec3 g;
+        g.x  = a0.x  * x0.x  + h.x  * x0.y;
+        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+        return 130.0 * dot(m, g);
+      }
+
+      // Thanks to andmar1x https://www.shadertoy.com/view/MtB3zW
+      float stars(in vec2 x, float numCells, float size, float br) {
+        vec2 n = x * numCells;
+        vec2 f = floor(n);
+
+        float d = 1.0e10;
+        for (int i = -1; i <= 1; ++i)
+        {
+          for (int j = -1; j <= 1; ++j)
+          {
+            vec2 g = f + vec2(float(i), float(j));
+            g = n - g - rand2(mod(g, numCells)) + rand(g);
+            // Control size
+            g *= 1. / (numCells * size);
+            d = min(d, dot(g, g));
+          }
+        }
+
+        return br * (smoothstep(.95, 1., (1. - sqrt(d))));
+      }
+
+      float fractalNoise(in vec2 coord, in float persistence, in float lacunarity) {    
+          float n = 0.;
+          float frequency = 3.;
+          float amplitude = 2.;
+          for (int o = 0; o < OCTAVES; ++o)
+          {
+              n += amplitude * snoise(coord * frequency);
+              amplitude *= persistence;
+              frequency *= lacunarity;
+          }
+          return n;
+      }
+
+      void main() {
+        vec2 coord = gl_FragCoord.xy / resolution.xy;
+        vec2 starCoord = gl_FragCoord.xy / resolution.yy - vec2(.5, 0);
+        vec3 color1 = RGB(10, 70, 50) * 1.5;
+        vec3 color2 = RGB(50, 0, 40) * 1.1;
+        float dist = distance(coord, vec2(0.5, 0.3)) * 1.5;
+
+        float time = -globalTime / 100.;
+
+        mat2 RotationMatrix = mat2(cos(time), sin(time), -sin(time), cos(time));
+        vec3 starField = stars(starCoord * RotationMatrix, 16., 0.03, 0.8) * vec3(.9, .9, .95);
+             starField += stars(starCoord * RotationMatrix, 40., 0.025, 1.0) * vec3(.9, .9, .95) * max(0.0, fractalNoise(starCoord * RotationMatrix, .5, .2));
+
+        vec3 aurora = RGB(0,255,130) * max(snoise(vec2((coord.x + sin(time)) * 15., coord.x * 40.)) * max((sin(10.0 * (coord.x + 2. * time)) *.1 + 1.26) - 2. * coord.y, 0.), 0.);
+        vec3 aurora2 = RGB(0,235,170) * max(snoise(vec2((.09 * coord.x + sin(time * .5)) * 15., coord.x * 1.)) * max((sin(5.0 * (coord.x + 1.5 * time)) *.1 + 1.28) - 2. * coord.y, 0.), 0.);
+
+        vec3 result = starField + aurora * aurora2.g * 3.5 + aurora2;
+
+        gl_FragColor = vec4(mix(color1, color2, dist), 1.0);
+        gl_FragColor.rgb += result;
+      }
+
+    `, uniforms: { resolution: { value: new THREE.Vector2(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio) }, globalTime: { value: performance.now() / 1000 } }, side: THREE.BackSide });class MountainMaterial extends THREE.ShaderMaterial {constructor() {super(MountainMaterial.shader);}}_defineProperty(MountainMaterial, "shader", { vertexShader: `
+      uniform vec3 mvPosition;
+
+      varying vec2 vUv;
+      varying float fogDepth;
+
+      void main() {
+        fogDepth = -mvPosition.z;
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+      }
+    `, fragmentShader: `
+      #ifdef GL_ES
+      precision mediump float;
+      #endif
+
+      varying vec2 vUv;
+
+      #include <fog_pars_fragment>
+
+      float random(vec2 co) {
+          return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+      }
+
+      vec2 rand2(vec2 p)
+      {
+          p = vec2(dot(p, vec2(12.9898,78.233)), dot(p, vec2(26.65125, 83.054543))); 
+          return fract(sin(p) * 43758.5453);
+      }
+
+      float rand(vec2 p)
+      {
+          return fract(sin(dot(p.xy ,vec2(54.90898,18.233))) * 4337.5453);
+      }
+
+      void main() {
+        float offset = random(vec2(gl_FragCoord.w));
+        vec2 c = vUv;
+        vec2 p = vUv;
+        p *= .3;
+        p.y = p.y * 30. - 4.;
+        p.x = p.x * (80. * offset) + 14.8 * offset;
+        vec2 q = (p - vec2(0.5,0.5)) * 1.;
+        // p = q;
+        vec3 col = vec3(0.);
+
+        float h = max(
+          .0,
+          max(
+            max(
+              abs(fract(p.x)-.5)-.25, 
+              3.*(abs(fract(.7*p.x+.4)-.5)-.4) 
+            ),
+            max(
+              1.2*(abs(fract(.8*p.x+.6)-.5)-.2), 
+              .3*(abs(fract(.5*p.x+.2)-.5)) 
+            ) 
+          )
+        );
+        float fill = 1.0 - smoothstep(h, h+.001, p.y);
+
+        vec3 col2 = col * min(fill, 2.0);
+
+        gl_FragColor = vec4(col2, fill);
+
+        #ifdef USE_FOG
+          #ifdef USE_LOGDEPTHBUF_EXT
+            float depth = gl_FragDepthEXT / gl_FragCoord.w;
+          #else
+            float depth = gl_FragCoord.z / gl_FragCoord.w;
+          #endif
+          float fogFactor = smoothstep(fogNear, fogFar, depth);
+          gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, fogFactor);
+        #endif
+      }
+    `, uniforms: THREE.UniformsLib.fog, fog: true, transparent: true });class TreeMaterial extends THREE.RawShaderMaterial {constructor() {super(TreeMaterial.shader);_defineProperty(this, "loop", timestamp => {requestAnimationFrame(this.loop);this.uniforms.globalTime.value = timestamp / 1000;});requestAnimationFrame(this.loop);}}_defineProperty(TreeMaterial, "shader", { vertexShader: `
+      attribute vec3 position;
+      attribute vec2 uv;
+
+      uniform mat4 projectionMatrix;
+      uniform mat4 modelViewMatrix;
+
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+      }
+    `, fragmentShader: `
+      #ifdef GL_ES
+      precision mediump float;
+      #endif
+
+      #define RGB(r, g, b) vec3(float(r) / 255.0, float(g) / 255.0, float(b) / 255.0)
+
+      uniform float globalTime;
+
+      varying vec2 vUv;
+
+      float treeFill(in float size, in vec2 offset) {
+        vec2 p = vUv;
+        vec2 q = p - vec2(0.5,0.5);
+          vec2 q1 = 100.0 / size * q - offset;
+          float r= mod(-0.8*q1.y,1.-0.06*q1.y) * -0.05*q1.y - .1*q1.y;
+          float fill = (1.0 - smoothstep(r, r+0.001, abs(q1.x+0.5*sin(0.9 * globalTime + p.x * 25.0)*(1.0 + q1.y/13.0)))) * smoothstep(0.0, 0.01, q1.y + 13.0);
+          return fill;
+      }
+
+      vec4 tree(in float size, in vec2 offset) {
+        float glowDist = 0.12;
+        vec3 glowColor = RGB(11, 115, 95);
+        float tree = treeFill(size, offset);
+        float treeGlow = treeFill(size, vec2(offset.x + glowDist, offset.y));
+        return max(vec4(glowColor * (treeGlow - tree), treeGlow), vec4(0.0));
+      }
+
+      void main() {
+        vec2 c = vUv;
+        vec2 p = vUv;
+        p *= 0.3;
+        p.y = p.y * 30.0 - 4.0;
+        p.x = p.x * 30.0;
+        vec2 q = (p - vec2(0.5,0.5)) * 5.5;
+
+        vec4 col = tree(1.0, vec2(-30.0, 7.0));
+              col += tree(1.2, vec2(-15.0, 8.0));
+              col += tree(1.1, vec2(-12.0, 4.0));
+              col += tree(1.0, vec2(-9.0, 6.0));
+              col += tree(1.1, vec2(-10.0, 3.0));
+              col += tree(1.0, vec2(-3.0, 4.0));
+              col += tree(1.1, vec2(-1.5, 5.0));
+              col += tree(1.0, vec2(5.0, 3.0));
+              col += tree(1.3, vec2(12.0, 8.0));
+              col += tree(0.9, vec2(15.0, 7.0));
+              col += tree(1.0, vec2(18.0, 7.0));
+              col += tree(1.1, vec2(26.0, 7.0));
+
+        gl_FragColor = vec4(max(col.rgb * p.y, vec3(0.0)), col.a);
+      }
+    `, uniforms: { globalTime: { value: performance.now() / 1000 } }, transparent: true });class Scene {constructor() {_defineProperty(this, "onWindowResize", () => {this.camera.aspect = window.innerWidth / window.innerHeight;this.camera.updateProjectionMatrix();this.renderer.setSize(window.innerWidth, window.innerHeight);});_defineProperty(this, "update", timestamp => {requestAnimationFrame(this.update);this.renderer.render(this.scene, this.camera);});this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 5000);this.camera.position.z = 40;this.scene = new THREE.Scene();this.scene.fog = new THREE.Fog(0xFF00FF, 40, 180);this.renderer = new THREE.WebGLRenderer({ antialias: true });this.renderer.setPixelRatio(window.devicePixelRatio);this.renderer.setSize(window.innerWidth, window.innerHeight);document.body.appendChild(this.renderer.domElement);this.clock = new THREE.Clock();window.addEventListener('resize', this.onWindowResize);const backgroundGeometry = new THREE.SphereGeometry(4000, 32, 15);const backgroundMaterial = new BackgroundMaterial();const background = new THREE.Mesh(backgroundGeometry, backgroundMaterial);this.scene.add(background);const treeGeometry = new THREE.PlaneGeometry(200, 200, 1, 1);const treeMaterial = new TreeMaterial();this.tree = new THREE.Mesh(treeGeometry, treeMaterial);this.tree.position.z = 0.1;this.scene.add(this.tree);MountainMaterial.uniforms = { fogColor: { value: this.scene.fog.color }, fogNear: { value: this.scene.fog.near }, fogFar: { value: this.scene.fog.far } };const mountainMaterial = new MountainMaterial();const mountainGeometry = new THREE.PlaneGeometry(600, 200, 1, 1);const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);mountain.position.set(0, 0, 0);const mountain2 = new THREE.Mesh(mountainGeometry, mountainMaterial);mountain2.position.set(0, -2, -26);const mountain3 = new THREE.Mesh(mountainGeometry, mountainMaterial);mountain3.position.set(0, 0, -35);this.scene.add(mountain);this.scene.add(mountain2);this.scene.add(mountain3);requestAnimationFrame(this.update);}}new Scene();  
+</script>
+
+{% elif visualization == 9 %}
+
+<script type="text/javascript">
+  
+"use strict";
+
+/* As I am beginning this pen, my idea is to imitate
+Electric Field Lines (https://codepen.io/EpicCoder_2002/pen/KERjgm)
+by Ahmed Eltaher (https://codepen.io/EpicCoder_2002)
+*/
+
+window.addEventListener("load",function() {
+
+  const AVG_SURFACE = 10000; // pixels²
+  const RADIUS = 2;
+  const COLOR_POS = '#ff0000';
+  const COLOR_NEG = '#0000ff';
+  const PART_MIN = 10; // min number of particles starting from each positive source
+  const PART_MAX = 50; // max number of particles starting from each positive source
+  const SPEED_ANIM = 1;
+  const SPEED_PART = 1;
+
+  let canv, ctx;    // canvas and context
+
+  let maxx, maxy;   // canvas dimensions
+
+  let nbPos, nbNeg;
+  let arrPos, arrNeg;
+  let particles;
+  let nbPart;
+
+// for animation
+  let tStampRef;   // time stamp ref for animation
+  let events;
+
+// shortcuts for Math.
+  const mrandom = Math.random;
+  const mfloor = Math.floor;
+  const mround = Math.round;
+  const mceil = Math.ceil;
+  const mabs = Math.abs;
+  const mmin = Math.min;
+  const mmax = Math.max;
+
+  const mPI = Math.PI;
+  const mPIS2 = Math.PI / 2;
+  const mPIS3 = Math.PI / 3;
+  const m2PI = Math.PI * 2;
+  const m2PIS3 = Math.PI * 2 / 3;
+  const msin = Math.sin;
+  const mcos = Math.cos;
+  const matan2 = Math.atan2;
+
+  const mhypot = Math.hypot;
+  const msqrt = Math.sqrt;
+
+  const rac3   = msqrt(3);
+  const rac3s2 = rac3 / 2;
+
+//------------------------------------------------------------------------
+
+function alea (mini, maxi) {
+// random number in given range
+
+  if (typeof(maxi) == 'undefined') return mini * mrandom(); // range 0..mini
+
+  return mini + mrandom() * (maxi - mini); // range mini..maxi
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function intAlea (mini, maxi) {
+// random integer in given range (mini..maxi - 1 or 0..mini - 1)
+//
+  if (typeof(maxi) == 'undefined') return mfloor(mini * mrandom()); // range 0..mini - 1
+  return mini + mfloor(mrandom() * (maxi - mini)); // range mini .. maxi - 1
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  function removeElement(array, element) {
+    let idx = array.indexOf(element);
+    if (idx == -1) throw ('Bug ! indexOf -1 in removeElement');
+    array.splice(idx, 1);
+  } // removeElement
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+let animate;
+
+{ // scope for animate
+
+let animState = 0;
+let currCell;
+
+animate = function(tStamp) {
+
+  let event;
+  let grp, neighs, found, tinit;
+
+  event = events.pop();
+  if (event && event.event == 'reset') animState = 0;
+  if (event && event.event == 'click') animState = 0;
+  window.requestAnimationFrame(animate)
+
+  tinit = performance.now();
+  do {
+
+    switch (animState) {
+
+      case 0 :
+        if (startOver()) {
+          ++animState;
+        }
+        break;
+
+      case 1 :
+        if (particles.length == 0) {
+          ++animState;
+          break;
+        }
+        particles.forEach (part => part.move());
+        break;
+
+      case 2:
+        
+        break;
+
+    } // switch
+  } while ((animState == 1) && (performance.now() - tinit < SPEED_ANIM));
+
+} // animate
+} // scope for animate
+
+//------------------------------------------------------------------------
+
+function Particle(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
+Particle.prototype.move = function(x, y) {
+
+  let x0, y0, dx, dy, dist, fx, fy;
+  let finished = false;
+
+  x0 = this.x; y0 = this.y;
+
+  fx = 0;
+  fy = 0;
+
+// positive charges
+  for (let k = 0; k < nbPos; ++k) {
+    dx = x0 - arrPos[k][0];
+    dy = y0 - arrPos[k][1];
+    dist = dx * dx + dy * dy;
+    fx += dx / dist / msqrt(dist);
+    fy += dy / dist / msqrt(dist);
+  }
+
+// negative charges
+  for (let k = 0; k < nbNeg; ++k) {
+    dx = arrNeg[k][0] - x0;
+    dy = arrNeg[k][1] - y0;
+    dist = dx * dx + dy * dy;
+    if (dist < RADIUS * RADIUS) finished = true;
+    fx += dx / dist / msqrt(dist);
+    fy += dy / dist / msqrt(dist);
+  }
+  dist = mhypot(fx, fy);
+  this.x += SPEED_PART * fx / dist;
+  this.y += SPEED_PART * fy / dist;
+
+  ctx.beginPath();
+  ctx.moveTo (x0, y0);
+  ctx.lineTo (this.x, this.y);
+  ctx.strokeStyle = this.color;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  if (finished) removeElement(particles, this);
+}
+
+
+//------------------------------------------------------------------------
+
+function createField() {
+
+  const minDist = msqrt(AVG_SURFACE) / 4;
+
+  let x, y;
+  let offsAng, nbPart, part;
+  let color;
+
+  nbPos = nbNeg = mround(maxx * maxy / AVG_SURFACE );
+  nbPart = intAlea(PART_MIN, PART_MAX + 1); // particles starting from this source
+  arrPos = [];
+  for (let k = 0; k < nbPos; ++k) {
+    do {
+      x = alea(10, maxx - 10);
+      y = alea(10, maxy - 10);
+    } while (arrPos.some( p => mhypot(p[0] - x, p[1] - y) < minDist));
+    arrPos[k] = [x, y];
+  } // for k
+
+  arrNeg = arrPos.splice(mround(nbPos / 2));
+  nbPos = arrPos.length;
+  nbNeg = arrNeg.length;
+/*
+  ctx.fillStyle = COLOR_POS;
+  for (let k = 0; k < nbPos; ++k) {
+    ctx.beginPath();
+    ctx.arc(arrPos[k][0], arrPos[k][1], RADIUS, 0, m2PI);
+    ctx. fill();
+  } // for k
+
+  ctx.fillStyle = COLOR_NEG;
+  for (let k = 0; k < nbNeg; ++k) {
+    ctx.beginPath();
+    ctx.arc(arrNeg[k][0], arrNeg[k][1], RADIUS, 0, m2PI);
+    ctx. fill();
+  } // for k
+*/
+// create particles
+
+  particles = [];
+  arrPos.forEach(source => {
+    offsAng = alea(m2PI);
+   
+    color = `hsl(${intAlea(360)},100%,50%)`;
+    for (let k = 0; k < nbPart; ++k) {
+      part = new Particle(source[0], source[1]);
+      particles.push(part);
+      part.dir = offsAng + k * m2PI / nbPart;
+      part.x += RADIUS * mcos(part.dir);
+      part.y += RADIUS * msin(part.dir);
+      part.color = color;
+    }
+  }); // arrPos.forEach
+
+} // createField
+
+//------------------------------------------------------------------------
+
+function startOver() {
+
+// canvas dimensions
+
+  maxx = window.innerWidth;
+  maxy = window.innerHeight;
+
+  canv.width = maxx;
+  canv.height = maxy;
+  ctx.lineJoin = 'bevel';
+  ctx.lineCap = 'round';
+
+  ctx.clearRect(0,0,maxx,maxy);
+
+  createField();
+
+  return true;
+
+} // startOver
+
+//------------------------------------------------------------------------
+
+function mouseClick (event) {
+
+  events.push({event:'click'});;
+
+} // mouseMove
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+// beginning of execution
+
+  {
+    canv = document.createElement('canvas');
+    canv.style.position="absolute";
+    document.body.appendChild(canv);
+    ctx = canv.getContext('2d');
+    canv.setAttribute ('title','click me');
+  } // création CANVAS
+  canv.addEventListener('click',mouseClick); // just for initial position
+  events = [{event:'reset'}];
+  requestAnimationFrame (animate);
+
+}); // window load listener  
+
+</script>
 
 {% endif %}
 
-  <section id="four" style="position: absolute;z-index: 10000000;bottom:-17.8;width: 100%;transform: rotate(180deg);min-width: 500px;">
+  <section id="four" style="position: absolute;z-index: 10;bottom:-17.8;width: 100%;transform: rotate(180deg)">
       <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="120" viewBox="0.2 0 178 30" preserveAspectRatio="none">
           <g transform="translate(-14.514284,-115.36352)">
-              <path style="fill:#8819ff;" d="m 14.74107,115.49581 h 178.02679 v 30.61607 h -29.10417 v -12.47321 h -10.58333 v -8.31548 h -13.98512 v 13.98512 h -20.41072 v -13.98512 h -8.31547 v 7.18155 h -7.18155 v 10.9613 H 85.422617 v -10.9613 H 68.791666 V 121.54343 H 51.40476 v 15.875 H 29.860117 v -9.82739 h -8.693452 v -7.55952 h -6.520089 v -4.53571 z" />
+              <path style="fill:#2B2B2B;" d="m 14.74107,115.49581 h 178.02679 v 30.61607 h -29.10417 v -12.47321 h -10.58333 v -8.31548 h -13.98512 v 13.98512 h -20.41072 v -13.98512 h -8.31547 v 7.18155 h -7.18155 v 10.9613 H 85.422617 v -10.9613 H 68.791666 V 121.54343 H 51.40476 v 15.875 H 29.860117 v -9.82739 h -8.693452 v -7.55952 h -6.520089 v -4.53571 z" />
               <path style="fill:#F9F8FF;" d="M 14.741071,112.54762 H 192.76786 v 30.61607 H 163.66369 V 130.69048 H 153.08036 V 122.375 h -13.98512 v 13.98512 H 118.68452 V 122.375 h -8.31547 v 7.18155 h -7.18155 v 10.9613 H 85.422617 v -10.9613 H 68.791666 V 118.59524 H 51.40476 v 15.875 H 29.860118 v -9.82739 h -8.693452 v -7.55952 h -6.520089 v -4.53571 z"/>
           </g>
       </svg>
@@ -1633,17 +2204,15 @@ animate();
 
 
 
-    <div class="container dark" style="position: relative;z-index: 5;padding-top: 100px">
+    <div class="container dark" style="position: relative;z-index: 5;padding-top: 100px;pointer-events: none">
       <div class="col">
         <div class="row" style="height: 100vh;">
-          <div class="col-lg">
-            <div class="row h-25"></div>
+          <div class="col-lg" style="padding-top: 10vh;">
             <div class="row"><h1 class="index-title">Feria Virtual Internacional de Ciencias e Ingenierías</h1></div>
             <div class="row"><button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#registerModal">Registrarse</button></div>
-            <div class="row h-25"></div>
           </div>
 
-          <div class="col-lg text-center">
+          <div class="col-lg text-center" >
             <!-- <img src="static/img/locked.jpg" style="margin:20px;width:70%"> -->
             {% with flash_messages = get_flashed_messages() %}
             {% if flash_messages %}
@@ -1683,9 +2252,9 @@ animate();
           </div>
           <div class="modal-body mx-3">
               <div class="md-form">
-                  <input name="userEmail" placeholder="Your Email" type="text" autofocus class="form-control">
+                  <input name="userEmail" placeholder="Tu e-mail" type="text" autofocus class="form-control">
                   <br>
-                  <input name="userPassword" placeholder="Your Password"  type="password" class="form-control">
+                  <input name="userPassword" placeholder="Tu contraseña"  type="password" class="form-control">
                 </div>              
               <br>          
           </div>
@@ -1711,11 +2280,11 @@ animate();
           </div>
           <div class="modal-body mx-3">
               <div class="md-form">
-                  <input name="userName" placeholder="Your Name" type="text" autofocus class="form-control">
+                  <input name="userName" placeholder="Tu nombre" type="text" autofocus class="form-control">
                   <br>
-                  <input name="userEmail" placeholder="Your Email" type="text" autofocus class="form-control">
+                  <input name="userEmail" placeholder="Tu correo" type="text" autofocus class="form-control">
                   <br>
-                  <input name="userPassword" placeholder="Your Password"  type="password" class="form-control">
+                  <input name="userPassword" placeholder="Tu contraseña"  type="password" class="form-control">
                 </div>              
               <br>          
           </div>

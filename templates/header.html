@@ -45,6 +45,7 @@
     font-weight: 600 !important;
     font-family: 'Montserrat', sans-serif !important;
     border:none ;
+    pointer-events: all;
     max-width: 150px;
     color:white !important;
     padding: 5px 15px !important;
@@ -74,8 +75,8 @@
     background-color: #67FBD1 !important;
   }
   .btn-primary{
-    background-color: #FEFEDF !important;
-    color: #2B2B2B !important;
+    background-color: #6800d8 !important;
+    color: white !important;
   }
   .btn-warning{
     background-color: #DF4550!important
@@ -96,6 +97,11 @@
   }  
   .alert{
     margin-bottom: 0rem !important;
+  }
+  .alert-danger{
+    margin-bottom: 0rem !important;
+    background-color: rgba(223, 69, 80,0.2) !important;
+    color: red;
   }
   .teammate{
     color: white;
@@ -137,14 +143,21 @@
     position: relative;
   }
   .index-title{
+    margin-top: auto;
+    margin-bottom: auto;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     font-size: 50px;
     color: white;
     left: 0;
     float: left;
-    text-shadow: 3px 3px 10px black;
+    text-shadow: 3px 3px 6px black;
   }
+  @media only screen and (max-width:600px){
+    .index-title{
+        font-size: 30px;
+    }    
+  };
   .bg{
     background-color: black;
   }
@@ -152,6 +165,7 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 500 !important;
     background-color: #F9F8FF ;
+    overflow-x: hidden;
   }
   input{
     font-weight: 400 !important;
@@ -174,7 +188,9 @@
     border:none;
     padding:30px;
   }canvas{
+    top: 0;
     background-color: black;
+    position: absolute;
   }
 
 

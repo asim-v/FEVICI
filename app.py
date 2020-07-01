@@ -186,7 +186,16 @@ def user_login():
                 flash_msg = "Something is wrong!!"
         flash(flash_msg)
     # return login page for GET request
-    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7]))
+    # 1 - Newton Fractal 
+    # 2 - Fluid Cube
+    # 3 - Bacteria Evolution
+    # 4 - Hennophase
+    # 5 - Game of life
+    # 6 - Mica Cube
+    # 7 - Mandelbrot set
+    # 8 - Stars
+
+    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8,9]))
     
 
 @app.route('/register', methods=["GET", "POST"])
