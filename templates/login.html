@@ -805,7 +805,14 @@ window.addEventListener('load', () => {
 
 {% elif visualization == 4 %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style type="text/css">
+  canvas {
+    position: absolute;
+    z-index: -10;
+  }
 
+</style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <aside class="note">
   <h1>Mapa de Hénon</h1>
@@ -822,7 +829,7 @@ const birand = () => (Math.random() * 2) - 1;
 const lerp = (min, max, t) => min + (t * (max - min));
 
 const canvas = document.createElement('canvas');
-canvas.height = window.innerHeight * window.devicePixelRatio;
+canvas.height = window.innerHeight;
 canvas.width = window.innerWidth * window.devicePixelRatio;
 const context = canvas.getContext('2d');
 context.globalCompositeOperation = 'lighter';
@@ -2235,7 +2242,7 @@ function mouseClick (event) {
         <div class="row" style="height: 100vh;">
           <div class="col-lg" style="padding-top: 10vh;">
             <div class="row"><h1 class="index-title">Feria Virtual Internacional de Ciencias e Ingenierías</h1></div><br>
-            <!-- <div class="row"><button type="button" class="btn btn-secondary btn-block pill-large" data-toggle="modal" data-target="#registerModal">Registrarse</button></div> -->
+            <div class="row"><button type="button " class="btn lightgreen btn-block pill-large" data-toggle="modal" data-target="#registerModal">Registrarse</button></div>
           </div>
 
           <div class="col-lg text-center" >
@@ -2878,7 +2885,7 @@ $(document).ready(function(){
 
 
 
-<div class="container" style="padding-top: 50px;">
+<div class="container">
 
   <div class="row content">   
     <div class="col-md">

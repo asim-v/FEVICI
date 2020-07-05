@@ -6,12 +6,14 @@ TODO:
         Idealmente tiene la opción de verlo sin tener que descargarlo, embedido en otra página HTML
     - Implementar bloqueo de formularios
     - Interfaz para chats y chats recientes
-    - Colocar correctamente la dashboard o la página de inicio, parecido al templete
+    - Colocar correctamente la dashboard o la página de inicio, parecido al templete con la experiencia similar a esta:
+        - https://demo.themewagon.com/preview/free-bootstrap-4-html5-admin-dashboard-template-adminmart
     - Colocar ventana de colaboradores,reglas, convocatoria, premios y recursos interactivos
     - Terminar Landing Page
 
 EN PROGRESO:
     - Implementando funcionalidad para compartir proyecto (Link de vista pública y colaboradores)
+    - Implementando descarga de archivos subidos.
 
 Changelog:
     - (28/6) Formulario "Sobre Mi implementado"
@@ -20,8 +22,6 @@ Changelog:
 
 
 '''
-
-
 
 
 # imports for flask
@@ -197,13 +197,13 @@ def user_login():
 
         except requests.HTTPError as e:
             if ("EMAIL_NOT_FOUND" in str(e)):
-                flash_msg = "Please register before login"
+                flash_msg = "Favor de registrarse antes de ingresar"
             elif ("INVALID_EMAIL" in str(e)):
-                flash_msg = "Please enter a valid email address"
+                flash_msg = "Por favor ingresa un correo válido"
             elif ("INVALID_PASSWORD" in str(e)):
-                flash_msg = "Email or Password is wrong"
+                flash_msg = "Contraseña inválida"
             else:
-                flash_msg = "Something is wrong!!"
+                flash_msg = "Algo salio mal!!"
         flash(flash_msg)
     # return login page for GET request
     # 1 - Newton Fractal 
@@ -215,7 +215,7 @@ def user_login():
     # 7 - Mandelbrot set
     # 8 - Stars
 
-    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8]))
+    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8,9]))
     
 
 @app.route('/register', methods=["GET", "POST"])
@@ -247,13 +247,13 @@ def user_register():
             return redirect(url_for('index_page'))
         except requests.HTTPError as e:
             if ("EMAIL_EXISTS" in str(e)):
-                flash_msg = "You have already registerd! Please log in."
+                flash_msg = "Ya te registraste! Por favor inicia sesión."
             elif ("INVALID_EMAIL" in str(e)):
-                flash_msg = "Please enter a valid email address"
+                flash_msg = "Por favor ingresa un correo electrónico válido"
             elif ("WEAK_PASSWORD" in str(e)):
-                flash_msg = "Please use a strong password"
+                flash_msg = "Por favir utiliza una contraseña segura"
             else:
-                flash_msg = "Something is wrong!!"+str(e)        
+                flash_msg = "Algo salio mal!!"+str(e)        
             flash(flash_msg)
     # return to login page for GET
     return redirect(url_for('user_login'))
@@ -538,5 +538,5 @@ def send_js(path):
     return send_from_directory('static/js', path)
 
 if (__name__ == "__main__"):
-    #app.run(debug=True)
-	socketio.run(app, debug=True)
+    app.run(debug=True)
+	#socketio.run(app, debug=True)
