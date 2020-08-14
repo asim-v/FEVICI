@@ -45,7 +45,7 @@
               {% for person in team_list %}
                 <span class="tooltip_container">
                   <div class="tooltip">
-                    <button onclick="validate()" href="" class="teammate" style="background-color: {{person.color}}">{{person.initials}}</button>
+                    <button type="button" onclick="" class="teammate" style="background-color: {{person.color}}">{{person.initials}}</button>
                     <span class="tooltiptext">{{person.name}}<br>{{person.email}}</span>
                   </div>
                 </span>
@@ -61,20 +61,49 @@
               </div>
             </div>
               <!-- Modal for Share  -->
+              <style> 
+                  .input-icons i { 
+                      position: absolute;                       
+                      color: #b0b0b0;
+                  }.input-icons i:hover{
+                    background-color:#b0b0b0;
+                    color: white; 
+                  }
+                    
+                  .input-icons { 
+                      text-align: right;
+                      padding-right: 40px;
+                      width: 100%; 
+                      margin-bottom: 10px; 
+                  } 
+                    
+                  .icon { 
+                      padding: 10px; 
+                      min-width: 40px; 
+                  } 
+                    
+                  .input-field { 
+                      width: 100%; 
+                  } 
+              </style>              
               <div class="modal fade shadowed" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                  <form method="POST" action="{{ url_for('send_invite') }}">        
+                  
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Compartir</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Invitar al equipo</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body mx-3">
                         <div class="md-form">
+
                             <label class="my-1 mr-2" for="code">Código de equipo</label>
-                            <input name="userEmail" id ="code" placeholder="Your Email" type="text" autofocus class="form-control" readonly>
+                            <div class="input-icons" >
+                              <i class="fa fa-copy icon" onclick="copy()" id="copied"></i> 
+                              <input name="userEmail" id ="code" value ="124355" placeholder="124355" type="readonly" autofocus class="form-control input-field" readonly>
+                            </div>
                             <br>
                             <label class="my-1 mr-2" for="invitation">Enviar invitación por correo?</label>
                             <input name="userPassword" id="invitation" placeholder="miembro@correo.com" class="form-control">
@@ -83,10 +112,10 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                      <button type="submit" class="btn btn-success">Invitar</button>
+                      <button type="button" onclick="sendMail()" id = "sendmail" class="btn btn-success">Enviar</button>
                     </div>
                   </div>
-                  </form>
+                  
                 </div>
               </div>
 
@@ -596,7 +625,7 @@ function start() {
 
 //var strUser = e.options[e.selectedIndex].value;  
 function invite(){
-  $("#invite_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+  // $("#invite_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
 }
 function validate(){
   $("#save_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando ...');
@@ -671,6 +700,53 @@ function checkMaterials(){
   }
 }
 
+function copy() {
+  /* Get the text field */
+  var copyText = document.getElementById("code");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  element = document.getElementById('copied').classList;
+  element.remove('fa-copy');
+  element.add('fa-check');
+
+  
+}
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function sendMail(){
+  mailto = document.getElementById("invitation").value;
+  $("#sendmail").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando ...');
+  if (validateEmail(mailto)){
+    fetch("/send_invite/"+mailto)
+      .then((data) => {
+        console.log(data);
+        $("#sendmail").html('Enviado');
+        document.getElementById("sendmail").style.backgroundColor = "#67FBD1 "
+        document.getElementById("sendmail").style.color = "#2B2B2B "        
+        // window.location = data['url'];
+      },
+        (error) => {
+          console.log(error);
+          $("#sendmail").html("Error.");
+        }
+      );  
+  }
+  else{
+    $("#sendmail").html("Correo Inválido");
+    document.getElementById("sendmail").style.backgroundColor = "#DF4550 "
+    document.getElementById("sendmail").style.color = "#fff "
+  }
+}
 
 </script>
 

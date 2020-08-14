@@ -21,7 +21,7 @@ Changelog:
     - (20/6) Implementado sistema de mensajeado en tiempo real, falta implementar interfaz
 
 
-'''
+''' 
 
 
 # imports for flask
@@ -85,21 +85,23 @@ app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 #MAIL
-mail = Mail(app)
-mail.init_app(app)
+
+
 
 #CONFIGURAR MAILSERVER
-# app.config['MAIL_SERVER'] = 
-# app.config['MAIL_PORT']
-# app.config['MAIL_USE_TLS']
-# app.config['MAIL_USE_SSL']
+app.config['MAIL_SERVER'] = 'smtpout.secureserver.net'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 # app.config['MAIL_DEBUG']
-# app.config['MAIL_USERNAME']
-# app.config['MAIL_PASSWORD']
+app.config['MAIL_USERNAME'] = 'contacto@fevici.org'
+app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
 # app.config['MAIL_DEFAULT_SENDER']
 # app.config['MAIL_MAX_EMAILS']
 # app.config['MAIL_SUPPRESS_SEND']
 # app.config['MAIL_ASCII_ATTACHMENTS']
+
+mail = Mail(app)
 
 
 
@@ -119,6 +121,10 @@ bucket = client.get_bucket('fevici.appspot.com')
 # blob = bucket.blob('my-test-file.txt')
 # blob.upload_from_string('this is test content!')
 
+#SIRVE PARA LISTAR LOS BLOBS QUE EXISTEN
+# for blob in client.list_blobs('fevici.appspot.com', prefix='abc/myfolder'): #Con prefijo
+all_projects = [blob.name for blob in client.list_blobs('fevici.appspot.com')]
+# print(all_projects[0].name)
 
 
 #Db references
@@ -306,33 +312,34 @@ def recieve_invite(invite_id):
 
 
 
-@app.route("/send_invite")
-def send_invite():
+@app.route("/send_invite/<invite_to>")
+def send_invite(invite_to):
     '''
         La pagina genera un id de invitación que al ser usado por otro usuario, sobreescribe su proyecto con el id del proyecto con el del enviado
     '''
-    invite_to = "emiliobot@hotmail.com"
+    # invite_to = "emoxic.sama@gmail.com"
     msg = Message("Hello",
-                      sender="from@example.com",
+                      sender=("Invitación a la Feria Virtual de Ciencias e Ingenierías","contacto@fevici.org"),
                       recipients=[invite_to])
-    msg.recipients = ["you@example.com"]
-    msg.add_recipient("somebodyelse@example.com")
-    msg = Message("Hello",
-                  sender=("Me", "me@example.com"))
+    # msg.recipients = ["you@example.com"]
+    # msg.add_recipient("somebodyelse@example.com")
+    # msg = Message("Hello",
+    #               sender=("Me", "me@example.com"))
 
-    assert msg.sender == "Me <me@example.com>"
+    # assert msg.sender == "Me <me@example.com>"
 
     msg.body = "testing"
     msg.html = "<b>testing</b>"
 
     mail.send(msg)
+    return 'sent'
 
 class team(object):
     def __init__(self,id):
         self.doc = user_doc = users_coll.document(id)
         self.name = user_doc.get().to_dict().get("name")
         self.email = user_doc.get().to_dict().get("email")
-        self.color = random.choice(["#6772E5","#D869D0","#FF71A6","#FF967B","#FFC761","#F9F871"])
+        self.color = random.choice(["#6772E5","#D869D0","#FF71A6","#FF967B","#FFC761"])
         self.initials = ''.join([x[0].upper() for x in self.name.split(' ')])
 
 @app.route("/about")
@@ -404,6 +411,7 @@ def save_json(data,uid = None):
 def save_file(file,uid = None):
     '''
         Dado objeto file, guardar en base de datos fevici en proyectos
+        Devuelve el id de donde ha sido guardado
     '''
     # gets the id of he old file to delete it
     user_doc = users_coll.document(session['id'])
@@ -415,9 +423,11 @@ def save_file(file,uid = None):
         blob.delete()
     except:pass
     # gets the old file and deletes it
-
-
+    
     filename = ''.join([str(int(random.random()*1000000))])                    
+    while filename in all_projects: filename = ''.join([str(int(random.random()*1000000))])                    
+        
+
     blob = bucket.blob(filename) 
     blob.upload_from_file(file)    
 
@@ -538,5 +548,5 @@ def send_js(path):
     return send_from_directory('static/js', path)
 
 if (__name__ == "__main__"):
-    app.run(debug=True)
-	#socketio.run(app, debug=True)
+    #app.run(debug=True)
+	socketio.run(app, debug=True)
