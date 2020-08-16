@@ -19,5 +19,6 @@
   "homepage": "https://github.com/asim-v/FEVICI#readme",
   "devDependencies": {
     "firebase-tools": "^8.4.3"
-  }
+  },
+  "dependencies": {}
 }

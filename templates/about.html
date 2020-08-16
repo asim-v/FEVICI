@@ -96,8 +96,12 @@
                       border-radius: 15px;  
                     }
                     </style>
-                      <label for="date1">Ingresa tu fecha de nacimiento</label>
-                      <input id="date1" type="date" name="date1" value="" class="pretty"><br>
+                      <label for="Fecha">Ingresa tu fecha de nacimiento</label>
+                      {% if project['Fecha']|length > 0 %}
+                        <input id="Fecha" type="date" name="Fecha" value="{{project['Fecha']}}" class="pretty"><br>
+                      {% else %}
+                        <input id="Fecha" type="date" name="Fecha" class="pretty"><br>
+                      {% endif %}
                     <script type="text/javascript">
                     yepnope({ // or Modernizr.load
                         test: Modernizr.inputtypes.date,
@@ -156,16 +160,32 @@
                     <br>
                     <script src="js/country-state-select.js"></script>
                     <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Selecciona tu país</label>
-                    <select id="country" name="country" class="custom-select my-1 mr-sm-2"></select><br><br>
+                    {% if project['Country']|length > 0 %}
+                      <select id="country" name="country" class="custom-select my-1 mr-sm-2" value = "{{project['Country']}}"></select><br><br>
+                    {% else %}
+                      <select id="country" name="country" class="custom-select my-1 mr-sm-2"></select><br><br>
+                    {% endif %}
+
 
                     <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Seleccciona tu estado</label>
-                    <select id="state" name="state" class="custom-select my-1 mr-sm-2"></select>
+                    {% if project['State']|length > 0%}
+                      <select id="state" name="state" class="custom-select my-1 mr-sm-2" value = "{{project['State']}}"></select>
+                    {% else %}
+                      <select id="state" name="state" class="custom-select my-1 mr-sm-2"></select>
+                    {%endif %}
 
-                    <script language="javascript">
-                                populateCountries("country", "state");
-                                populateCountries("country2");
-                    </script>
-                    <!-- SELECCIONADOR DE PAIS -->
+                    <script type="text/javascript">
+                        populateCountries("country", "state");
+                        var country = "{{project.Country}}";
+                        var state = "{{project.State}}";
+                        console.log("printing");
+                        console.log(country+" "+state);
+                        if (country.length > 0){
+                          document.getElementById("country").value = country;
+                        }if(state.length > 0){
+                          document.getElementById("state").value = state;
+                        }
+                    </script>                    <!-- SELECCIONADOR DE PAIS -->
 
                     <br><br>
                     <div class="custom-control custom-checkbox mr-sm-2">

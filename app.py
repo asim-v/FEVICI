@@ -177,7 +177,8 @@ def index_page():
             # if unable to verify session_id for any reason
             # maybe invalid or expired, redirect to login
             flash_msg = "Your session is expired!"
-            return "INDEX EXCEPTION" + str(e)
+            #return "INDEX EXCEPTION" + str(e)
+            return redirect(url_for("user_login"))    
 
     flash_msg = "Please Log In"
     flash(flash_msg)
@@ -224,8 +225,10 @@ def user_login():
     return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8,9]))
     
 
+
 @app.route('/register', methods=["GET", "POST"])
 def user_register():
+    def genID():return int(random.random()*1000000)
     if (request.method == "POST"):
         user_name = request.form['userName']
         user_email = request.form['userEmail']
@@ -243,9 +246,10 @@ def user_register():
             session["id"] = user_recode.get('localId')
             users_coll.add({"name": user_name,
                             "email": user_email,
-                            "about_user":[],
+                            "team_id": genID(),
+                            "about_user":{},
                             "connected_chats": [],
-                            "project_desc":[],
+                            "project_desc":{},
                             "project_file":{"project_id":0,"project_team":[session['id']],"project_name":''}
             }, user_recode.get('localId'))
             
@@ -340,7 +344,7 @@ class team(object):
         self.name = user_doc.get().to_dict().get("name")
         self.email = user_doc.get().to_dict().get("email")
         self.color = random.choice(["#6772E5","#D869D0","#FF71A6","#FF967B","#FFC761"])
-        self.initials = ''.join([x[0].upper() for x in self.name.split(' ')])
+        self.initials = ''.join([x[0].upper() for x in self.name.split(' ')][:3])
 
 @app.route("/about")
 def about():
