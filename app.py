@@ -82,27 +82,34 @@ chats_watch_list = {}
 #INTI FLASK with socketio for rt msg
 app = Flask(__name__)
 app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
-socketio = SocketIO(app, cors_allowed_origins="*")
+
+
+
+
+
 
 #MAIL
-
-
-
 #CONFIGURAR MAILSERVER
-app.config['MAIL_SERVER'] = 'smtpout.secureserver.net'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-# app.config['MAIL_DEBUG']
-app.config['MAIL_USERNAME'] = 'contacto@fevici.org'
-app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
+app.config['MAIL_DEBUG'] = True
+# app.config['MAIL_USERNAME'] = 'contacto@fevici.org'
+# app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
+app.config['MAIL_USERNAME'] = 'asimov.netw@gmail.com'
+app.config['MAIL_PASSWORD'] = 'zRBgy?kpEEL%W7T+bA!-L&?C&'
 # app.config['MAIL_DEFAULT_SENDER']
 # app.config['MAIL_MAX_EMAILS']
-# app.config['MAIL_SUPPRESS_SEND']
+app.config['MAIL_SUPPRESS_SEND'] = False
+app.config['TESTING'] = False
 # app.config['MAIL_ASCII_ATTACHMENTS']
-
 mail = Mail(app)
 
+
+
+#Init Socketio
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 # initializes fb with bucket name
@@ -318,25 +325,31 @@ def recieve_invite(invite_id):
 
 @app.route("/send_invite/<invite_to>")
 def send_invite(invite_to):
-    '''
-        La pagina genera un id de invitación que al ser usado por otro usuario, sobreescribe su proyecto con el id del proyecto con el del enviado
-    '''
-    # invite_to = "emoxic.sama@gmail.com"
-    msg = Message("Hello",
-                      sender=("Invitación a la Feria Virtual de Ciencias e Ingenierías","contacto@fevici.org"),
-                      recipients=[invite_to])
-    # msg.recipients = ["you@example.com"]
-    # msg.add_recipient("somebodyelse@example.com")
-    # msg = Message("Hello",
-    #               sender=("Me", "me@example.com"))
+	with app.app_context():
 
-    # assert msg.sender == "Me <me@example.com>"
+		'''
+		    La pagina genera un id de invitación que al ser usado por otro usuario, sobreescribe su proyecto con el id del proyecto con el del enviado
+		'''
+		invite_to = str(invite_to)
+		# invite_to = str(invite_to)
+		msg = Message("Hello",
+		                  sender=("Invitación a la Feria Virtual de Ciencias e Ingenierías","contacto@fevici.org"),
+		                  recipients=[invite_to])
+		# msg.recipients = ["you@example.com"]
+		# msg.add_recipient("somebodyelse@example.com")
+		# msg = Message("Hello",
+		#               sender=("Me", "me@example.com"))
 
-    msg.body = "testing"
-    msg.html = "<b>testing</b>"
+		# assert msg.sender == "Me <me@example.com>"
+		try:
+			print(invite_to)
+			msg.body = "testing"
+			msg.html = "<b>testing</b>"
 
-    mail.send(msg)
-    return 'sent'
+			mail.send(msg)
+			return 'sent'
+		except Exception as e:
+			return str(e)
 
 class team(object):
     def __init__(self,id):
