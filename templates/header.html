@@ -7,10 +7,15 @@
     <!-- Bootstrap CSS -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Favicon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 </head>
 
 <!-- Navigation --> 
-<nav class="navbar fixed-top navbar-expand-sm navbar-light">
+<nav class="navbar fixed-top navbar-expand-sm navbar-light" id="navbar">
   <a class="navbar-brand" href="{{ url_for('index_page')  }}" style="font-family: 'Montserrat', sans-serif;"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +28,12 @@
     <!-- Diferentes jqueries para el carousel, funciona solamente con jquery 2 aun que el dashboard ocupa el 3 -->
     {% if auth!=False %}
       <p style="margin:5px;color:white;background-color:rgba(43,43,43,.5);padding: 2px 12px; border-radius: 15px;"> {{ user_name }}</p>
-      <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 2px 12px; border-radius: 15px;"> <a href="/logout">Cerrar Sesión</a></p>
+      <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 4px 12px; border-radius: 15px;"> <a href="/logout">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+      </a></p>          
+      <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 4px 12px; border-radius: 15px;"> <a href="/logout">
+        <i class="fa fa-sign-out" aria-hidden="true"></i>
+      </a></p>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     {% else %}
       <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/18zJl4U1Hrir_VxdAv2g_XpBlj-BIcwK8rcP9E7iq_gw/edit?usp=sharing'">Académicos</button>
@@ -34,14 +44,103 @@
     {%endif%}
   </div>
 </nav>
-{% block content %}
-{% endblock %}
+
+
+
+
+<!-- SIDEBAR -->
+<style type="text/css">
+  .icon-sidebar{
+    left: 0;
+    width: 8.5vh;
+    position:fixed;
+    height: 100%;
+    background-color: #fff;
+  }.subicon-sidebar{
+    left: 25%;
+    top: 2vh;
+    position: relative;
+    text-align: center;
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    color: #bdbec5;
+    background-position: center;
+  }.subicon-sidebar button{
+    border:none;
+    background-color: transparent;
+  }.subicon-sidebar button ::before{
+    background-color: transparent;
+  }.active{
+    border-radius: 15px;
+    /*box-shadow: 5px 5px 10px lightgray;*/
+    background-color: #f3e8ff;
+  }.active i{
+    color: #8819ff !important;
+  }
+  .subicon i{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+  }.icon-sidebar .row{
+    height: 10vh
+  }
+</style>  
+<!-- SIDEBAR -->
+
+
+
+
+<div class="content" id="main">
+
+<div class="icon-sidebar column" id="sidebar">
+  <div class="row">
+    <div class="subicon-sidebar {% if active == 1 %}active{% endif %}"><button class="subicon" onclick="cancel()"><i class="fa fa-home" aria-hidden="True" ></i></button></div>
+  </div>
+  <div class="row">
+    <div class="subicon-sidebar {% if active == 2 %}active{% endif %}"><button class="subicon" onclick="about()" ><i class="fa fa-address-card" aria-hidden="True"></i></button></div>       
+  </div>
+  <div class="row">
+    <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon"><i class="fa fa-calendar" aria-hidden="True"></i></button></div>
+  </div>
+  <div class="row">
+    <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><button class="subicon" onclick="create_new_note()"><i class="fa fa-comments" aria-hidden="True"></i></button></div>
+  </div>
+  <div class="row">
+    <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><button class="subicon" onclick="project()"><i class="fa fa-flask" aria-hidden="True"></i></button></div>
+  </div>    
+  <div class="row">
+    <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><button class="subicon" onclick="project()"><i class="fa fa-store" aria-hidden="True"></i></button></div>
+  </div>  
+</div>
+
+<div class="showbox" id="showbox">
+  {% block content %}
+  {% endblock %}
+</div>
+
+
+
+
+
+
+
+
 
 
 <!-- CUSTOM STYLES -->
 <style type="text/css">
   @import url('https://fonts.googleapis.com/css2?family=Miriam+Libre&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  .custom-control-input:checked~.custom-control-label::before {
+      color: #fff;
+      border-color: #8819ff;
+      background-color: #8819ff;
+    }    
   .shadowed{
     box-shadow:5px 5px 10px 1px lightgrey !important;
     border: 0px !important; 
@@ -189,7 +288,8 @@
   }
 
   body{
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
+
     font-weight: 500 !important;
     background-color: #F9F8FF ;
     overflow-x: hidden;
@@ -232,6 +332,7 @@
     font-weight: 500;
   }h3{
     font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
   }
   @media only screen and (max-width:1500px){
   }.content{
@@ -250,6 +351,12 @@
       height: 80vh;
     }
   }
+  p{
+    font-size: 18px;
+  }
+  p .fa{
+    font-size: 20px;
+  }
 </style>
 <!-- CUSTOM STYLES -->
 
@@ -264,5 +371,70 @@
 <script src="/__/firebase/init.js"></script>
 <!-- Optional JavaScript -->
 
+<script type="text/javascript">
+
+
+navbar = document.getElementById("navbar").offsetHeight;
+sidebar = document.getElementById("sidebar").offsetWidth;
+document.getElementById("main").style.paddingTop = navbar;
+
+document.getElementById("showbox").style.paddingLeft = sidebar;
+document.getElementById("showbox").style.paddingTop += 20;
+
+
+/*
+ Create a new chat  
+*/
+function create_new_note() {
+  $("#btn-create-new-chat").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creando ...');
+  fetch("/new-chat/create")
+    .then((data) => {
+      console.log(data);
+      $("#btn-create-new-chat").html("Listo!");
+      window.location = data['url'];
+    },
+      (error) => {
+        console.log(error);
+        $("#btn-create-new-chat").html("Hubo un error.");
+      });
+}
+function project(){
+  $("#btn-go-to-project").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
+  fetch("/project")
+    .then((data) => {
+      console.log(data);
+      window.location = data['url'];
+    },
+      (error) => {
+        console.log(error);
+        $("#btn-go-to-project").html("Hubo un error.");
+      });
+}
+function about(){
+$("#btn-go-to-about").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
+fetch("/about")
+  .then((data) => 
+{      console.log(data);
+    window.location = data['url'];
+  },
+    (error) => {
+      console.log(error);
+      $("#btn-go-to-about").html("Hubo un error.");
+    });
+}
+function cancel(){
+  $("#cancel-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saliendo ...');
+  fetch("/")
+    .then((data) => {
+      console.log(data);
+      window.location = data['url'];
+    },
+      (error) => {
+        console.log(error);
+        $("#cancel").html("Error.");
+      });
+}
+
+</script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">

@@ -92,13 +92,12 @@ app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
 #CONFIGURAR MAILSERVER
 app.config['MAIL_SERVER'] = 'smtpout.secureserver.net'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_DEBUG'] = True
 app.config['MAIL_USERNAME'] = 'contacto@fevici.org'
 app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
 # app.config['MAIL_DEFAULT_SENDER']
-# app.config['MAIL_MAX_EMAILS']
+app.config['MAIL_MAX_EMAILS'] = 2
 app.config['MAIL_SUPPRESS_SEND'] = False
 app.config['TESTING'] = False
 # app.config['MAIL_ASCII_ATTACHMENTS']
@@ -129,7 +128,7 @@ bucket = client.get_bucket('fevici.appspot.com')
 #SIRVE PARA LISTAR LOS BLOBS QUE EXISTEN
 # for blob in client.list_blobs('fevici.appspot.com', prefix='abc/myfolder'): #Con prefijo
 all_projects = [blob.name for blob in client.list_blobs('fevici.appspot.com')]
-# print(all_projects[0].name)
+print(all_projects[0])
 
 
 #Db references
@@ -177,7 +176,7 @@ def index_page():
             for i in connected_chats:
                 connected_chats_list.append(i.get().to_dict())
             
-            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"], chats_list=connected_chats_list[::-1])
+            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"], chats_list=connected_chats_list[::-1],active=1)
         except Exception as e:
             # if unable to verify session_id for any reason
             # maybe invalid or expired, redirect to login
@@ -304,7 +303,7 @@ def user_chat(chatid):
         if (chatid not in chats_watch_list):
             chat_watch = chat_doc.on_snapshot(_on_snapshot_callback)
 
-        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"]))
+        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"],active=4))
     except:
         return (redirect(url_for('user_login')))
 
@@ -341,8 +340,8 @@ def send_invite(invite_to):
 		# assert msg.sender == "Me <me@example.com>"
 		try:
 			print(invite_to)
-			msg.body = "testing"
-			msg.html = "<b>Hola quisiera decirte que entiendo que es dificil pero que harás? Cuál es tu visión? Cómo llegas a esa visión?</b>"
+			msg.body = "Probanding"
+			msg.html = "<b>Holassss quisiera decirte que entiendo que es dificil pero que harás? Cuál es tu visión? Cómo llegas a esa visión?</b>"
 
 			mail.send(msg)
 			return 'sent'
@@ -365,7 +364,7 @@ def about():
     proj = users_coll.document(session['id']).get().to_dict()
     about_user= proj["about_user"]
 
-    return render_template("about.html",user_name=session["user_name"],project = about_user,limit=limit,status = session['status'])
+    return render_template("about.html",user_name=session["user_name"],project = about_user,limit=limit,status = session['status'],active=2)
 
 
 
@@ -412,7 +411,7 @@ def project():
     #generates team list object for visualizing teammates
     team_list = [team(x) for x in proj_file["project_team"]]
 
-    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file)
+    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5)
 
 def save_json(data,uid = None):
     '''
@@ -564,4 +563,4 @@ def send_js(path):
 
 if (__name__ == "__main__"):
     #app.run(debug=True)
-	socketio.run(app, debug=True)
+	socketio.run(app,debug=True)

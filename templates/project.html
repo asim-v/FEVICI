@@ -3,7 +3,7 @@
 
 
 
-<div class="container" style="margin-top: 40px">
+<div class="container" >
   <div class="row">
     <div class="col-lg">
     </div>
@@ -41,23 +41,34 @@
             </div>     
 
             <div class="modal-header" style="display: inline-block;">
-              <div class="label" style="padding-bottom: 10px;">Tu equipo</div>
-              {% for person in team_list %}
-                <span class="tooltip_container">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="label" style="padding-bottom: 10px;">Tu equipo</div>
+                  {% for person in team_list %}
+                    <span class="tooltip_container">
+                      <div class="tooltip">
+                        <button type="button" onclick="" class="teammate" style="background-color: {{person.color}}">{{person.initials}}</button>
+                        <span class="tooltiptext">{{person.name}}<br>{{person.email}}</span>
+                      </div>
+                    </span>
+                  {% endfor %}
+
+
+
+
+
                   <div class="tooltip">
-                    <button type="button" onclick="" class="teammate" style="background-color: {{person.color}}">{{person.initials}}</button>
-                    <span class="tooltiptext">{{person.name}}<br>{{person.email}}</span>
+                    <button onclick="invite()" class="teammate" id="invite_button" data-toggle="modal" data-target="#inviteModal" type="button">+</button>
+                    <span class="tooltiptext">Invitar más personas al equipo (Max 5)</span>
                   </div>
-                </span>
-              {% endfor %}
-
-
-
-
-
-              <div class="tooltip">
-                <button onclick="invite()" class="teammate" id="invite_button" data-toggle="modal" data-target="#inviteModal" type="button">+</button>
-                <span class="tooltiptext">Invitar más personas al equipo (Max 5)</span>
+                </div>
+                <div class="col-sm-6">
+                  <div class="label">Proyecto Público</div>
+                  <div class="custom-control custom-checkbox mr-sm-2">
+                    <input name="PublicProject" type="checkbox" class="custom-control-input" id="PublicProject" {% if project['PublicProject'] == 'on' %} checked {% endif %}>
+                    <label class="custom-control-label" for="PublicProject">Deseas que tu proyecto sea visible por los demás participantes?</label>
+                  </div>  
+                </div>
               </div>
             </div>
               <!-- Modal for Share  -->
@@ -236,8 +247,8 @@
 
                     <br>
                     <div class="custom-control custom-checkbox mr-sm-2">
-                      <input type="checkbox" class="custom-control-input" id="customControlAutosizing" onclick="checkMaterials()">
-                      <label class="custom-control-label" for="customControlAutosizing">Utilizaste Materiales Químicos durante tu experimento?</label>
+                      <input type="checkbox" class="custom-control-input" id="PublicProject" onclick="checkMaterials()">
+                      <label class="custom-control-label" for="PublicProject">Utilizaste Materiales Químicos durante tu experimento?</label>
                     </div>                      
 
                     <div style="display: none" id="invisible">
@@ -302,7 +313,7 @@
   .upload .drop-here {
     position: absolute;
     width: 100%;
-    height: 100%;
+    
     outline: none;
     border-radius: var(--border-radius);
     opacity: var(--opacity, 0);
@@ -693,7 +704,7 @@ function getIndex(){
 }
 
 function checkMaterials(){
-  if (document.getElementById('customControlAutosizing').checked){
+  if (document.getElementById('PublicProject').checked){
     document.getElementById('invisible').style.display = 'inline';
   }else{
     document.getElementById('invisible').style.display = 'none';
