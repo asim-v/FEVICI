@@ -166,17 +166,12 @@ def index_page():
             
 
             # Trying to implement users connected chats list            
-            user_doc = users_coll.document(decoded_clamis['user_id'])
+            user_doc = users_coll.document(session['id'])
             user_details = user_doc.get().to_dict()
-            connected_chats = user_details.get("connected_chats")
             session["user_name"] = user_details.get("name")
             #flash(decoded_clamis)
 
-            connected_chats_list = []
-            for i in connected_chats:
-                connected_chats_list.append(i.get().to_dict())
-            
-            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"], chats_list=connected_chats_list[::-1],active=1)
+            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"],active=1)
         except Exception as e:
             # if unable to verify session_id for any reason
             # maybe invalid or expired, redirect to login
@@ -214,7 +209,7 @@ def user_login():
             elif ("INVALID_PASSWORD" in str(e)):
                 flash_msg = "Contraseña inválida"
             else:
-                flash_msg = "Algo salio mal!!"
+                flash_msg = "Algo salio mal!!" + str(e)
         flash(flash_msg)
     # return login page for GET request
     # 1 - Newton Fractal 
@@ -303,9 +298,20 @@ def user_chat(chatid):
         if (chatid not in chats_watch_list):
             chat_watch = chat_doc.on_snapshot(_on_snapshot_callback)
 
-        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"],active=4))
-    except:
-        return (redirect(url_for('user_login')))
+        # Trying to implement users connected chats list            
+        user_doc = users_coll.document(session['id'])
+        user_details = user_doc.get().to_dict()
+        connected_chats = user_details.get("connected_chats")
+        session["user_name"] = user_details.get("name")
+        #flash(decoded_clamis)
+
+        connected_chats_list = []
+        for i in connected_chats:
+            connected_chats_list.append(i.get().to_dict())
+
+        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"],active=4, chats_list=connected_chats_list[::-1]))
+    except Exception as e:
+        return str(e)
 
 
 

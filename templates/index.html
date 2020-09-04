@@ -1,48 +1,6 @@
 {% extends "header.html" %}
 {% block content %}
-<script>
-  /*
-   Create a new chat  
-  */
-  function create_new_note() {
-    $("#btn-create-new-chat").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creando ...');
-    fetch("/new-chat/create")
-      .then((data) => {
-        console.log(data);
-        $("#btn-create-new-chat").html("Listo!");
-        window.location = data['url'];
-      },
-        (error) => {
-          console.log(error);
-          $("#btn-create-new-chat").html("Hubo un error.");
-        });
-  }
-  function project(){
-    $("#btn-go-to-project").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
-    fetch("/project")
-      .then((data) => {
-        console.log(data);
-        window.location = data['url'];
-      },
-        (error) => {
-          console.log(error);
-          $("#btn-go-to-project").html("Hubo un error.");
-        });
-  }
-  function about(){
-  $("#btn-go-to-about").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
-  fetch("/about")
-    .then((data) => 
-{      console.log(data);
-      window.location = data['url'];
-    },
-      (error) => {
-        console.log(error);
-        $("#btn-go-to-about").html("Hubo un error.");
-      });
-}
-  
-</script>
+
 
 
 
@@ -61,51 +19,17 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
-      <div class="col-lg text-center">
-        <button id="btn-go-to-about" type="button" onclick="about()" class="btn btn-primary  btn-block">
-          Sobre Mi
-        </button>
-      </div><br>
-      <div class="col-lg text-center">
-        <button id="btn-create-new-chat" type="button" onclick="create_new_note()" class="btn btn-primary  btn-block">
-          Crear Chat
-        </button>
-      </div><br>       
-      <div class="col-lg text-center">
-        <button id="btn-go-to-project" type="button" onclick="project()" class="btn btn-primary  btn-block">
-          Proyecto
-        </button>
-      </div>
-
-     
     </div>
 
   </div>
 
   <div class="row" style="margin-top:40px">
-    
-    <div class="col-lg-6">
-      {% if chats_list %}
-      <label> Tus chats:</label>
-      {% endif %}
-      {% for chat in chats_list %}
-        <div class="card shadowed" >
-          <div class="card-header">
-            Chat : {{ chat.get("nid") }}
-          </div>
-          <div class="card-body">
-            <h7 class="card-title">Users :</h7>
-            <p class="card-text">{{ ', '.join(chat.get("users")) }}</p>
-            <a href="/chat/{{ chat.get('nid') }}" class="btn btn-primary">Abrir</a> 
-            <a href="/chat/leave/{{ chat.get('nid') }}" id="{{chat.get('nid')}}" onclick="cancel(this.id)" class="btn btn-secondary float-right">Salir</a>
-          </div>
-        </div>
-        {% endfor %}
 
+    <div class="modal-content borderless shadowed">
+      <div class="modal-header">
+        <h3>Sobre Ti! &#128125;</h3>
+      </div>
     </div>
-
-    <div class="col-lg-3"></div>
-
   </div>
 
 <script type="text/javascript">

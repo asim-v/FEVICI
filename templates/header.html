@@ -8,8 +8,10 @@
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- Favicon -->
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 
 
 </head>
@@ -52,16 +54,18 @@
 <style type="text/css">
   .icon-sidebar{
     left: 0;
-    width: 8.5vh;
+    width:70PX;
     position:fixed;
     height: 100%;
     background-color: #fff;
+    box-shadow: 5px 5px 10px lightgray;
   }.subicon-sidebar{
+
     left: 25%;
     top: 2vh;
     position: relative;
     text-align: center;
-    font-size: 30px;
+    font-size: 25px;
     width: 50px;
     height: 50px;
     color: #bdbec5;
@@ -94,37 +98,36 @@
 
 
 
-<div class="content" id="main">
-
-<div class="icon-sidebar column" id="sidebar">
-  <div class="row">
-    <div class="subicon-sidebar {% if active == 1 %}active{% endif %}"><button class="subicon" onclick="cancel()"><i class="fa fa-home" aria-hidden="True" ></i></button></div>
+{% if auth!=False%}<div class="content" id="main">{%endif%}
+  {% if auth!=False %}
+  <div class="icon-sidebar column" id="sidebar">
+    <div class="row">
+      <div class="subicon-sidebar {% if active == 1 %}active{% endif %}"><button class="subicon" onclick="cancel()"><i class="fas fa-home" aria-hidden="True" ></i></button></div>
+    </div>
+    <div class="row">
+      <div class="subicon-sidebar {% if active == 2 %}active{% endif %}"><button class="subicon" onclick="about()" ><i class="fas fa-address-card" aria-hidden="True"></i></button></div>       
+    </div>
+    <div class="row">
+      <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon"><i class="fas fa-calendar" aria-hidden="True"></i></button></div>
+    </div>
+    <div class="row">
+      <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><button class="subicon" onclick="create_new_note()"><i class="fas fa-comments" aria-hidden="True"></i></button></div>
+    </div>
+    <div class="row">
+      <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><button class="subicon" onclick="project()"><i class="fas fa-flask" aria-hidden="True"></i></button></div>
+    </div>    
+    <div class="row">
+      <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><button class="subicon" onclick="expo()"><i class="fas fa-store" aria-hidden="True"></i></button></div>
+    </div>  
   </div>
-  <div class="row">
-    <div class="subicon-sidebar {% if active == 2 %}active{% endif %}"><button class="subicon" onclick="about()" ><i class="fa fa-address-card" aria-hidden="True"></i></button></div>       
-  </div>
-  <div class="row">
-    <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon"><i class="fa fa-calendar" aria-hidden="True"></i></button></div>
-  </div>
-  <div class="row">
-    <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><button class="subicon" onclick="create_new_note()"><i class="fa fa-comments" aria-hidden="True"></i></button></div>
-  </div>
-  <div class="row">
-    <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><button class="subicon" onclick="project()"><i class="fa fa-flask" aria-hidden="True"></i></button></div>
-  </div>    
-  <div class="row">
-    <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><button class="subicon" onclick="project()"><i class="fa fa-store" aria-hidden="True"></i></button></div>
-  </div>  
-</div>
-
-<div class="showbox" id="showbox">
-  {% block content %}
-  {% endblock %}
-</div>
+  {% endif %}
+  {% if auth!=False%}<div class="showbox" id="showbox">{%endif%}
+    {% block content %}
+    {% endblock %}
+  {% if auth!=False%}</div>{%endif%}
 
 
-
-
+{% if auth!=False%}</div>{% endif %}
 
 
 
@@ -289,7 +292,7 @@
 
   body{
     font-family: 'Roboto', sans-serif;
-
+    
     font-weight: 500 !important;
     background-color: #F9F8FF ;
     overflow-x: hidden;
@@ -420,6 +423,16 @@ fetch("/about")
     (error) => {
       console.log(error);
       $("#btn-go-to-about").html("Hubo un error.");
+    });
+}
+function expo(){
+fetch("/expo")
+  .then((data) => 
+{      console.log(data);
+    window.location = data['url'];
+  },
+    (error) => {
+      console.log(error);
     });
 }
 function cancel(){
