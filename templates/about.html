@@ -94,16 +94,18 @@
 
 <style type="text/css">
     .upload {
-    --background: #F9F8FF;
+    background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{profileid}});
+    background-size: auto 100%;
+    background-repeat: no-repeat;
     --text-drop: #CAC8CA;
     --text-upload: #2D2C2F;
     --progress-color: #E7E5E7;
     --check-color: var(--text-upload);
-    --border-radius: 10px;
-    border-radius: 10px;
+    --border-radius:50%;
+    border-radius: 50%;
     border: dotted lightgrey;
-    width: 100%;
-    height: 100px;
+    width: 125px; 
+    height: 125px;
     position: relative;
     display: -webkit-box;
     display: flex;
@@ -364,15 +366,21 @@
   body .socials > a:hover {
     --scale: 1;
   }
+  .profile{
+    height: 200px ; 
+    left: 50%;
+    z-index: 10;
+  }
 </style>   
+<!-- 
+style="background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{id}});background-size: 100%" -->
 
+<label class="my-1 mr-2" for="inlineFormCustomSelectPref">Foto de perfil:<br>{{name}}</label>
 
-
-<div class="upload">
-
+<div class="upload" id="upload">
   <input type="file" name="file" title="file" class="drop-here">
   {% if name %}
-    <div class="text text-drop">{{name}}</div>
+    <div class="text text-drop" ></div>
   {%else%}
     <div class="text text-drop">Soltar archivo aqui</div>
   {%endif%}
@@ -413,6 +421,8 @@ function start() {
   this.classList.add("drop");
   setTimeout(() => this.classList.add("done"), 3000);
 }
+
+
 </script>
 
 

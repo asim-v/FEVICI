@@ -36,6 +36,7 @@
       <p style="margin:5px;background-color:rgba(209,213,218,.5);padding: 4px 12px; border-radius: 15px;"> <a href="/logout">
         <i class="fa fa-sign-out" aria-hidden="true"></i>
       </a></p>
+      <img src="https://storage.googleapis.com/fevici.appspot.com/{{profileid}}" class="profilepic">
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     {% else %}
       <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/18zJl4U1Hrir_VxdAv2g_XpBlj-BIcwK8rcP9E7iq_gw/edit?usp=sharing'">Académicos</button>
@@ -52,6 +53,10 @@
 
 <!-- SIDEBAR -->
 <style type="text/css">
+  .profilepic{
+    height: 40px;
+
+  }
   .icon-sidebar{
     left: 0;
     width:70PX;
@@ -109,7 +114,7 @@
       <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b"><button class="subicon" onclick="about()" ><i class="fas fa-address-card" aria-hidden="True"></i></button></div>       
     </div>
     <div class="row">
-      <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon"><i class="fas fa-calendar" aria-hidden="True"></i></button></div>
+      <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon" onclick="calendar()" ><i class="fas fa-calendar" aria-hidden="True"></i></button></div>
     </div>
     <div class="row">
       <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><button class="subicon" onclick="create_new_note()"><i class="fas fa-comments" aria-hidden="True"></i></button></div>
@@ -310,7 +315,8 @@
   } 
   nav{
     z-index: 15;
-    background-color: #8819ff;
+    background: rgb(255,21,126);
+    background: linear-gradient(90deg, rgba(255,21,126,1) 0%, rgba(157,23,252,1) 100%);
     box-shadow: 0px 0px 5px 1px;
 
   }
@@ -426,6 +432,16 @@ fetch("/about")
     (error) => {
       console.log(error);
       $("#btn-go-to-about").html("Hubo un error.");
+    });
+}
+function calendar(){
+fetch("/calendar")
+  .then((data) => 
+{      console.log(data);
+    window.location = data['url'];
+  },
+    (error) => {
+      console.log(error);      
     });
 }
 function expo(){
