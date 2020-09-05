@@ -58,7 +58,7 @@
     position:fixed;
     height: 100%;
     background-color: #fff;
-    box-shadow: 5px 5px 10px lightgray;
+    box-shadow: 2px 2px 7px lightgray;
   }.subicon-sidebar{
 
     left: 25%;
@@ -71,13 +71,14 @@
     color: #bdbec5;
     background-position: center;
   }.subicon-sidebar button{
+    color: #bdbec5 !important;
     border:none;
     background-color: transparent;
   }.subicon-sidebar button ::before{
     background-color: transparent;
   }.active{
-    border-radius: 15px;
-    /*box-shadow: 5px 5px 10px lightgray;*/
+    border-radius: 10px;
+    /*box-shadow: 2px 2px 7px lightgray;*/
     background-color: #f3e8ff;
   }.active i{
     color: #8819ff !important;
@@ -102,10 +103,10 @@
   {% if auth!=False %}
   <div class="icon-sidebar column" id="sidebar">
     <div class="row">
-      <div class="subicon-sidebar {% if active == 1 %}active{% endif %}"><button class="subicon" onclick="cancel()"><i class="fas fa-home" aria-hidden="True" ></i></button></div>
+      <div class="subicon-sidebar {% if active == 1 %}active{% endif %}" id="a"><button class="subicon" onclick="cancel()"><i class="fas fa-home" aria-hidden="True" ></i></button></div>
     </div>
     <div class="row">
-      <div class="subicon-sidebar {% if active == 2 %}active{% endif %}"><button class="subicon" onclick="about()" ><i class="fas fa-address-card" aria-hidden="True"></i></button></div>       
+      <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b"><button class="subicon" onclick="about()" ><i class="fas fa-address-card" aria-hidden="True"></i></button></div>       
     </div>
     <div class="row">
       <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon"><i class="fas fa-calendar" aria-hidden="True"></i></button></div>
@@ -145,7 +146,7 @@
       background-color: #8819ff;
     }    
   .shadowed{
-    box-shadow:5px 5px 10px 1px lightgrey !important;
+    box-shadow:2px 2px 7px 1px lightgrey !important;
     border: 0px !important; 
   }  
   .btn{
@@ -292,9 +293,11 @@
 
   body{
     font-family: 'Roboto', sans-serif;
-    
+/*    background-image: url('https://i.imgur.com/tPCneYv.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;ss*/    
     font-weight: 500 !important;
-    background-color: #F9F8FF ;
+    background-color: #faf9ff;
     overflow-x: hidden;
   }
   input{

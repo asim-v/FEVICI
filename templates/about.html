@@ -62,23 +62,370 @@
               {% endif %}
 
             <div class="modal-body mx-3">
-                <div class="md-form">
+                <div class="md-form"> 
+                    <div class="row">
+                      <div class="col-sm-9">
+                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Apellido(s)</label>
+                          {% if project['Apellidos']|length > 0 %}
+                            <input name="apellidos" placeholder="{{project['Apellidos']}}" value="{{project['Apellidos']}}" type="text" autofocus class="form-control">
+                          {% else %}
+                            <input name="apellidos" placeholder="" value="{{project['Apellidos']}}" type="text" autofocus class="form-control">
+                          {% endif %}
 
-                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Apellido(s)</label>
-                      {% if project['Apellidos']|length > 0 %}
-                        <input name="apellidos" placeholder="{{project['Apellidos']}}" value="{{project['Apellidos']}}" type="text" autofocus class="form-control">
-                      {% else %}
-                        <input name="apellidos" placeholder="" value="{{project['Apellidos']}}" type="text" autofocus class="form-control">
-                      {% endif %}
+                        <br>
+                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Nombre(s)</label>
+                          {% if project['Nombres']|length > 0 %}
+                            <input name="nombres" placeholder="{{project['Nombres']}}" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
+                          {% else %}
+                            <input name="nombres" placeholder="" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
+                          {% endif %}
+                      </div>
+                      <div class="col-sm-3">
 
-                    <br>
-                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Nombre(s)</label>
-                      {% if project['Nombres']|length > 0 %}
-                        <input name="nombres" placeholder="{{project['Nombres']}}" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
-                      {% else %}
-                        <input name="nombres" placeholder="" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
-                      {% endif %}
 
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+    .upload {
+    --background: #F9F8FF;
+    --text-drop: #CAC8CA;
+    --text-upload: #2D2C2F;
+    --progress-color: #E7E5E7;
+    --check-color: var(--text-upload);
+    --border-radius: 10px;
+    border-radius: 10px;
+    border: dotted lightgrey;
+    width: 100%;
+    height: 100px;
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+            align-items: center;
+  }
+  .upload::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--background);
+    border-radius: var(--border-radius);
+    -webkit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+    box-shadow: var(--shadow-x, 0px) var(--shadow-y, 1px) var(--shadow-blur, 3px) rgba(0, 0, 0, 0.1);
+    -webkit-transform: scale(var(--scale, 1));
+            transform: scale(var(--scale, 1));
+  }
+  .upload .drop-here {
+    position: absolute;
+    width: 100%;
+    
+    outline: none;
+    border-radius: var(--border-radius);
+    opacity: var(--opacity, 0);
+    overflow: hidden;
+    cursor: pointer;
+    text-indent: -9999px;
+    z-index: 1;
+  }
+  .upload .text {
+    position: absolute;
+    font-size: 21px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+  .upload .text.text-drop {
+    color: var(--text-drop);
+    opacity: var(--opacity, 1);
+    -webkit-transition: opacity .15s ease-out .15s;
+    transition: opacity .15s ease-out .15s;
+  }
+  .upload .text.text-upload {
+    color: var(--text-upload);
+    opacity: var(--opacity, 0);
+    -webkit-transition: opacity .15s ease-out;
+    transition: opacity .15s ease-out;
+  }
+  .upload .progress-wrapper {
+    position: absolute;
+  }
+  .upload .progress-wrapper .progress {
+    fill: none;
+    stroke: var(--progress-color);
+    stroke-width: 3;
+    stroke-dasharray: 722;
+    stroke-dashoffset: 722;
+  }
+  .upload .check-wrapper {
+    position: absolute;
+    opacity: var(--opacity, 0);
+    -webkit-transform: scale(var(--scale, 0.9)) rotate(var(--rotate, 3deg));
+            transform: scale(var(--scale, 0.9)) rotate(var(--rotate, 3deg));
+    -webkit-transition: opacity .15s ease-in, -webkit-transform .15s ease-in-out;
+    transition: opacity .15s ease-in, -webkit-transform .15s ease-in-out;
+    transition: transform .15s ease-in-out, opacity .15s ease-in;
+    transition: transform .15s ease-in-out, opacity .15s ease-in, -webkit-transform .15s ease-in-out;
+  }
+  .upload .check-wrapper .check {
+    width: 100px;
+    width: 100px;
+    fill: none;
+    background-clip: red;
+    stroke: #8fffdf;
+    stroke-width: 5;
+    stroke-dasharray: 50 0;
+    stroke-dashoffset: 50;
+  }
+  .upload .shadow {
+    opacity: var(--opacity, 0);
+    overflow: hidden;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: var(--border-radius);
+    -webkit-filter: blur(25px);
+            filter: blur(25px);
+    z-index: -1;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+  }
+  .upload .shadow::before {
+    content: '';
+    position: absolute;
+    top: -25%;
+    left: -25%;
+    height: 150%;
+    width: 150%;
+    background: conic-gradient(#4b82d4, #6a29e9, #4b82d4, #6a29e9, #c58357, #FFC940, #4b82d4);
+    -webkit-animation: shadow-animate 5s linear infinite;
+            animation: shadow-animate 5s linear infinite;
+  }
+  .upload.drag {
+    --scale: 1.03;
+    --shadow-y: 5px;
+    --shadow-blur: 20px;
+  }
+  .upload.drop .text.text-drop {
+    --opacity: 0;
+    -webkit-transition: opacity .15s ease-out;
+    transition: opacity .15s ease-out;
+  }
+  .upload.drop .text.text-upload {
+    --opacity: 1;
+    -webkit-transition: opacity .15s ease-out .15s;
+    transition: opacity .15s ease-out .15s;
+  }
+  .upload.drop .shadow {
+    --opacity: 1;
+  }
+  .upload.drop .progress-wrapper {
+    opacity: var(--opacity, 1);
+    -webkit-transform: scale(var(--scale, 1)) rotate(var(--rotate, -90deg));
+            transform: scale(var(--scale, 1)) rotate(var(--rotate, -90deg));
+  }
+  .upload.drop .progress-wrapper .progress {
+    -webkit-animation: progress-animate 3s ease .3s forwards;
+            animation: progress-animate 3s ease .3s forwards;
+  }
+  .upload.done {
+    --opacity: 0.5;
+    top: 50%;
+  }
+  .upload.done .text.text-upload {
+    --opacity: 0;
+  }
+  .upload.done .shadow {
+    --opacity: 0;
+  }
+  .upload.done .progress-wrapper {
+    --scale: .95;
+    -webkit-transition: opacity .3s, -webkit-transform .3s;
+    transition: opacity .3s, -webkit-transform .3s;
+    transition: transform .3s, opacity .3s;
+    transition: transform .3s, opacity .3s, -webkit-transform .3s;
+  }
+  .upload.done .check-wrapper {
+    --opacity: 1;
+    --scale: 1;
+    --rotate: 0deg;
+    -webkit-transition: opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
+    transition: opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
+    transition: transform .5s ease-in-out .3s, opacity .5s ease-in .3s;
+    transition: transform .5s ease-in-out .3s, opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
+  }
+  .upload.done .check-wrapper .check {
+    -webkit-animation: check-animate .5s ease-in-out .3s forwards;
+            animation: check-animate .5s ease-in-out .3s forwards;
+  }
+
+  @-webkit-keyframes shadow-animate {
+    0% {
+      -webkit-transform: rotate(0deg);
+              transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+    }
+  }
+
+  @keyframes shadow-animate {
+    0% {
+      -webkit-transform: rotate(0deg);
+              transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes progress-animate {
+    0% {
+      stroke-dashoffset: 722;
+    }
+    20% {
+      stroke-dashoffset: 500;
+    }
+    50% {
+      stroke-dashoffset: 322;
+    }
+    55% {
+      stroke-dashoffset: 300;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes progress-animate {
+    0% {
+      stroke-dashoffset: 722;
+    }
+    20% {
+      stroke-dashoffset: 500;
+    }
+    50% {
+      stroke-dashoffset: 322;
+    }
+    55% {
+      stroke-dashoffset: 300;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  @-webkit-keyframes check-animate {
+    0% {
+      stroke-dasharray: 0 100;
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dasharray: 100 0;
+      stroke-dashoffset: 100;
+    }
+  }
+  @keyframes check-animate {
+    0% {
+      stroke-dasharray: 0 100;
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dasharray: 100 0;
+      stroke-dashoffset: 100;
+    }
+  }
+
+  body .socials {
+    position: fixed;
+    display: block;
+    left: 20px;
+    bottom: 20px;
+  }
+  body .socials > a {
+    display: block;
+    width: 30px;
+    opacity: .2;
+    -webkit-transform: scale(var(--scale, 0.8));
+            transform: scale(var(--scale, 0.8));
+    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
+    transition: -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
+    transition: transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
+    transition: transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91), -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
+  }
+  body .socials > a:hover {
+    --scale: 1;
+  }
+</style>   
+
+
+
+<div class="upload">
+
+  <input type="file" name="file" title="file" class="drop-here">
+  {% if name %}
+    <div class="text text-drop">{{name}}</div>
+  {%else%}
+    <div class="text text-drop">Soltar archivo aqui</div>
+  {%endif%}
+  <div class="text text-upload">Cargando...</div>
+  <svg class="progress-wrapper" width="50" height="50">
+    <circle class="progress" r="115" cx="150" cy="150"></circle>
+  </svg>
+  <svg class="check-wrapper" width="130" height="130">
+    <polyline class="check" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+  </svg>
+  <div class="shadow"></div>
+</div>
+
+
+
+
+<!--- ## DRIBBBLE + TWITTER ############# -->
+<!-- <div class="socials">
+  <a class="dribbble" href="https://dribbble.com/shots/8571590-Upload-Animation" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 32 32"><path fill-rule="evenodd" clip-rule="evenodd" fill="black" d="M16 0C7.16703 0 0 7.16703 0 16C0 24.833 7.16703 32 16 32C24.8156 32 32 24.833 32 16C32 7.16703 24.8156 0 16 0ZM26.5683 7.37527C28.4772 9.70065 29.6226 12.6681 29.6573 15.8785C29.2061 15.7918 24.6941 14.872 20.1475 15.4447C20.0434 15.2191 19.9566 14.9761 19.8525 14.7332C19.5748 14.0738 19.2625 13.397 18.9501 12.7549C23.9826 10.7072 26.2733 7.75705 26.5683 7.37527ZM16 2.36009C19.4707 2.36009 22.6464 3.66161 25.0586 5.7961C24.8156 6.14317 22.7505 8.90239 17.8915 10.7245C15.6529 6.61171 13.1714 3.24512 12.7896 2.72451C13.8134 2.48156 14.8894 2.36009 16 2.36009ZM10.1866 3.64425C10.551 4.13015 12.9805 7.5141 15.2538 11.5401C8.86768 13.2408 3.22777 13.2061 2.62039 13.2061C3.50542 8.9718 6.36876 5.44902 10.1866 3.64425ZM2.32538 16.0174C2.32538 15.8785 2.32538 15.7397 2.32538 15.6009C2.9154 15.6182 9.54447 15.705 16.3644 13.6573C16.7636 14.4208 17.128 15.2017 17.4751 15.9826C17.3015 16.0347 17.1106 16.0868 16.9371 16.1388C9.89154 18.4121 6.14317 24.6247 5.8308 25.1453C3.6616 22.7332 2.32538 19.5228 2.32538 16.0174ZM16 29.6746C12.8416 29.6746 9.92625 28.5987 7.61822 26.7939C7.86117 26.2907 10.6377 20.9458 18.3427 18.256C18.3774 18.2386 18.3948 18.2386 18.4295 18.2213C20.3557 23.2017 21.1367 27.3839 21.3449 28.5813C19.6963 29.2928 17.8915 29.6746 16 29.6746ZM23.6182 27.3319C23.4794 26.4989 22.7505 22.5076 20.9631 17.5965C25.2495 16.9197 28.9978 18.0304 29.4664 18.1866C28.8764 21.987 26.6898 25.2668 23.6182 27.3319Z" fill="#EA4C89"></path></svg></a>
+</div> -->
+<script type="text/javascript">
+  var fileUpload = document.querySelector(".upload");
+
+fileUpload.addEventListener("dragover", function() {
+  this.classList.add("drag");
+  this.classList.remove("drop", "done");
+});
+
+fileUpload.addEventListener("dragleave", function() {
+  this.classList.remove("drag");
+});
+
+fileUpload.addEventListener("drop", start, false);
+fileUpload.addEventListener("change", start, false);
+
+function start() { 
+  this.classList.remove("drag");
+  this.classList.add("drop");
+  setTimeout(() => this.classList.add("done"), 3000);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+                      </div>
+                    </div>
 
                     <!-- SELECCIONADOR DE FECHA -->
                     <br>
@@ -230,7 +577,7 @@
               {% if status=="Success" %}
                 <button onclick="validate()" type="submit" href="/update_about" class="btn btn-success " id="save_button">Guardar de nuevo?</button>
               {% elif status != None %}
-                <button onclick="validate()" type="submit" href="/update_about" class="btn btn-warning " id="save_button">No se guardó, intentar de nuevo?</button>
+                <button onclick="validate()" type="submit" href="/update_about" class="btn btn-warning " id="save_button">Intentar de nuevo?</button>
               {% else %}
                 <button onclick="validate()" type="submit" href="/update_about" class="btn btn-primary " id="save_button">Guardar</button>
               {% endif %}

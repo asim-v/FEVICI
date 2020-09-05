@@ -68,7 +68,8 @@ CONFIG = {
 
 
 
-ALLOWED_EXTENSIONS = {'pdf'}
+ALLOWED_EXTENSIONS = ['pdf','docx']
+ALLOWED_IMAGES = ['png','jpg','jpeg']
 limit = "30 de Junio"
 editable = True
 WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"# read web api key from file
@@ -128,7 +129,7 @@ bucket = client.get_bucket('fevici.appspot.com')
 #SIRVE PARA LISTAR LOS BLOBS QUE EXISTEN
 # for blob in client.list_blobs('fevici.appspot.com', prefix='abc/myfolder'): #Con prefijo
 all_projects = [blob.name for blob in client.list_blobs('fevici.appspot.com')]
-print(all_projects[0])
+print(all_projects)
 
 
 #Db references
@@ -247,6 +248,7 @@ def user_register():
                             "email": user_email,
                             "team_id": genID(),
                             "about_user":{},
+                            "about_file":{},
                             "connected_chats": [],
                             "project_desc":{},
                             "project_file":{"project_id":0,"project_team":[session['id']],"project_name":''}
@@ -260,7 +262,7 @@ def user_register():
             elif ("INVALID_EMAIL" in str(e)):
                 flash_msg = "Por favor ingresa un correo electrónico válido"
             elif ("WEAK_PASSWORD" in str(e)):
-                flash_msg = "Por favir utiliza una contraseña segura"
+                flash_msg = "Por favor utiliza una contraseña segura"
             else:
                 flash_msg = "Algo salio mal!!"+str(e)        
             flash(flash_msg)
@@ -272,6 +274,10 @@ def user_logout():
     #session.pop('session_id', None)
     session.clear()
     return redirect(url_for('index_page'))
+
+@app.route('/file/<filename>')
+def send_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route("/chat/<chatid>")
 def user_chat(chatid):
@@ -369,8 +375,9 @@ def about():
     '''
     proj = users_coll.document(session['id']).get().to_dict()
     about_user= proj["about_user"]
-
-    return render_template("about.html",user_name=session["user_name"],project = about_user,limit=limit,status = session['status'],active=2)
+    about_file = proj["about_file"]
+    name = about_file['image_name'][:5]+'...'+about_file['image_name'][::-1][:3][::-1] 
+    return render_template("about.html",user_name=session["user_name"],project = about_user,project_file = about_file,limit=limit,status = session['status'],active=2,name=name)
 
 
 
@@ -388,18 +395,34 @@ def update_about():
 
             for field in form: 
                 try:
-                    if request.form[field] not in ['Select Country','']:  # Solo subir si no está vacio el formulario
+                    if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
                         data[field[0].upper()+field[1:]] = request.form[field]
                 except Exception as e:return str(e)#;print(str(request.form[field]))
 
-            #return str(data) #DEBUG
-            #return save_file(request.files['file']) #DEBUG
 
-            save_json({"about_user":data})  #Guardar el data parseado de los forms
+            if request.files['file'] and not allowed_image(request.files['file'].filename):
+                save_json({"about_user":data})
+                
+                session["status"] = "Se guardaron los datos pero la imagen subida no es compatible, los formatos aceptados son PNG,JPG,JPEG"
+                return redirect(url_for("about"))  
 
-            #guarda rque salio bien en status
-            session["status"] = "Success"
-            return redirect(url_for("about"))  
+            else:                
+                #Obtener spec para guardar
+                user_doc = users_coll.document(session['id'])
+                project_details = user_doc.get().to_dict().get("about_file")
+
+
+                #Save file devuelve el id del archivo que se guarda con la func
+                project_details["image_id"] = save_file(request.files['file'])              
+                project_details["image_name"] = request.files['file'].filename
+
+                #return save_file(request.files['file']) #DEBUG
+                save_json({"about_file":project_details})  #Guardar el nuevo data con el id agregado                
+                save_json({"about_user":data})  #Guardar el data parseado de los forms
+
+                #guarda rque salio bien en status
+                session["status"] = "Success"
+                return redirect(url_for("about"))  
 
         except Exception as e:return "FORM EXCEPTION: "+str(e)
     else: return 
@@ -414,6 +437,7 @@ def project():
     proj = users_coll.document(session['id']).get().to_dict()
     proj_desc= proj["project_desc"]
     proj_file = proj["project_file"]
+
     #generates team list object for visualizing teammates
     team_list = [team(x) for x in proj_file["project_team"]]
 
@@ -459,6 +483,13 @@ def allowed_file(filename):
         Extensión en extensiones permitidas?
     '''
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def allowed_image(filename):
+    '''
+        Extensión en extensiones permitidas?
+    '''
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
 
 
 @app.route("/update", methods=["POST"])
