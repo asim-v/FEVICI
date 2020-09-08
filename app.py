@@ -100,7 +100,7 @@ app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
 # app.config['MAIL_DEFAULT_SENDER']
 app.config['MAIL_MAX_EMAILS'] = 2
 app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['TESTING'] = False
+app.config['TESTING'] = True
 # app.config['MAIL_ASCII_ATTACHMENTS']
 mail = Mail(app)
 
@@ -171,8 +171,10 @@ def index_page():
             user_details = user_doc.get().to_dict()
             session["user_name"] = user_details.get("name")
             #flash(decoded_clamis)
+            
+            session['about_file_ID'] = user_details["about_file"]["image_id"]
 
-            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"],active=1)
+            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"],active=1,profileid=session["about_file_ID"])
         except Exception as e:
             # if unable to verify session_id for any reason
             # maybe invalid or expired, redirect to login
@@ -271,13 +273,10 @@ def user_register():
 
 @app.route('/logout')
 def user_logout():
-    #session.pop('session_id', None)
+    session.pop('session_id', None)
     session.clear()
     return redirect(url_for('index_page'))
 
-@app.route('/file/<filename>')
-def send_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route("/chat/<chatid>")
 def user_chat(chatid):
@@ -315,7 +314,7 @@ def user_chat(chatid):
         for i in connected_chats:
             connected_chats_list.append(i.get().to_dict())
 
-        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"],active=4, chats_list=connected_chats_list[::-1]))
+        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"],active=4, chats_list=connected_chats_list[::-1],profileid=session["about_file_ID"]))
     except Exception as e:
         return str(e)
 
@@ -376,8 +375,10 @@ def about():
     proj = users_coll.document(session['id']).get().to_dict()
     about_user= proj["about_user"]
     about_file = proj["about_file"]
+    about_file_ID = proj["about_file"]["image_id"]
+    session['about_file_ID'] = about_file_ID
     name = about_file['image_name'][:5]+'...'+about_file['image_name'][::-1][:3][::-1] 
-    return render_template("about.html",user_name=session["user_name"],project = about_user,project_file = about_file,limit=limit,status = session['status'],active=2,name=name)
+    return render_template("about.html",user_name=session["user_name"],project = about_user,project_file = about_file,limit=limit,status = session['status'],active=2,name=name,profileid=session["about_file_ID"])
 
 
 
@@ -427,6 +428,13 @@ def update_about():
         except Exception as e:return "FORM EXCEPTION: "+str(e)
     else: return 
 
+@app.route("/calendar")
+def calendar():
+    return render_template("calendar.html",user_name=session["user_name"],status = session['status'],active=3,profileid=session["about_file_ID"])
+
+@app.route("/expo")
+def expo():
+    return render_template("expo.html",user_name=session["user_name"],status = session['status'],active=6,profileid=session["about_file_ID"])
 
 
 @app.route("/project")
@@ -441,16 +449,19 @@ def project():
     #generates team list object for visualizing teammates
     team_list = [team(x) for x in proj_file["project_team"]]
 
-    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5)
+    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5,profileid=session["about_file_ID"])
 
 def save_json(data,uid = None):
     '''
         INPUT = dict
         Guardar data json en id[default el de la sesion] de la bd, se hace la asignacion de este modo para evitar el sessionoutofcontext error
     '''
-    u_id = session['id'] if (uid == None) else uid
-    user_doc = users_coll.document(u_id)
-    user_doc.update(data)
+    try:
+        u_id = session['id'] if (uid == None) else uid
+        user_doc = users_coll.document(u_id)
+        user_doc.update(data)
+    except:
+        return 'Save_json error'
 
 def save_file(file,uid = None):
     '''
@@ -468,14 +479,16 @@ def save_file(file,uid = None):
     except:pass
     # gets the old file and deletes it
     
-    filename = ''.join([str(int(random.random()*1000000))])                    
-    while filename in all_projects: filename = ''.join([str(int(random.random()*1000000))])                    
+    new_filename = ''.join([str(int(random.random()*1000000))])                    
+    while new_filename in all_projects: new_filename = ''.join([str(int(random.random()*1000000))])                    
         
+    old_filename = file.filename
 
-    blob = bucket.blob(filename) 
+    extension = old_filename.rsplit('.', 1)[1].lower()
+    blob = bucket.blob(new_filename+'.'+extension) 
     blob.upload_from_file(file)    
 
-    return filename
+    return new_filename+'.'+extension
 
 
 def allowed_file(filename):
@@ -597,6 +610,19 @@ def leave_chat(chatid):
 @app.route('/js/<path:path>')
 def send_js(path):
     return send_from_directory('static/js', path)
+
+
+# @app.route('/file/<filename>')
+# def send_file(filename):
+
+#     storage_client = storage.Client()
+
+#     bucket = storage_client.bucket('fevici.appspot.com')
+#     blob = bucket.blob(filename)
+#     file_obj = open("my-secure-file", "w+")    
+#     blob.download_to_file(file_obj)
+
+#     return send_from_directory('', filename)
 
 if (__name__ == "__main__"):
     #app.run(debug=True)
