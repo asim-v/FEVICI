@@ -412,10 +412,11 @@ def update_about():
                 user_doc = users_coll.document(session['id'])
                 project_details = user_doc.get().to_dict().get("about_file")
 
-
-                #Save file devuelve el id del archivo que se guarda con la func
-                project_details["image_id"] = save_file(request.files['file'])              
-                project_details["image_name"] = request.files['file'].filename
+                try:
+                    #Save file devuelve el id del archivo que se guarda con la func
+                    project_details["image_id"] = save_file(request.files['file'])              
+                    project_details["image_name"] = request.files['file'].filename
+                except:pass
 
                 #return save_file(request.files['file']) #DEBUG
                 save_json({"about_file":project_details})  #Guardar el nuevo data con el id agregado                
@@ -470,15 +471,15 @@ def save_file(file,uid = None):
     '''
     # gets the id of he old file to delete it
     user_doc = users_coll.document(session['id'])
-    user_details = user_doc.get().to_dict()
-    # return user_details   DEBUG
+    user_details = user_doc.get().to_dict()   
     try:
         project = user_details.get("project_file")['project_id']
         blob = bucket.blob(project) 
         blob.delete()
-    except:pass
+    except Exception as e:pass
     # gets the old file and deletes it
     
+
     new_filename = ''.join([str(int(random.random()*1000000))])                    
     while new_filename in all_projects: new_filename = ''.join([str(int(random.random()*1000000))])                    
         
@@ -487,6 +488,7 @@ def save_file(file,uid = None):
     extension = old_filename.rsplit('.', 1)[1].lower()
     blob = bucket.blob(new_filename+'.'+extension) 
     blob.upload_from_file(file)    
+
 
     return new_filename+'.'+extension
 
@@ -526,26 +528,33 @@ def update():
                 except Exception as e:return str(e)#;print(str(request.form[field]))
 
 
+
             if request.files['file'] and not allowed_file(request.files['file'].filename):
+
                 save_json({"project_desc":data})
                 
                 session["status"] = "Se guardaron los datos pero el archivo subido no es compatible, los formatos aceptados son PDF,DOCX"
                 return redirect(url_for("project"))  
 
             else:                
-                #Obtener spec para guardar
-                user_doc = users_coll.document(session['id'])
-                project_details = user_doc.get().to_dict().get("project_file")
+                try:
+                    #Obtener spec para guardar
+                    user_doc = users_coll.document(session['id'])
+                    project_details = user_doc.get().to_dict().get("project_file")
+                except Exception as e:return "DB error"+str(e)
 
-
-                #Save file devuelve el id del archivo que se guarda con la func
-                project_details["project_id"] = save_file(request.files['file'])              
-                project_details["project_name"] = request.files['file'].filename
-
-                
-                #return save_file(request.files['file']) #DEBUG
-                save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
-                save_json({"project_desc":data})  #Guardar el data parseado de los forms
+                try:
+                    # return save_file(request.files['file']) #DEBUG
+                    #Save file devuelve el id del archivo que se guarda con la func                    
+                    project_details["project_id"] = save_file(request.files['file'])              
+                    project_details["project_name"] = request.files['file'].filename
+                except Exception as e:pass
+                    
+                try:            
+                    
+                    save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
+                    save_json({"project_desc":data})  #Guardar el data parseado de los forms
+                except Exception as e:return "Json error"+str(e)
 
                 #guarda rque salio bien en status
                 session["status"] = "Success"
