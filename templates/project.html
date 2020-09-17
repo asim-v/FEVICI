@@ -65,7 +65,7 @@
                 <div class="col-sm-6">
                   <div class="label">Proyecto Público</div>
                   <div class="custom-control custom-checkbox mr-sm-2">
-                    <input name="PublicProject" type="checkbox" class="custom-control-input" id="PublicProject" {% if project['PublicProject'] == 'on' %} checked {% endif %}>
+                    <input name="PublicProject" type="checkbox" class="custom-control-input {% if project['PublicProject'] == 'on' %} checked {% endif %} " id="PublicProject">
                     <label class="custom-control-label" for="PublicProject">Deseas que tu proyecto sea visible por los demás participantes?</label>
                   </div>  
                 </div>
@@ -96,11 +96,21 @@
                   .input-field { 
                       width: 100%; 
                   } 
+                  .modal-backdrop{
+                    display : none;
+                  }
+
+                  .custom-modal{
+                    border:none;
+                    overflow: visible;
+                    padding-top: 50px;
+                    background-color: white;
+                  }
               </style>              
-              <div class="modal fade shadowed" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+              <div class="modal  shadowed " id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog custom-modal" role="document">
                   
-                  <div class="modal-content">
+                  <div class="modal-content ">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Invitar al equipo</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -247,8 +257,8 @@
 
                     <br>
                     <div class="custom-control custom-checkbox mr-sm-2">
-                      <input type="checkbox" class="custom-control-input" id="PublicProject" onclick="checkMaterials()">
-                      <label class="custom-control-label" for="PublicProject">Utilizaste Materiales Químicos durante tu experimento?</label>
+                      <input type="checkbox" class="custom-control-input" id="Materials" onclick="checkMaterials()">
+                      <label class="custom-control-label" for="Materials">Utilizaste Materiales Químicos durante tu experimento?</label>
                     </div>                      
 
                     <div style="display: none" id="invisible">
@@ -704,7 +714,7 @@ function getIndex(){
 }
 
 function checkMaterials(){
-  if (document.getElementById('PublicProject').checked){
+  if (document.getElementById('Materials').checked){
     document.getElementById('invisible').style.display = 'inline';
   }else{
     document.getElementById('invisible').style.display = 'none';

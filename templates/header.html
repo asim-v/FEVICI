@@ -271,7 +271,11 @@
   .form-control{
     border:none !important;
     background-color: #F9F8FF !important
-  }  
+  }.form-control:focus{
+    outline: none !important;
+    border-color: #8fffdf;
+    box-shadow: 0 0 10px #8fffdf;    
+  }
   .alert{
     margin-bottom: 0rem !important;
   }
@@ -301,17 +305,19 @@
     z-index: 100000 !important;
   }
   .tooltip .tooltiptext {
+    
     font-family: 'Montserrat', sans-serif;
     visibility: hidden;
     width: 220px;
     color: #fff;
     border-radius: 10px;
     padding: 8px 12px;
-    backdrop-filter: grayscale(0.5) opacity(0.3);
+    background-color:  #2b2b2b8c;
+    backdrop-filter: grayscale(0.5) opacity(0.5);
 
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
+
   }
   .tooltip:hover .tooltiptext {
     visibility: visible;
@@ -360,6 +366,9 @@
   }
   input{
     font-weight: 400 !important;
+  }input:focus{
+    border-color:#8819ff !important;
+    outline: none !important;
   }
   select{
     font-weight: 400 !important;
@@ -425,6 +434,10 @@
   }
   p .fa{
     font-size: 20px;
+  }
+  .modal-content{
+    backdrop-filter:opacity(0.98) blur(5px);
+    background-color:transparent;
   }
 </style>
 <!-- CUSTOM STYLES -->
@@ -646,6 +659,7 @@
 }
 
 .ddcontainer {
+  pointer-events: none;
   background: #fff;
   border-radius: 3px;
   box-shadow: 5px 5px 10px lightgrey;
@@ -661,6 +675,7 @@
 }
 
 .ddcontainer.active {
+  pointer-events: all;
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0px);
@@ -1364,8 +1379,8 @@ try{
   });
 
   particleground(document.getElementById('particles-background'), {
-    dotColor: 'rgba(255, 255, 255, 0.5)',
-    lineColor: 'rgba(255, 255, 255, 0.05)',
+    dotColor: '#8fffdf',
+    lineColor: '#8fffdf',
     minSpeedX: 0.075,
     maxSpeedX: 0.15,
     minSpeedY: 0.075,
@@ -1374,7 +1389,7 @@ try{
     curvedLines: false,
     proximity: 20, // How close two dots need to be before they join
     parallaxMultiplier: 20, // Lower the number is more extreme parallax
-    particleRadius: 2, // Dot size
+    particleRadius: 5, // Dot size
   });
 }catch(error){
   console.log(error);

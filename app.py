@@ -51,6 +51,9 @@ import datetime
 import random
 
 
+
+
+
 CONFIG = {
   "type": "service_account",
   "project_id": "fevici",
@@ -80,8 +83,20 @@ user_auth = firebase_user_auth.initialize(WEB_API_KEY)
 # keeping already watching list
 chats_watch_list = {}
 
+
+
+#Apps
+from apps.chat import chat
+from apps.login import login
+from apps.register import register
+from apps.teams import teams
+from apps import save
 #INTI FLASK with socketio for rt msg
 app = Flask(__name__)
+app.register_blueprint(chat)
+app.register_blueprint(login)
+app.register_blueprint(register)
+app.register_blueprint(teams)
 app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
 
 
@@ -100,7 +115,7 @@ app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
 # app.config['MAIL_DEFAULT_SENDER']
 app.config['MAIL_MAX_EMAILS'] = 2
 app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['TESTING'] = True
+app.config['TESTING'] = False
 # app.config['MAIL_ASCII_ATTACHMENTS']
 mail = Mail(app)
 
@@ -155,7 +170,7 @@ def index_page():
         Pagina de inicio
     '''
     flash_msg = None
-    if ("session_id" in session):
+    if "session_id" in session:
         try:
             # verify session_id
             decoded_clamis = auth.verify_session_cookie(session["session_id"])   
@@ -186,186 +201,7 @@ def index_page():
     flash(flash_msg)
     return redirect(url_for("user_login"))    
 
-@app.route('/login', methods=["GET","POST"])
-def user_login():
-    if (request.method == "POST"):
-        user_email = request.form['userEmail']
-        user_password = request.form['userPassword']
-        flash_msg = None
-        try:
-            user_recode = user_auth.sign_in_user_with_email_password(user_email, user_password)
-            session["token"] = user_recode
-            # get idToken
-            user_id_token = user_recode.get('idToken')
-            # get a session cookie using id token and set it in sessions
-            # this will automatically create secure cookies under the hood
-            user_session_cookie = auth.create_session_cookie(user_id_token, expires_in=datetime.timedelta(days=14))           
-            session['session_id'] = user_session_cookie
-            # if username passwd valid then redirect to index page
-            return redirect(url_for('index_page'))
 
-        except requests.HTTPError as e:
-            if ("EMAIL_NOT_FOUND" in str(e)):
-                flash_msg = "Favor de registrarse antes de ingresar"
-            elif ("INVALID_EMAIL" in str(e)):
-                flash_msg = "Por favor ingresa un correo válido"
-            elif ("INVALID_PASSWORD" in str(e)):
-                flash_msg = "Contraseña inválida"
-            else:
-                flash_msg = "Algo salio mal!!" + str(e)
-        flash(flash_msg)
-    # return login page for GET request
-    # 1 - Newton Fractal 
-    # 2 - Fluid Cube
-    # 3 - Bacteria Evolution
-    # 4 - Hennophase
-    # 5 - Game of life
-    # 6 - Mica Cube
-    # 7 - Mandelbrot set
-    # 8 - Stars
-
-    return render_template("login.html",auth = False,visualization = random.choice([1,2,3,4,5,6,7,8,9]))
-    
-
-
-@app.route('/register', methods=["GET", "POST"])
-def user_register():
-    def genID():return int(random.random()*1000000)
-    if (request.method == "POST"):
-        user_name = request.form['userName']
-        user_email = request.form['userEmail']
-        user_password = request.form['userPassword']
-        flash_msg = None
-        try:
-            user_recode = user_auth.create_user_with_email_password(user_email, user_password)
-            # get idToken
-            user_id_token = user_recode.get('idToken')
-            # get a session cookie using id token and set it in sessions
-            # this will automatically create secure cookies under the hood
-            user_session_cookie = auth.create_session_cookie(user_id_token, expires_in=datetime.timedelta(days=14))           
-            session['session_id'] = user_session_cookie
-            # add user document to users collection
-            session["id"] = user_recode.get('localId')
-            users_coll.add({"name": user_name,
-                            "email": user_email,
-                            "team_id": genID(),
-                            "about_user":{},
-                            "about_file":{},
-                            "connected_chats": [],
-                            "project_desc":{},
-                            "project_file":{"project_id":0,"project_team":[session['id']],"project_name":''}
-            }, user_recode.get('localId'))
-            
-            # if registration is valid then redirect to index page
-            return redirect(url_for('index_page'))
-        except requests.HTTPError as e:
-            if ("EMAIL_EXISTS" in str(e)):
-                flash_msg = "Ya te registraste! Por favor inicia sesión."
-            elif ("INVALID_EMAIL" in str(e)):
-                flash_msg = "Por favor ingresa un correo electrónico válido"
-            elif ("WEAK_PASSWORD" in str(e)):
-                flash_msg = "Por favor utiliza una contraseña segura"
-            else:
-                flash_msg = "Algo salio mal!!"+str(e)        
-            flash(flash_msg)
-    # return to login page for GET
-    return redirect(url_for('user_login'))
-
-@app.route('/logout')
-def user_logout():
-    session.pop('session_id', None)
-    session.clear()
-    return redirect(url_for('index_page'))
-
-
-@app.route("/chat/<chatid>")
-def user_chat(chatid):
-    '''
-        TODO: Hacer ventana de chats como la de cualquier app de mensajeo con los profesores registrados.
-    '''
-    try:
-        chat_doc = chats_coll.document(chatid)
-        chat_details = chat_doc.get().to_dict()
-
-        # if user is not already joined then append him to users list
-        if (session["email_addr"] not in chat_details.get("users")):
-            chat_details.get("users").append(session["email_addr"])
-            chat_doc.update(chat_details, option=None)
-
-            # then append chat_doc to user's connected chats
-            user_doc = users_coll.document(session['id'])
-            user_details = user_doc.get().to_dict()
-            user_details.get("connected_chats").append(chat_doc)
-            user_doc.update(user_details, option=None)
-
-
-        # start checking for changes. 
-        if (chatid not in chats_watch_list):
-            chat_watch = chat_doc.on_snapshot(_on_snapshot_callback)
-
-        # Trying to implement users connected chats list            
-        user_doc = users_coll.document(session['id'])
-        user_details = user_doc.get().to_dict()
-        connected_chats = user_details.get("connected_chats")
-        session["user_name"] = user_details.get("name")
-        #flash(decoded_clamis)
-
-        connected_chats_list = []
-        for i in connected_chats:
-            connected_chats_list.append(i.get().to_dict())
-
-        return (render_template("chat.html", users_list=chat_details.get("users"), logged_user=session["email_addr"], chatid=chatid, user_email = session["email_addr"],active=4, chats_list=connected_chats_list[::-1],profileid=session["about_file_ID"]))
-    except Exception as e:
-        return str(e)
-
-
-
-@app.route("/recieve_invite/<invite_id>")
-def recieve_invite(invite_id):
-    '''
-        TODO: Dos opciones de invitación:
-            1) El usuario recibe un correo y es redirigido al about donde se muestra el código de invitación recibido
-            2) El usuario utiliza el cógido de invitación que también se muestra en el popup de project para ingtesarlo manualmente 
-    '''
-    pass
-
-
-
-@app.route("/send_invite/<invite_to>")
-def send_invite(invite_to):
-	with app.app_context():
-
-		'''
-		    La pagina genera un id de invitación que al ser usado por otro usuario, sobreescribe su proyecto con el id del proyecto con el del enviado
-		'''
-		invite_to = str(invite_to)
-		# invite_to = str(invite_to)
-		msg = Message("Sup Famille",
-		                  sender=("Invitación a la Feria Virtual de Ciencias e Ingenierías","contacto@fevici.org"),
-		                  recipients=[invite_to])
-		# msg.recipients = ["you@example.com"]
-		# msg.add_recipient("somebodyelse@example.com")
-		# msg = Message("Hello",
-		#               sender=("Me", "me@example.com"))
-
-		# assert msg.sender == "Me <me@example.com>"
-		try:
-			print(invite_to)
-			msg.body = "Probanding"
-			msg.html = "<b>Holassss quisiera decirte que entiendo que es dificil pero que harás? Cuál es tu visión? Cómo llegas a esa visión?</b>"
-
-			mail.send(msg)
-			return 'sent'
-		except Exception as e:
-			return str(e)
-
-class team(object):
-    def __init__(self,id):
-        self.doc = user_doc = users_coll.document(id)
-        self.name = user_doc.get().to_dict().get("name")
-        self.email = user_doc.get().to_dict().get("email")
-        self.color = random.choice(["#6772E5","#D869D0","#FF71A6","#FF967B","#FFC761"])
-        self.initials = ''.join([x[0].upper() for x in self.name.split(' ')][:3])
 
 @app.route("/about")
 def about():
@@ -429,15 +265,6 @@ def update_about():
         except Exception as e:return "FORM EXCEPTION: "+str(e)
     else: return 
 
-@app.route("/calendar")
-def calendar():
-    return render_template("calendar.html",user_name=session["user_name"],status = session['status'],active=3,profileid=session["about_file_ID"])
-
-@app.route("/expo")
-def expo():
-    return render_template("expo.html",user_name=session["user_name"],status = session['status'],active=6,profileid=session["about_file_ID"])
-
-
 @app.route("/project")
 def project():
     '''
@@ -452,60 +279,17 @@ def project():
 
     return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5,profileid=session["about_file_ID"])
 
-def save_json(data,uid = None):
-    '''
-        INPUT = dict
-        Guardar data json en id[default el de la sesion] de la bd, se hace la asignacion de este modo para evitar el sessionoutofcontext error
-    '''
-    try:
-        u_id = session['id'] if (uid == None) else uid
-        user_doc = users_coll.document(u_id)
-        user_doc.update(data)
-    except:
-        return 'Save_json error'
-
-def save_file(file,uid = None):
-    '''
-        Dado objeto file, guardar en base de datos fevici en proyectos
-        Devuelve el id de donde ha sido guardado
-    '''
-    # gets the id of he old file to delete it
-    user_doc = users_coll.document(session['id'])
-    user_details = user_doc.get().to_dict()   
-    try:
-        project = user_details.get("project_file")['project_id']
-        blob = bucket.blob(project) 
-        blob.delete()
-    except Exception as e:pass
-    # gets the old file and deletes it
-    
-
-    new_filename = ''.join([str(int(random.random()*1000000))])                    
-    while new_filename in all_projects: new_filename = ''.join([str(int(random.random()*1000000))])                    
-        
-    old_filename = file.filename
-
-    extension = old_filename.rsplit('.', 1)[1].lower()
-    blob = bucket.blob(new_filename+'.'+extension) 
-    blob.upload_from_file(file)    
-
-
-    return new_filename+'.'+extension
-
-
 def allowed_file(filename):
     '''
         Extensión en extensiones permitidas?
     '''
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 def allowed_image(filename):
     '''
         Extensión en extensiones permitidas?
     '''
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
-
 
 @app.route("/update", methods=["POST"])
 def update():    
@@ -563,58 +347,15 @@ def update():
         except Exception as e:return "FORM EXCEPTION: "+str(e)
     else: return 
 
-@app.route("/new-chat")
-def new_chat():
-    return (render_template("new-note.html"))
 
-@app.route("/new-chat/create")
-def create_new_chat():
-    try:
-        cid = str(random.random())[2:] + str(random.randint(1241, 4124))
-        chats_coll.add({"nid": cid,
-                        "users": [],
-						"chat": ""
-        }, cid)
-        return (redirect("/chat/{}".format(cid)))
-    except:
-	    return ("There is an error. Please try again.")
-	
+@app.route("/calendar")
+def calendar():
+    return render_template("calendar.html",user_name=session["user_name"],status = session['status'],active=3,profileid=session["about_file_ID"])
 
-# get chatid and return chat_detail
-@app.route("/chat/getinfo/<chatid>")
-def get_chat_info(chatid):
-    cht_info = chats_coll.document(chatid)
-    session[chatid] = False	
-    return (jsonify(cht_info.get().to_dict()))
+@app.route("/expo")
+def expo():
+    return render_template("expo.html",user_name=session["user_name"],status = session['status'],active=6,profileid=session["about_file_ID"])
 
-
-@app.route("/chat/add/<chatid>/<message>")
-def add_chat(chatid, message):
-
-    chat_doc = chats_coll.document(chatid)
-    chat_details = chat_doc.get().to_dict()
-    chat_details["chat"] += "\n[{}] : {}".format(session.get("email_addr").split("@")[0], message)
-    chat_doc.update(chat_details, option=None)
-
-    # need to handle errors but for now
-    return (jsonify({}))
-
-@app.route("/chat/leave/<chatid>")
-def leave_chat(chatid):
-    try:
-        chat_doc = chats_coll.document(chatid)
-        chat_details = chat_doc.get().to_dict()
-        chat_details.get("users").remove(session.get("email_addr"))
-        chat_doc.update(chat_details, option=None)
-
-        user_doc = users_coll.document(session["id"])
-        user_details = user_doc.get().to_dict()
-        user_details.get("connected_chats").remove(chat_doc)
-        user_doc.update(user_details, option=None) 
-        # just for now
-        return redirect(url_for("index_page"))   
-    except Exception as e:
-        return (str(e))
 
 @app.route('/js/<path:path>')
 def send_js(path):
@@ -634,5 +375,6 @@ def send_js(path):
 #     return send_from_directory('', filename)
 
 if (__name__ == "__main__"):
+	pass
     #app.run(debug=True)
-	socketio.run(app,debug=True)
+	socketio.run(app,host='0.0.0.0',debug=True)
