@@ -25,7 +25,7 @@ Changelog:
 
 
 # imports for flask
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
+from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
 from flask_mail import Mail, Message
 #For File Management
 from werkzeug.utils import secure_filename
@@ -75,10 +75,10 @@ ALLOWED_EXTENSIONS = ['pdf','docx']
 ALLOWED_IMAGES = ['png','jpg','jpeg']
 limit = "30 de Junio"
 editable = True
-WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"# read web api key from file
 
 
 # firebase user auth init
+WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"
 user_auth = firebase_user_auth.initialize(WEB_API_KEY)
 # keeping already watching list
 chats_watch_list = {}
@@ -86,18 +86,34 @@ chats_watch_list = {}
 
 
 #Apps
-from apps.chat import chat
-from apps.login import login
-from apps.register import register
-from apps.teams import teams
-from apps import save
+from apps.chat import chatBP
+from apps.login import loginBP
+from apps.register import registerBP
+from apps.calendar import calendarBP
+from apps.expo import expoBP
+from apps.about import aboutBP
+from apps.project import projectBP
+from apps.index import indexBP
+from apps.teams import teamsBP
+
+#Código normal
+from apps import save 
+
 #INTI FLASK with socketio for rt msg
 app = Flask(__name__)
-app.register_blueprint(chat)
-app.register_blueprint(login)
-app.register_blueprint(register)
-app.register_blueprint(teams)
 app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
+
+#Registra Blueprints
+app.register_blueprint(chatBP)
+app.register_blueprint(loginBP)
+app.register_blueprint(registerBP)
+app.register_blueprint(calendarBP)
+app.register_blueprint(expoBP)
+app.register_blueprint(aboutBP)
+app.register_blueprint(projectBP)
+app.register_blueprint(indexBP)
+app.register_blueprint(teamsBP)
+
 
 
 
@@ -125,6 +141,7 @@ mail = Mail(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 
+
 # initializes fb with bucket name
 cred = credentials.Certificate(CONFIG)
 default_app = firebase_admin.initialize_app(cred,{
@@ -136,6 +153,7 @@ credentials = service_account.Credentials.from_service_account_info(CONFIG)
 client = storage.Client(project='fevici', credentials=credentials)
 
 bucket = client.get_bucket('fevici.appspot.com')
+
 
 #SIRVE PARA PROBAR COMO GUARDAR FILES
 # blob = bucket.blob('my-test-file.txt')
@@ -159,203 +177,6 @@ chats_coll = db.collection(u"notes")
 
 
 
-def _on_snapshot_callback(doc_snapshot, changes, readtime):
-    # need to send requried event to required people
-    chatid = doc_snapshot[0].id
-    socketio.emit(chatid, {'doc_updated': True})
-
-@app.route('/')
-def index_page():
-    '''
-        Pagina de inicio
-    '''
-    flash_msg = None
-    if "session_id" in session:
-        try:
-            # verify session_id
-            decoded_clamis = auth.verify_session_cookie(session["session_id"])   
-            #flash(decoded_clamis)
-            session['email_addr'] = decoded_clamis['email']
-            session['id'] = decoded_clamis['user_id']
-            #session variable to indicate errors
-            session["status"]  = None
-            
-
-            # Trying to implement users connected chats list            
-            user_doc = users_coll.document(session['id'])
-            user_details = user_doc.get().to_dict()
-            session["user_name"] = user_details.get("name")
-            #flash(decoded_clamis)
-            
-            session['about_file_ID'] = user_details["about_file"]["image_id"]
-
-            return render_template("index.html", user_email=session["email_addr"],user_name=session["user_name"],active=1,profileid=session["about_file_ID"])
-        except Exception as e:
-            # if unable to verify session_id for any reason
-            # maybe invalid or expired, redirect to login
-            flash_msg = "Your session is expired!"
-            #return "INDEX EXCEPTION" + str(e)
-            return redirect(url_for("user_login"))    
-
-    flash_msg = "Please Log In"
-    flash(flash_msg)
-    return redirect(url_for("user_login"))    
-
-
-
-@app.route("/about")
-def about():
-    '''
-        Renderiza el about form con el id del usuario en la sesion actual
-    '''
-    proj = users_coll.document(session['id']).get().to_dict()
-    about_user= proj["about_user"]
-    about_file = proj["about_file"]
-    about_file_ID = proj["about_file"]["image_id"]
-    session['about_file_ID'] = about_file_ID
-    name = about_file['image_name'][:5]+'...'+about_file['image_name'][::-1][:3][::-1] 
-    return render_template("about.html",user_name=session["user_name"],project = about_user,project_file = about_file,limit=limit,status = session['status'],active=2,name=name,profileid=session["about_file_ID"])
-
-
-
-@app.route("/update_about", methods=["POST"])
-def update_about():    
-    '''
-        Actualiza el formulairo about
-    '''
-    if request.method == "POST":
-        try: 
-
-            data = {}
-            form = request.form
-
-
-            for field in form: 
-                try:
-                    if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
-                        data[field[0].upper()+field[1:]] = request.form[field]
-                except Exception as e:return str(e)#;print(str(request.form[field]))
-
-
-            if request.files['file'] and not allowed_image(request.files['file'].filename):
-                save_json({"about_user":data})
-                
-                session["status"] = "Se guardaron los datos pero la imagen subida no es compatible, los formatos aceptados son PNG,JPG,JPEG"
-                return redirect(url_for("about"))  
-
-            else:                
-                #Obtener spec para guardar
-                user_doc = users_coll.document(session['id'])
-                project_details = user_doc.get().to_dict().get("about_file")
-
-                try:
-                    #Save file devuelve el id del archivo que se guarda con la func
-                    project_details["image_id"] = save_file(request.files['file'])              
-                    project_details["image_name"] = request.files['file'].filename
-                except:pass
-
-                #return save_file(request.files['file']) #DEBUG
-                save_json({"about_file":project_details})  #Guardar el nuevo data con el id agregado                
-                save_json({"about_user":data})  #Guardar el data parseado de los forms
-
-                #guarda rque salio bien en status
-                session["status"] = "Success"
-                return redirect(url_for("about"))  
-
-        except Exception as e:return "FORM EXCEPTION: "+str(e)
-    else: return 
-
-@app.route("/project")
-def project():
-    '''
-        Renderiza el proyecto con el id del usuario en la sesion actual
-    '''
-    proj = users_coll.document(session['id']).get().to_dict()
-    proj_desc= proj["project_desc"]
-    proj_file = proj["project_file"]
-
-    #generates team list object for visualizing teammates
-    team_list = [team(x) for x in proj_file["project_team"]]
-
-    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5,profileid=session["about_file_ID"])
-
-def allowed_file(filename):
-    '''
-        Extensión en extensiones permitidas?
-    '''
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def allowed_image(filename):
-    '''
-        Extensión en extensiones permitidas?
-    '''
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
-
-@app.route("/update", methods=["POST"])
-def update():    
-    '''
-        - Genera un dicionario con los formularios que se obtienen en el request con las llaves iguales al nombre del formulairo pero en mayuscula para guardarse en la bd:
-        {'Nombre':nombre,...}
-        - El formulario está hecho para tener dentro la información previa del usuario 
-    '''
-    if request.method == "POST":
-        try: 
-
-            data = {}
-            form = request.form
-
-
-            for field in form: 
-                try:
-                    if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
-                        data[field[0].upper()+field[1:]] = request.form[field]
-                except Exception as e:return str(e)#;print(str(request.form[field]))
-
-
-
-            if request.files['file'] and not allowed_file(request.files['file'].filename):
-
-                save_json({"project_desc":data})
-                
-                session["status"] = "Se guardaron los datos pero el archivo subido no es compatible, los formatos aceptados son PDF,DOCX"
-                return redirect(url_for("project"))  
-
-            else:                
-                try:
-                    #Obtener spec para guardar
-                    user_doc = users_coll.document(session['id'])
-                    project_details = user_doc.get().to_dict().get("project_file")
-                except Exception as e:return "DB error"+str(e)
-
-                try:
-                    # return save_file(request.files['file']) #DEBUG
-                    #Save file devuelve el id del archivo que se guarda con la func                    
-                    project_details["project_id"] = save_file(request.files['file'])              
-                    project_details["project_name"] = request.files['file'].filename
-                except Exception as e:pass
-                    
-                try:            
-                    
-                    save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
-                    save_json({"project_desc":data})  #Guardar el data parseado de los forms
-                except Exception as e:return "Json error"+str(e)
-
-                #guarda rque salio bien en status
-                session["status"] = "Success"
-                return redirect(url_for("project"))  
-
-        except Exception as e:return "FORM EXCEPTION: "+str(e)
-    else: return 
-
-
-@app.route("/calendar")
-def calendar():
-    return render_template("calendar.html",user_name=session["user_name"],status = session['status'],active=3,profileid=session["about_file_ID"])
-
-@app.route("/expo")
-def expo():
-    return render_template("expo.html",user_name=session["user_name"],status = session['status'],active=6,profileid=session["about_file_ID"])
-
 
 @app.route('/js/<path:path>')
 def send_js(path):
@@ -375,6 +196,5 @@ def send_js(path):
 #     return send_from_directory('', filename)
 
 if (__name__ == "__main__"):
-	pass
     #app.run(debug=True)
 	socketio.run(app,host='0.0.0.0',debug=True)

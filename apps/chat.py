@@ -1,14 +1,44 @@
-from flask import Blueprint
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
 
-chat = Blueprint('chat',__name__)
+# imports for flask
+from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
+from flask_mail import Mail, Message
+#For File Management
+from werkzeug.utils import secure_filename
+
+# imports for firebase
+from firebase_admin import credentials, firestore, auth
+import firebase_admin
+import firebase
+from google.cloud import storage
+from google.oauth2 import service_account
+
+import sys#DEBUG
+import os#DEBUG
+
+# custom lib
+import firebase_user_auth
+
+# realtime communication
+from flask_socketio import SocketIO, emit, send
+
+import requests
+import datetime
+import random
 
 
-@chat.route("/new-chat")
+chatBP = Blueprint('chatBP',__name__)
+
+
+def _on_snapshot_callback(doc_snapshot, changes, readtime):
+    # need to send requried event to required people
+    chatid = doc_snapshot[0].id
+    socketio.emit(chatid, {'doc_updated': True})
+    
+@chatBP.route("/new-chat")
 def new_chat():
     return (render_template("new-note.html"))
 
-@chat.route("/new-chat/create")
+@chatBP.route("/new-chat/create")
 def create_new_chat():
     try:
         cid = str(random.random())[2:] + str(random.randint(1241, 4124))
@@ -22,14 +52,14 @@ def create_new_chat():
 	
 
 # get chatid and return chat_detail
-@chat.route("/chat/getinfo/<chatid>")
+@chatBP.route("/chat/getinfo/<chatid>")
 def get_chat_info(chatid):
     cht_info = chats_coll.document(chatid)
     session[chatid] = False	
     return (jsonify(cht_info.get().to_dict()))
 
 
-@chat.route("/chat/add/<chatid>/<message>")
+@chatBP.route("/chat/add/<chatid>/<message>")
 def add_chat(chatid, message):
 
     chat_doc = chats_coll.document(chatid)
@@ -40,7 +70,7 @@ def add_chat(chatid, message):
     # need to handle errors but for now
     return (jsonify({}))
 
-@chat.route("/chat/leave/<chatid>")
+@chatBP.route("/chat/leave/<chatid>")
 def leave_chat(chatid):
     try:
         chat_doc = chats_coll.document(chatid)
@@ -57,7 +87,7 @@ def leave_chat(chatid):
     except Exception as e:
         return (str(e))
 
-@chat.route("/chat/<chatid>")
+@chatBP.route("/chat/<chatid>")
 def user_chat(chatid):
     '''
         TODO: Hacer ventana de chats como la de cualquier app de mensajeo con los profesores registrados y alumnos.

@@ -59,7 +59,259 @@ nav{
 
 {% if visualization == 1 %}
 
-{% extends 'visualizations/V1-Fractal.html'%}
+
+<!-- ADORNO -->
+<div id="container"></div>
+<style type="text/css">
+  html, body {
+  margin: 0;
+  height: 100%;
+}
+
+  canvas {
+    position: absolute;
+    z-index: -10;
+    display: block;
+  }
+</style>
+<aside class="note">
+  <h1>Fractal de Newton</h1>  
+  <p>El fractal de Newton es una curiosa creación basado en la aplicación del método de Newton para la resolución de sistemas de ecuaciones no lineales.  Seleccionamos una región del plano complejo y vamos ejecutando el método de Newton, para una función F dada, en un punto elegido de la región.Dependiendo de a qué solución converga el método pintamos ese punto de un color u otro.</p>
+  <p><a href="https://codepen.io/DonKarlssonSan">Créditos</a>.</p>
+</aside>
+<script id="vertexShader" type="x-shader/x-vertex">
+
+  void main() {
+    gl_Position = vec4(position, 1.0);
+  }
+
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+
+  uniform vec2 iResolution;
+  uniform float iGlobalTime;
+   
+// Hyperboloc functions from https://machinesdontcare.wordpress.com/2008/03/10/glsl-cosh-sinh-tanh/
+
+/// COSH Function (Hyperbolic Cosine)
+float cosh(float val)
+{
+    float tmp = exp(val);
+    float cosH = (tmp + 1.0 / tmp) / 2.0;
+    return cosH;
+}
+ 
+// TANH Function (Hyperbolic Tangent)
+float tanh(float val)
+{
+    float tmp = exp(val);
+    float tanH = (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
+    return tanH;
+}
+ 
+// SINH Function (Hyperbolic Sine)
+float sinh(float val)
+{
+    float tmp = exp(val);
+    float sinH = (tmp - 1.0 / tmp) / 2.0;
+    return sinH;
+}   
+   
+// Complex Number math by julesb
+// https://github.com/julesb/glsl-util
+
+#define PI 3.14159265
+
+#define cx_mul(a, b) vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x)
+#define cx_div(a, b) vec2(((a.x*b.x+a.y*b.y)/(b.x*b.x+b.y*b.y)),((a.y*b.x-a.x*b.y)/(b.x*b.x+b.y*b.y)))
+#define cx_modulus(a) length(a)
+#define cx_conj(a) vec2(a.x,-a.y)
+#define cx_arg(a) atan2(a.y,a.x)
+#define cx_sin(a) vec2(sin(a.x) * cosh(a.y), cos(a.x) * sinh(a.y))
+#define cx_cos(a) vec2(cos(a.x) * cosh(a.y), -sin(a.x) * sinh(a.y))
+
+vec2 cx_sqrt(vec2 a) {
+    float r = sqrt(a.x*a.x+a.y*a.y);
+    float rpart = sqrt(0.5*(r+a.x));
+    float ipart = sqrt(0.5*(r-a.x));
+    if (a.y < 0.0) ipart = -ipart;
+    return vec2(rpart,ipart);
+}
+
+vec2 cx_tan(vec2 a) {return cx_div(cx_sin(a), cx_cos(a)); }
+
+vec2 cx_log(vec2 a) {
+    float rpart = sqrt((a.x*a.x)+(a.y*a.y));
+    float ipart = atan(a.y,a.x);
+    if (ipart > PI) ipart=ipart-(2.0*PI);
+    return vec2(log(rpart),ipart);
+}
+
+vec2 cx_mobius(vec2 a) {
+    vec2 c1 = a - vec2(1.0,0.0);
+    vec2 c2 = a + vec2(1.0,0.0);
+    return cx_div(c1, c2);
+}
+
+vec2 cx_z_plus_one_over_z(vec2 a) {
+    return a + cx_div(vec2(1.0,0.0), a);
+}
+
+vec2 cx_z_squared_plus_c(vec2 z, vec2 c) {
+    return cx_mul(z, z) + c;
+}
+
+vec2 cx_sin_of_one_over_z(vec2 z) {
+    return cx_sin(cx_div(vec2(1.0,0.0), z));
+}
+
+
+////////////////////////////////////////////////////////////
+// end Complex Number math by julesb
+////////////////////////////////////////////////////////////
+
+
+// From Stackoveflow
+// http://stackoverflow.com/questions/15095909/from-rgb-to-hsv-in-opengl-glsl
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+// My (Johan Karlsson) own additions to complex number math
+#define cx_sub(a, b) vec2(a.x - b.x, a.y - b.y)
+#define cx_add(a, b) vec2(a.x + b.x, a.y + b.y)
+#define cx_abs(a) sqrt(a.x * a.x + a.y * a.y)
+vec2 cx_to_polar(vec2 a) {
+    float phi = atan(a.x, a.y);
+    float r = sqrt(a.x * a.x + a.y * a.y);    
+    return vec2(r, phi); 
+}
+    
+    
+// End utils, here comes the actual fractal
+
+// sin(z) - 2 
+vec2 f(vec2 z) {
+    vec2 sinz = cx_sin(z);
+    vec2 sinzminustwo = vec2(sinz.x - 2.0, sinz.y);
+    return sinzminustwo;
+} 
+
+// f(z) derivated
+// cos(z)  
+vec2 fPrim(vec2 z) {
+    return cx_cos(z);
+}
+
+const int maxIterations = 800;
+vec2 one = vec2(1, 0);
+vec3 newtonRapson(vec2 z) {
+  vec2 oldZ = z;
+  float s = 0.0;
+  for(int i = 0; i < maxIterations; i++){
+    z = cx_sub(z, cx_div(f(z), fPrim(z))); 
+    if(abs(oldZ.x - z.x) < 0.00001 && abs(oldZ.y - z.y) < 0.00001) {
+      break;
+    }
+    
+    vec2 w = cx_div(one, cx_sub(oldZ, z));
+    float wAbs = cx_abs(w);
+    
+    s += exp(-wAbs);
+    oldZ = z;
+  }
+  return vec3(s, cx_to_polar(z));
+}
+
+
+
+void main(void)
+{
+    // I have no clue about what I am doing
+    // Trial and error
+    // Magic numbers
+    // You are welcome
+    vec2 uv = (gl_FragCoord.xy - 0.5 * iResolution.xy) / min(iResolution.y, iResolution.x);
+    vec2 moved = vec2(uv.x - 1.0, uv.y-0.7);
+    float cs = cos(iGlobalTime/12.0);
+    float sn = sin(iGlobalTime/12.0);
+    vec2 rotated = vec2(moved.x * cs - moved.y * sn, moved.x * sn + moved.y * cs);
+    vec3 result = newtonRapson(rotated);
+    float c = 0.9-result.x/float(maxIterations)*50.0;    
+    vec3 color = hsv2rgb(vec3(result.z + iGlobalTime/15.0, 1.0, c));    
+    gl_FragColor = vec4(color, 1.0);
+}
+
+</script>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js'></script><script>
+var container;
+var camera, scene, renderer;
+var uniforms;
+var startTime;
+
+init();
+animate();
+
+function init() {
+  container = document.getElementById('container');
+
+  startTime = Date.now();
+  camera = new THREE.Camera();
+  camera.position.z = 1;
+
+  scene = new THREE.Scene();
+
+  var geometry = new THREE.PlaneBufferGeometry(16, 9);
+
+  uniforms = {
+    iGlobalTime: { type: "f", value: 1.0 },
+    iResolution: { type: "v2", value: new THREE.Vector2() }
+  };
+
+  var material = new THREE.ShaderMaterial( {
+
+    uniforms: uniforms,
+    vertexShader: document.getElementById('vertexShader').textContent,
+    fragmentShader: document.getElementById('fragmentShader').textContent
+
+  } );
+
+  var mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  renderer = new THREE.WebGLRenderer();
+  container.appendChild(renderer.domElement);
+
+  onWindowResize();
+
+  window.addEventListener('resize', onWindowResize, false);
+}
+
+function onWindowResize(event) {
+  uniforms.iResolution.value.x = window.innerWidth;
+  uniforms.iResolution.value.y = window.innerHeight;
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  var currentTime = Date.now();
+  uniforms.iGlobalTime.value = (currentTime - startTime) * 0.001;
+  renderer.render(scene, camera);
+}    
+  </script>
+
+<!-- ADORNO -->
 
 {% elif visualization == 2 %}
 
@@ -2511,7 +2763,7 @@ function mouseClick (event) {
     <!-- Modal for Login -->
     <div class="modal fade shadowed" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form method="POST" action="{{ url_for('user_login') }}">        
+        <form method="POST" action="{{ url_for('loginBP.user_login') }}">        
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Iniciar Sesión</h5>
@@ -2539,7 +2791,7 @@ function mouseClick (event) {
     <!-- Modal for Register -->
     <div class="modal fade shadowed" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form method="POST" action="{{ url_for('user_register') }}">        
+        <form method="POST" action="{{ url_for('registerBP.user_register') }}">        
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Registrarse</h5>

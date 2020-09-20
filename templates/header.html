@@ -18,8 +18,8 @@
 
 <!-- Navigation --> 
 <nav class="navbar fixed-top navbar-expand-sm navbar-light" id="navbar">
-  {% if auth!=False %}<a class="navbar-brand" href="{{ url_for('index_page')  }}" ><img src="static/img/logo-color.png" style="max-height: 35px"> FEVICI</a>
-  {%else%}<a class="navbar-brand" href="{{ url_for('index_page')  }}"  style="color: white !important"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>{%endif%}
+  {% if auth!=False %}<a class="navbar-brand" href="{{ url_for('indexBP.index_page')  }}" ><img src="static/img/logo-color.png" style="max-height: 35px"> FEVICI</a>
+  {%else%}<a class="navbar-brand" href="{{ url_for('indexBP.index_page')  }}"  style="color: white !important"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>{%endif%}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

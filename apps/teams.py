@@ -1,11 +1,36 @@
-from flask import Blueprint
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
 
-teams = Blueprint('teams',__name__)
+# imports for flask
+from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
+from flask_mail import Mail, Message
+#For File Management
+from werkzeug.utils import secure_filename
+
+# imports for firebase
+from firebase_admin import credentials, firestore, auth
+import firebase_admin
+import firebase
+from google.cloud import storage
+from google.oauth2 import service_account
+
+import sys#DEBUG
+import os#DEBUG
+
+# custom lib
+import firebase_user_auth
+
+# realtime communication
+from flask_socketio import SocketIO, emit, send
+
+import requests
+import datetime
+import random
+
+
+teamsBP = Blueprint('teamsBP',__name__)
 
 
 
-@teams.route("/recieve_invite/<invite_id>")
+@teamsBP.route("/recieve_invite/<invite_id>")
 def recieve_invite(invite_id):
     '''
         TODO: Dos opciones de invitación:
@@ -16,7 +41,7 @@ def recieve_invite(invite_id):
 
 
 
-@teams.route("/send_invite/<invite_to>")
+@teamsBP.route("/send_invite/<invite_to>")
 def send_invite(invite_to):
 	with teams.app_context():
 

@@ -1,10 +1,41 @@
-from flask import Blueprint
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
 
-register = Blueprint('register',__name__)
+# imports for flask
+from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
+from flask_mail import Mail, Message
+#For File Management
+from werkzeug.utils import secure_filename
+
+# imports for firebase
+from firebase_admin import credentials, firestore, auth
+import firebase_admin
+import firebase
+from google.cloud import storage
+from google.oauth2 import service_account
+
+import sys#DEBUG
+import os#DEBUG
+
+# custom lib
+import firebase_user_auth
+
+# realtime communication
+from flask_socketio import SocketIO, emit, send
+
+import requests
+import datetime
+import random
 
 
-@register.route('/register', methods=["GET", "POST"])
+
+# firebase user auth init
+WEB_API_KEY = "AIzaSyCwvUgLW2pKUta-Me4oMi-JYumzAfavtcs"
+user_auth = firebase_user_auth.initialize(WEB_API_KEY)
+
+
+registerBP = Blueprint('registerBP',__name__)
+
+
+@registerBP.route('/register', methods=["GET", "POST"])
 def user_register():
     def genID():return int(random.random()*1000000)
     if (request.method == "POST"):
@@ -36,7 +67,7 @@ def user_register():
             }, user_recode.get('localId'))
             
             # if registration is valid then redirect to index page
-            return redirect(url_for('index_page'))
+            return redirect(url_for('indexBP.index_page'))
         except requests.HTTPError as e:
             if ("EMAIL_EXISTS" in str(e)):
                 flash_msg = "Ya te registraste! Por favor inicia sesión."
@@ -48,4 +79,4 @@ def user_register():
                 flash_msg = "Algo salio mal!!"+str(e)        
             flash(flash_msg)
     # return to login page for GET
-    return redirect(url_for('user_login'))
+    return redirect(url_for('indexBP.user_login'))
