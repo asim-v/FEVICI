@@ -79,4 +79,4 @@ def user_register():
                 flash_msg = "Algo salio mal!!"+str(e)        
             flash(flash_msg)
     # return to login page for GET
-    return redirect(url_for('indexBP.user_login'))
+    return redirect(url_for('loginBP.user_login'))
