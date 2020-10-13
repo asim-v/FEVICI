@@ -1,29 +1,4 @@
-
-# imports for flask
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
-from flask_mail import Mail, Message
-#For File Management
-from werkzeug.utils import secure_filename
-
-# imports for firebase
-from firebase_admin import credentials, firestore, auth
-import firebase_admin
-import firebase
-from google.cloud import storage
-from google.oauth2 import service_account
-
-import sys#DEBUG
-import os#DEBUG
-
-# custom lib
-import firebase_user_auth
-
-# realtime communication
-from flask_socketio import SocketIO, emit, send
-
-import requests
-import datetime
-import random
+from init import *
 
 aboutBP = Blueprint('aboutBP',__name__)
 
@@ -66,7 +41,7 @@ def update_about():
                 save_json({"about_user":data})
                 
                 session["status"] = "Se guardaron los datos pero la imagen subida no es compatible, los formatos aceptados son PNG,JPG,JPEG"
-                return redirect(url_for("about"))  
+                return redirect(url_for("aboutBP.about"))  
 
             else:                
                 #Obtener spec para guardar
@@ -85,7 +60,8 @@ def update_about():
 
                 #guarda rque salio bien en status
                 session["status"] = "Success"
-                return redirect(url_for("about"))  
+                return redirect(url_for("aboutBP.about"))  
 
         except Exception as e:return "FORM EXCEPTION: "+str(e)
     else: return 
+

@@ -1,3 +1,6 @@
+ALLOWED_EXTENSIONS = ['pdf','docx']
+ALLOWED_IMAGES = ['png','jpg','jpeg']
+
 def save_json(data,uid = None):
     '''
         INPUT = dict
@@ -38,3 +41,8 @@ def save_file(file,uid = None):
 
     return new_filename+'.'+extension
 
+def allowed_image(filename):
+    '''
+        Extensión en extensiones permitidas?
+    '''
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES

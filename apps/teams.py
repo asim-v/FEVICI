@@ -1,29 +1,4 @@
-
-# imports for flask
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
-from flask_mail import Mail, Message
-#For File Management
-from werkzeug.utils import secure_filename
-
-# imports for firebase
-from firebase_admin import credentials, firestore, auth
-import firebase_admin
-import firebase
-from google.cloud import storage
-from google.oauth2 import service_account
-
-import sys#DEBUG
-import os#DEBUG
-
-# custom lib
-import firebase_user_auth
-
-# realtime communication
-from flask_socketio import SocketIO, emit, send
-
-import requests
-import datetime
-import random
+from init import *
 
 
 teamsBP = Blueprint('teamsBP',__name__)
@@ -69,10 +44,3 @@ def send_invite(invite_to):
 		except Exception as e:
 			return str(e)
 
-class team(object):
-    def __init__(self,id):
-        self.doc = user_doc = users_coll.document(id)
-        self.name = user_doc.get().to_dict().get("name")
-        self.email = user_doc.get().to_dict().get("email")
-        self.color = random.choice(["#6772E5","#D869D0","#FF71A6","#FF967B","#FFC761"])
-        self.initials = ''.join([x[0].upper() for x in self.name.split(' ')][:3])
