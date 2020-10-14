@@ -47,9 +47,9 @@
           
 
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-          <a href="#0"><span class="material-icons notif">notifications</span><span></span></a> 
+          <a href="#0" class="notif"><i class="fas fa-bell"></i><span></span></a> 
          
-          <nav class="snav" id="snav" style="display: none;">
+          <nav class="snav" id="snav" style="visibility: hidden;">
             <div class="navcontainer">
               <nav class="navinner">
 
@@ -147,6 +147,41 @@
 
       }.icon-sidebar .row{
         height: 10vh
+      }.notif{
+        display: inline;
+        position: relative;
+        z-index: 10;
+        
+        border-radius:10px;
+        font-size: 20px;
+        text-decoration: none !important;
+      }.notif:hover{
+        
+        text-decoration: none;
+      }
+      .ping{
+        color: #fe5858;
+        position: absolute;
+        border-radius: 5px;
+        border: 2px white;
+        font-size: 30px;
+        z-index: 20;
+        left: 60%;
+        top: 30%;
+        text-shadow: 0px 0px 4px #f3e8ff;
+      }
+      .collapse-left{
+        position: absolute;
+        z-index: 10;
+        bottom:100px;
+        left: 35px;
+        color: #bdbec5 !important;
+        visibility: hidden;
+      }
+      @media only screen  and (max-width:600px ){
+        .collapse-left{
+          visibility: visible;
+        }
       }
     </style>  
     <!-- SIDEBAR -->
@@ -158,22 +193,32 @@
       {% if auth!=False %}
       <div class="icon-sidebar column" id="sidebar">
         <div class="row">
-          <div class="subicon-sidebar {% if active == 1 %}active{% endif %}" id="a"><a class="subicon" href="/"><i class="fas fa-home" aria-hidden="True" ></i></a></div>
+          <div class="subicon-sidebar {% if active == 1 %}active{% endif %}" id="a">            
+            <a class="subicon" href="/"><div class="ping">•</div><i class="fas fa-home" aria-hidden="True" ></i></a></div>
         </div>
         <div class="row">
-          <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b"><a class="subicon" href="/about" ><i class="fas fa-address-card" aria-hidden="True"></i></a></div>       
+          <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b">
+            <a class="subicon" href="/about" ><div class="ping">•</div><i class="fas fa-address-card" aria-hidden="True"></i></a></div>       
         </div>
         <div class="row">
-          <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><a class="subicon" href="/calendar" ><i class="fas fa-calendar" aria-hidden="True"></i></a></div>
+          <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><a class="subicon" href="/calendar" >
+            <i class="fas fa-calendar" aria-hidden="True"><div class="ping">•</div></i></a></div>
         </div>
         <div class="row">
-          <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><a class="subicon" href="/chat" ><i class="fas fa-comments" aria-hidden="True"></i></a></div>
+          <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><a class="subicon" href="/chat" >
+            <div class="ping">•</div><i class="fas fa-comments" aria-hidden="True"></i></a></div>
         </div>
         <div class="row">
-          <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><a class="subicon" href="/project" ><i class="fas fa-flask" aria-hidden="True"></i></a></div>
+          <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><a class="subicon" href="/project" >
+            <div class="ping">•</div><i class="fas fa-flask" aria-hidden="True"></i></a></div>
         </div>    
         <div class="row">
-          <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><a class="subicon" href="/expo" ><i class="fas fa-store" aria-hidden="True"></i></a></div>
+          <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><a class="subicon" href="/expo" >
+            <div class="ping">•</div><i class="fas fa-store" aria-hidden="True"></i></a></div>
+        </div>  
+        <div class="row">
+          <div class="collapse-left"><a class="subicon" onclick="collapse()" >
+            <i class="fas fa-arrow-left" aria-hidden="True"></i></a></div>
         </div>  
       </div>
       {% endif %}
@@ -402,6 +447,7 @@
         border:none;
         padding:30px;
       }canvas{
+        position: fixed;
         left:  0;
         top: 0;
         
@@ -768,6 +814,7 @@
     <!-- PARTICLE CSS -->
     <style type="text/css">
       body {
+      background:#f7f8ff;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       
@@ -854,7 +901,7 @@
       transform: scale3d(0.5, 0.5, 1);*/
     }
     #particles-background {
-      background: #f7f8ff;
+      /*background: #f7f8ff;*/
       /*background-image: -moz-linear-gradient(45deg, #3f3251 2%, #002025 100%);
       background-image: -webkit-linear-gradient(45deg, #3f3251 2%, #002025 100%);
       background-image: linear-gradient(45deg, #3f3251 2%, #002025 100%);*/
@@ -1151,8 +1198,9 @@
             }
 
             function i() {
-              
-              r.width = d.offsetWidth, r.height = d.offsetHeight, s.fillStyle = g.dotColor, s.strokeStyle = g.lineColor, s.lineWidth = g.lineWidth
+              console.log(d);
+
+              r.height = document.getElementById('sidebar').offsetHeight,r.width = d.offsetWidth, s.fillStyle = g.dotColor, s.strokeStyle = g.lineColor, s.lineWidth = g.lineWidth
             }
 
             function j() {
@@ -1377,17 +1425,18 @@
   
   old_main = document.getElementById('main').offsetHeight;
   old_showbox = document.getElementById('showbox').offsetWidth;
-  old_bg = document.getElementById("particles-background").offsetWidth;
-  old_fg = document.getElementById("particles-foreground").offsetWidth;
   document.getElementById("main").setAttribute('style','height:'+old_main-navbar+'px');
-  document.getElementById("showbox").setAttribute('style','width:'+old_showbox-sidebar+'px');
-  document.getElementById("particles-background").setAttribute('style','width:'+old_bg-sidebar+'px');
-  document.getElementById("particles-foreground").setAttribute('style','width:'+old_fg-sidebar+'px');
+  document.getElementById("showbox").setAttribute('style','width:'+old_showbox-sidebar+'px');  
+  // old_bg = document.getElementById("particles-background").offsetWidth;
+  // old_fg = document.getElementById("particles-foreground").offsetWidth;
+  
+  // document.getElementById("particles-background").setAttribute('style','width:'+old_bg-sidebar+'px');
+  // document.getElementById("particles-foreground").setAttribute('style','width:'+old_fg-sidebar+'px');
 
   document.getElementById("main").setAttribute('style','padding-top:'+navbar+'px');
   document.getElementById("showbox").setAttribute('style','padding-left:'+sidebar+'px');
-  document.getElementById("particles-background").setAttribute('style','padding-left:'+sidebar+'px');
-  document.getElementById("particles-foreground").setAttribute('style','padding-left:'+sidebar+'px');  
+  // document.getElementById("particles-background").setAttribute('style','padding-left:'+sidebar+'px');
+  // document.getElementById("particles-foreground").setAttribute('style','padding-left:'+sidebar+'px');  
 
   document.getElementById('snav').setAttribute('style','visibility:visible');
 
