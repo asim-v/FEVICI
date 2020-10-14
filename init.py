@@ -1,6 +1,6 @@
 
 # imports for flask
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint
+from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint,jsonify
 from flask_mail import Mail, Message
 #For File Management
 from werkzeug.utils import secure_filename
@@ -77,17 +77,15 @@ bucket = client.get_bucket('fevici.appspot.com')
 
 #SIRVE PARA LISTAR LOS BLOBS QUE EXISTEN
 # for blob in client.list_blobs('fevici.appspot.com', prefix='abc/myfolder'): #Con prefijo
-all_projects = [blob.name for blob in client.list_blobs('fevici.appspot.com')]
-print(all_projects)
+# all_projects = [blob.name for blob in client.list_blobs('fevici.appspot.com')]
+# print(all_projects)
 
 
 #Db references
-db = firestore.client()
+client = firestore.client()
 # users collection reference 
-users_coll = db.collection(u"users")
+users_coll = client.collection(u"users")
 # notes collection reference
-chats_coll = db.collection(u"notes")
-
-
+chats_coll = client.collection(u"notes")
 
 
