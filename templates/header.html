@@ -171,17 +171,24 @@
         text-shadow: 0px 0px 4px #f3e8ff;
       }
       .collapse-left{
-        position: absolute;
-        z-index: 10;
-        bottom:100px;
-        left: 35px;
-        color: #bdbec5 !important;
+        position: fixed;
+        z-index: 30;
+        padding: 30px;
+        bottom: 15px;
+        left: 3px;
+        color: #7d17fc !important;
+        border: solid #7d17fc54 1.5px;
         visibility: hidden;
+        background-color: #eedeff;
+        border-radius: 10px;
       }
       @media only screen  and (max-width:600px ){
         .collapse-left{
           visibility: visible;
         }
+      }
+      .hidden{
+        left: -100px;
       }
     </style>  
     <!-- SIDEBAR -->
@@ -216,11 +223,13 @@
           <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><a class="subicon" href="/expo" >
             <div class="ping">•</div><i class="fas fa-store" aria-hidden="True"></i></a></div>
         </div>  
-        <div class="row">
-          <div class="collapse-left"><a class="subicon" onclick="collapse()" >
-            <i class="fas fa-arrow-left" aria-hidden="True"></i></a></div>
-        </div>  
       </div>
+
+      <div class="collapse-left">
+        <a class="subicon" onclick="collapse_sidebar()" id="collapse-left">
+        <i class="fas fa-arrow-left" aria-hidden="True"></i></a>
+      </div>
+
       {% endif %}
       
       {% if auth!=False%}
@@ -1150,7 +1159,31 @@
           $("#cancel").html("Error.");
         });
   }
+  // <i class="fas fa-arrow-left" aria-hidden="True"></i>
+  function collapse_sidebar(){
+    var sidebar = document.getElementById('sidebar');
+    var button = document.getElementById('collapse-left')
+    var box = document.getElementById('showbox');
 
+    sidebar.classList.add('hidden');
+    box.setAttribute('style','padding-left:0px');
+    button.setAttribute('onclick','open_sidebar()');
+    button.innerHTML = '<i class="fas fa-arrow-right" aria-hidden="True"></i>';
+    // button.setAttribute()
+    
+  }
+  function open_sidebar(){
+    var sidebar = document.getElementById('sidebar');
+    var sidebar_lenght = document.getElementById('sidebar').offsetWidth;
+    var button = document.getElementById('collapse-left')
+    var box = document.getElementById('showbox');
+
+    sidebar.classList.remove('hidden');
+    box.setAttribute('style','padding-left:70px');
+    button.setAttribute('onclick','collapse_sidebar()');
+    button.innerHTML = '<i class="fas fa-arrow-left" aria-hidden="True"></i>';
+    console.log(sidebar_lenght.toString());
+  }
   </script>
 
 
