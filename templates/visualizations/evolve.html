@@ -1,0 +1,324 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style type="text/css">
+html, body {
+  height: 100%;
+}
+
+body {
+  -webkit-perspective: 1000px;
+          perspective: 1000px;
+}
+
+ul {
+  padding: 0 1em;
+  margin: 1em 0;
+}
+
+canvas {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  opacity: 1;
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+  -webkit-transition: opacity 250ms, -webkit-transform 250ms;
+  transition: opacity 250ms, -webkit-transform 250ms;
+  transition: opacity 250ms, transform 250ms;
+  transition: opacity 250ms, transform 250ms, -webkit-transform 250ms;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.description {
+  width: 24em;
+  padding: 1em;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.description__title {
+  font-size: 1em;
+} 
+</style>
+
+<aside class="note">
+  <h1>La evolución de las bacterias</h1>
+  <li>La página está divida en secciones, cada una teniendo requisitos para que la bacteria viva.</li>
+  <li>Cada bacteria tiene herencia</li>
+  <li>Su herencia tiene una pequeña probabilidad de mutación</li>
+  <li>La diversidad genética es representada por los colores</li>  
+  <p><a href="https://timseverien.com/">Créditos</a>.</p>
+
+</aside>
+<script src='https://cdn.rawgit.com/inexorabletash/polyfill/master/es5.js'></script>
+<script src='https://cdn.rawgit.com/inexorabletash/polyfill/master/es6.js'></script>
+<script type="text/javascript">
+  function getShuffledArray(array) {
+  const newArray = [...array];
+  let counter = newArray.length;
+
+  while (counter > 0) {
+    const index = Math.floor(Math.random() * counter);
+    counter--;
+
+    let temp = newArray[counter];
+    newArray[counter] = newArray[index];
+    newArray[index] = temp;
+  }
+
+  return newArray;
+}
+
+class Bacterium {
+  static createRandomDna() {
+    return Math.floor(Math.random() * Bacterium.DNA_MAX_VALUE) | 0b1;
+  }
+
+  static shouldMutate(mutationOdss) {
+    return Math.random() < mutationOdss;
+  }
+
+  static createDnaFromParent(parent, mutationOdds) {
+    if (!Bacterium.shouldMutate(mutationOdds)) return parent;
+
+    const mutationIndex = Math.floor(Math.random() * Bacterium.DNA_LENGTH);
+    const mutation = 0b1 << mutationIndex;
+
+    return parent ^ mutation | 0b1;
+  }
+
+  static getColorFromDna(dna) {
+    const seed = (dna.toString(2).match(/1/g) || []).length / Bacterium.DNA_LENGTH;
+    const hue = Math.floor(Bacterium.DNA_COLOR_HUE_MIN + (Bacterium.DNA_COLOR_HUE_MAX - Bacterium.DNA_COLOR_HUE_MIN) * seed);
+    return `hsl(${hue}, 60%, 40%)`;
+  }}
+
+
+Bacterium.DNA_LENGTH = 8;
+Bacterium.DNA_MAX_VALUE = Math.pow(2, Bacterium.DNA_LENGTH);
+Bacterium.DNA_COLOR_HUE_MIN = 180;
+Bacterium.DNA_COLOR_HUE_MAX = 0;
+
+class BacteriumPlane {
+  constructor(width, height) {
+    this.height = height;
+    this.width = width;
+
+    this.isFinished = false;
+    this.changes = [];
+
+    this.sections = [
+    dna => true,
+    dna => {
+      return (
+        dna & 0x1 << 1 &&
+        dna & 0x1 << 2 &&
+        dna & 0x1 << 3);
+
+    },
+    dna => {
+      return (
+        dna & 0x1 << 1 &&
+        dna & 0x1 << 2 &&
+        dna & 0x1 << 3 &&
+        dna & 0x1 << 4 &&
+        dna & 0x1 << 5);
+
+    },
+    dna => {
+      return (
+        dna & 0x1 << 1 &&
+        dna & 0x1 << 2 &&
+        dna & 0x1 << 3 &&
+        dna & 0x1 << 4 &&
+        dna & 0x1 << 5 &&
+        dna & 0x1 << 6);
+
+    }];
+
+
+    this.mutationOdds = 1 / 32;
+    this.clear();
+  }
+
+  clear() {
+    this.bacteria = new Uint8Array(this.height * this.width);
+
+    const initialBacteriumDna = Bacterium.createRandomDna();
+    const initialBacteriaCount = 4;
+
+    for (let i = 0; i < initialBacteriaCount; i++) {
+      const initialBacteriumIndex = this.getIndexByPosition(0, Math.floor((i + .5) / initialBacteriaCount * this.height));
+      this.setBacterium(initialBacteriumIndex, initialBacteriumDna);
+    }
+
+    this.isFinished = false;
+  }
+
+  getPositionByIndex(index) {
+    return {
+      x: index % this.width,
+      y: Math.floor(index / this.width) };
+
+  }
+
+  getIndexByPosition(x, y) {
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+      return;
+    }
+
+    return y * this.width + x;
+  }
+
+  isEmpty(index) {
+    return this.bacteria[index] === 0;
+  }
+
+  isValidIndex(index) {
+    return typeof index === 'number';
+  }
+
+  getBacteriumOffspringIndex(index) {
+    const position = this.getPositionByIndex(index);
+    const isValid = index => this.isValidIndex(index) && this.isEmpty(index);
+
+    const offspringIndexOptions = [
+    this.getIndexByPosition(position.x - 1, position.y),
+    this.getIndexByPosition(position.x + 1, position.y),
+    this.getIndexByPosition(position.x, position.y - 1),
+    this.getIndexByPosition(position.x, position.y + 1)].
+    filter(isValid);
+
+    // Cancel if no options are available
+    if (offspringIndexOptions.length === 0) return;
+    return getShuffledArray(offspringIndexOptions)[0];
+  }
+
+  canBacteriumSurviveAt(dna, index) {
+    const position = this.getPositionByIndex(index);
+    const sectionIndex = Math.floor(position.x / this.width * this.sections.length);
+
+    return this.sections[sectionIndex](dna);
+  }
+
+  setBacterium(index, dna) {
+    this.bacteria[index] = dna;
+    this.changes.push(index);
+  }
+
+  update() {
+    if (this.isFinished) return;
+
+    const bacteria = new Uint8Array(this.bacteria);
+
+    bacteria.forEach((dna, index) => {
+      if (this.isEmpty(index)) return;
+
+      const offspringIndex = this.getBacteriumOffspringIndex(index);
+      if (offspringIndex === undefined) return;
+
+      let offspringDna = Bacterium.createDnaFromParent(dna, this.mutationOdds);
+
+      if (this.canBacteriumSurviveAt(offspringDna, offspringIndex)) {
+        this.setBacterium(offspringIndex, offspringDna);
+      }
+    });
+  }
+
+  render(context) {
+    if (this.isFinished) return;
+
+    const changes = [...this.changes];
+    this.changes.length = 0;
+
+    changes.forEach(index => {
+      const dna = this.bacteria[index];
+      const position = this.getPositionByIndex(index);
+
+      context.fillStyle = Bacterium.getColorFromDna(dna);
+      context.fillRect(position.x, position.y, 1, 1);
+    });
+  }
+
+  updateIsFinished() {
+    this.isFinished = this.bacteria.every(dna => dna > 0);
+  }}
+
+
+class Simulation {
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.context = this.canvas.getContext('2d');
+  }
+
+  setSize(width, height) {
+    this.bacteria = new BacteriumPlane(width, height);
+    this.canvas.height = height;
+    this.canvas.width = width;
+  }
+
+  render() {
+    requestAnimationFrame(this.render.bind(this));
+
+    this.bacteria.update();
+    this.bacteria.render(this.context, this.scale);
+  }
+
+  reset() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.bacteria.clear();
+  }}
+
+
+let simScale = 3;
+const getSimHeight = () => Math.round(window.innerHeight / simScale);
+const getSimWidth = () => Math.round(window.innerWidth / simScale);
+
+const sim = new Simulation();
+sim.setSize(getSimWidth(), getSimHeight());
+sim.render();
+
+window.setInterval(sim.bacteria.updateIsFinished.bind(sim.bacteria), 1000);
+
+document.body.appendChild(sim.canvas);
+
+window.addEventListener('resize', () => {
+  sim.setSize(getSimWidth(), getSimHeight());
+  sim.reset();
+});
+
+window.addEventListener('load', () => {
+  const gui = new dat.GUI();
+  const config = {
+    mutationOdds: sim.bacteria.mutationOdds,
+    restart: sim.reset.bind(sim),
+    density: simScale };
+
+
+  gui.add(config, 'mutationOdds').min(0).max(.25).step(.0001).onChange(value => {
+    sim.bacteria.mutationOdds = value;
+  });
+
+  gui.add(config, 'density').min(1).max(8).step(1).onFinishChange(value => {
+    simScale = value;
+
+    sim.setSize(getSimWidth(), getSimHeight());
+    sim.reset();
+  });
+
+  gui.add(config, 'restart');
+});
+</script>
+
+</body>
+</html>
+

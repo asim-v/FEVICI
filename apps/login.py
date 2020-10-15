@@ -45,7 +45,7 @@ def user_login():
     # 7 - Mandelbrot set
     # 8 - Stars
 
-    return render_template("login.html",auth = False,visualization = random.choice([1]))
+    return render_template("login.html",auth = False)
     
 
 @loginBP.route('/logout')
