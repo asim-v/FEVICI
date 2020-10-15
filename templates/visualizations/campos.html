@@ -1,0 +1,248 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style type="text/css">
+  canvas {
+    display: block;
+    position: absolute;
+    z-index: -10;
+  }
+
+</style>
+<aside class="note">
+  <h1>Visualización de campos físicos</h1>
+  
+  <p>Cuando se excita el campo electromagnetico, se crean fotones o la radiación que precibimos como luz, como el campo que crea electrones, en total los campos generan 17 partículas fundamentales, leptones, quarks y bosones, si observamos la nada, o un vacío, vemos que está más activo de lo que imaginamos!.</p>
+  <p><a href="https://twitter.com/timseverien">Créditos</a>.</p>
+</aside>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js'></script>
+<script type="text/javascript">
+/**
+ * Creates the material for the layers
+ * @param {String} noiseShader - The shader part containing noise functions
+ * @return {THREE.ShaderMaterial} The newely created shader material
+ */
+function createLayerShaderMaterial(noiseShader, uniforms) {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+
+    uniforms: uniforms,
+    vertexShader: `
+    uniform vec3 scale;
+    varying vec3 vPosition;
+
+    void main() {
+      vPosition = position;
+
+      gl_Position = projectionMatrix *
+        modelViewMatrix *
+        vec4(position, 1.0);
+    }`,
+
+    fragmentShader: `${noiseShader}
+    uniform float time;
+    varying vec3 vPosition;
+    
+    void main() {
+      // Determine base colors
+      vec3 base = vec3(.55, .3, 1.0);
+      vec3 top = vec3(.53, .89, .84);
+
+      // Calculate offset
+      float timeMultiplier1 = .25;
+      vec3 offset1 = vec3(
+        time * timeMultiplier1,
+        time * timeMultiplier1,
+        time * timeMultiplier1
+      );
+      float timeMultiplier2 = .333;
+      vec3 offset2 = vec3(
+        time * -timeMultiplier2,
+        time * -timeMultiplier2,
+        time * -timeMultiplier2
+      );
+      
+      // Generate and normalize noise
+      float noiseScale = 1.5;
+      float random1 = snoise(vPosition * noiseScale + offset1);
+      float random2 = snoise(vPosition * noiseScale + offset2);
+      // Mix the two randoms, then normalize output
+      float random = ((random1 + random2) / 2.0) + 1.0 / 2.0;
+      
+      // Offset noise a little to create the intensity
+      float intensityOffset = .3;
+      float intensity = max(.0, floor(random + intensityOffset));
+      
+      // Calculate final color
+      vec3 color = base + (top - base) * vPosition.z + intensity * .1;
+
+      // Calculate final alpha
+      float alphaBase = .1;
+      float alphaMultiplier = 1.0 - alphaBase;
+      float alpha = intensity * alphaMultiplier + alphaBase;
+
+      gl_FragColor = vec4(color, alpha);
+    }` });
+
+}
+
+/**
+   * Creates a new layer
+   * @param {Number} y - The y-coordinate to position the layer at
+   * @param {THREE.Material} material - The layer material
+   * @return {THREE.Mesh} The newely created layer
+   */
+function createLayer(y, material) {
+  const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+  geometry.vertices = geometry.vertices.map(vertex => {
+    return new THREE.Vector3(vertex.x, vertex.y, y);
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = -Math.PI / 2;
+  return mesh;
+}
+
+/**
+   * Creates a complete scene
+   * 1. Loads assets
+   * 2. Creates new scene
+   * 3. Create shader material
+   * 4. Add the layers to the scene
+   * 5. Returns the scene
+   *
+   * @return {Promise}
+   */
+function createBox(layerShaderUniforms) {
+  const box = new THREE.Object3D();
+
+  return new Promise((resolve, reject) => {
+    fetch('https://raw.githubusercontent.com/ashima/webgl-noise/master/src/noise3D.glsl').
+    then(response => response.text()).
+    then(noiseShader => {
+      const layerMaterial = createLayerShaderMaterial(noiseShader, layerShaderUniforms);
+      const layerCount = 32;
+
+      for (let i = 0; i < layerCount; i++) {
+        box.add(createLayer(i / layerCount, layerMaterial));
+      }
+
+      resolve(box);
+    }).
+    catch(reject);
+  });
+}
+
+/**
+   * Get a proxy function to debounce a function call
+   */
+function getDebounceFunction(func, delay) {
+  let timeout;
+
+  return (...args) => {
+    if (timeout) {
+      window.clearTimeout(timeout);
+    }
+
+    timeout = window.setTimeout(func, delay, ...args);
+  };
+}
+
+/**
+   * Handle mouse movement
+   * @param {Event} e - The mouse event
+   */
+function mouseMoveHandler(e) {
+  const angle = e.clientX / window.innerWidth * Math.PI * 2;
+  setCameraPosition(angle);
+}
+
+/**
+   * Update camera position by angle
+   * @param {Number} angle - The angle, obviously
+   */
+function setCameraPosition(angle) {
+  // Add 45 degrees to angle, so it starts at the corner <:
+  angle += Math.PI / 4;
+
+  camera.position.set(
+  Math.cos(angle) * cameraDistance,
+  cameraDistance,
+  Math.sin(angle) * cameraDistance);
+
+
+  camera.lookAt(cameraTarget);
+}
+
+/**
+   * Resize the WebGL canvas to match current viewport
+   */
+function resize() {
+  const aspect = window.innerWidth / window.innerHeight;
+
+  camera.left = cameraWidth / -2 * aspect;
+  camera.right = cameraWidth / 2 * aspect;
+  camera.top = cameraHeight / 2;
+  camera.bottom = cameraHeight / -2;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(
+  window.innerWidth,
+  window.innerHeight);
+
+}
+
+/**
+   * Simply renders the WebGL canvas
+   */
+function render() {
+  layerShaderUniforms.time.value = time.getElapsedTime();
+  renderer.render(scene, camera);
+}
+
+/**
+   * Start the animation loop
+   */
+function loop() {
+  requestAnimationFrame(loop);
+  render();
+}
+
+let box;
+const cameraHeight = 2;
+const cameraWidth = 2;
+const cameraDistance = 4;
+const cameraTarget = new THREE.Vector3(0, .5, 0);
+const time = new THREE.Clock();
+
+// Initalize camera
+const camera = new THREE.OrthographicCamera(0, 0, 0, 0, 1, 1024);
+setCameraPosition(0);
+
+const scene = new THREE.Scene();
+
+// Initialize renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', getDebounceFunction(resize, 100));
+window.addEventListener('mousemove', mouseMoveHandler);
+
+const layerShaderUniforms = {
+  time: {
+    value: 0 },
+
+  scale: {
+    value: new THREE.Vector3(1, 1, 0) } };
+
+
+
+createBox(layerShaderUniforms).then(newBox => {
+  box = newBox;
+  scene.add(box);
+
+  resize();
+  loop();
+}); 
+</script>

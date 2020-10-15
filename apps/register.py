@@ -1,10 +1,10 @@
-from flask import Blueprint
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
-
-register = Blueprint('register',__name__)
+from init import *
 
 
-@register.route('/register', methods=["GET", "POST"])
+registerBP = Blueprint('registerBP',__name__)
+
+
+@registerBP.route('/register', methods=["GET", "POST"])
 def user_register():
     def genID():return int(random.random()*1000000)
     if (request.method == "POST"):
@@ -36,7 +36,7 @@ def user_register():
             }, user_recode.get('localId'))
             
             # if registration is valid then redirect to index page
-            return redirect(url_for('index_page'))
+            return redirect(url_for('indexBP.index_page'))
         except requests.HTTPError as e:
             if ("EMAIL_EXISTS" in str(e)):
                 flash_msg = "Ya te registraste! Por favor inicia sesión."
@@ -48,4 +48,4 @@ def user_register():
                 flash_msg = "Algo salio mal!!"+str(e)        
             flash(flash_msg)
     # return to login page for GET
-    return redirect(url_for('user_login'))
+    return redirect(url_for('loginBP.user_login'))

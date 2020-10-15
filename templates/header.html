@@ -1,6 +1,9 @@
+<!DOCTYPE HTML>
+<html>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
 
@@ -15,1120 +18,1213 @@
 
 
 </head>
+<body>
+  <div class="wrapper">
+    <!-- Navigation --> 
+    <nav class="navbar fixed-top navbar-expand-sm navbar-light" id="navbar">
+      {% if auth!=False %}<a class="navbar-brand" href="{{ url_for('indexBP.index_page')  }}" ><img src="static/img/logo.svg" style="max-height: 35px"> FEVICI</a>
+      {%else%}<a class="navbar-brand" href="{{ url_for('indexBP.index_page')  }}"  style="color: white !important"><img src="static/img/logo.png" style="max-height: 35px"> FEVICI</a>{%endif%}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-<!-- Navigation --> 
-<nav class="navbar fixed-top navbar-expand-sm navbar-light" id="navbar">
-  {% if auth!=False %}<a class="navbar-brand" href="{{ url_for('index_page')  }}" ><img src="static/img/logo-color.png" style="max-height: 35px"> FEVICI</a>
-  {%else%}<a class="navbar-brand" href="{{ url_for('index_page')  }}"  style="color: white !important"><img src="static/img/logo.png" style="max-height: 30px"> FEVICI</a>{%endif%}
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <!-- Diferentes jqueries para el carousel, funciona solamente con jquery 2 aun que el dashboard ocupa el 3 -->
+        {% if auth!=False %}
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-    </ul>
-    <!-- Diferentes jqueries para el carousel, funciona solamente con jquery 2 aun que el dashboard ocupa el 3 -->
-    {% if auth!=False %}
+          <div id="lineCont"> 
+            <div id="line"></div>
+            <div id="span">Date Placeholder</div>
+          </div>
+          <!-- <div id="mainCont">
+          </div> -->
 
-      <div id="lineCont"> 
-        <div id="line"></div>
-        <div id="span">Date Placeholder</div>
-      </div>
-      <!-- <div id="mainCont">
-      </div> -->
+          
+        
+          
 
-      
-    
-      
+          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+          <a href="#0" class="notif"><i class="fas fa-bell"></i><span></span></a> 
+         
+          <nav class="snav" id="snav" style="visibility: hidden;">
+            <div class="navcontainer">
+              <nav class="navinner">
 
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <a href="#0"><span class="material-icons notif">notifications</span><span></span></a> 
-     
-      <nav class="snav">
-        <div class="navcontainer">
-          <nav class="navinner">
-
-            
-            <a href="#0" class="profileddtrigger"><img src="https://storage.googleapis.com/fevici.appspot.com/{{profileid}}" /></a>
-            <!-- mobile main menu-->
-            <div class="ddcontainer mobilemenudd">
-              <nav class="ddnav">
-                <a href="#0"><span class="material-icons">dashboard</span><span>Dashboard</span></a>
-                <a href="#0"><span class="material-icons">search</span><span>Search</span></a>
-                <a href="#0"><span class="material-icons">insert_drive_file</span><span>Drafts</span></a>
-              </nav>
-            </div>
-            <!-- dropdown profile menu -->
-            <div class="ddcontainer profiledd">
-              <a href="/about" class="ddheader">
-                <img src="https://storage.googleapis.com/fevici.appspot.com/{{profileid}}" />
-                <h5 class="ddname">{{ user_name }}</h5><span class="ddtitle">Front End Dev</span>
-              </a>
-              <nav class="ddnav">                
-                <a href="#0"><span class="material-icons">settings</span><span>Configuración</span></a>
-                <a href="#0"><span class="material-icons">phone</span><span>Soporte</span></a>
-                <a href="/logout"><span class="material-icons">exit_to_app</span><span>Cerrar Sesión</span></a>
+                
+                <a href="#0" class="profileddtrigger"><img src="https://storage.googleapis.com/fevici.appspot.com/{{profileid}}" /></a>
+                <!-- mobile main menu-->
+                <div class="ddcontainer mobilemenudd">
+                  <nav class="ddnav">
+                    <a href="#0"><span class="material-icons">dashboard</span><span>Dashboard</span></a>
+                    <a href="#0"><span class="material-icons">search</span><span>Search</span></a>
+                    <a href="#0"><span class="material-icons">insert_drive_file</span><span>Drafts</span></a>
+                  </nav>
+                </div>
+                <!-- dropdown profile menu -->
+                <div class="ddcontainer profiledd">
+                  <a href="/about" class="ddheader">
+                    <img src="https://storage.googleapis.com/fevici.appspot.com/{{profileid}}" />
+                    <h5 class="ddname">{{ user_name }}</h5><span class="ddtitle">Front End Dev</span>
+                  </a>
+                  <nav class="ddnav">                
+                    <a href="#0"><span class="material-icons">settings</span><span>Configuración</span></a>
+                    <a href="#0"><span class="material-icons">phone</span><span>Soporte</span></a>
+                    <a href="/logout"><span class="material-icons">exit_to_app</span><span>Cerrar Sesión</span></a>
+                  </nav>
+                </div>
               </nav>
             </div>
           </nav>
-        </div>
-      </nav>
 
-      
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    {% else %}
-      <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/18zJl4U1Hrir_VxdAv2g_XpBlj-BIcwK8rcP9E7iq_gw/edit?usp=sharing'">Académicos</button>
-      <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/1sxvDrcPZFZSOw2rrBe3Lo0teG3ZaeDXXLeVCnIufr7I/edit?usp=sharing'">Instituciones</button>
-      <button type="button" class="btn purple btn-block pill-large" onclick="location.href='https://docs.google.com/document/d/1gNJxCRYtt1v42T6lJ7u7_ghNTsaX0urrf7kIQ6ilPao/edit?usp=sharing'">Convocatoria</button>      
-      <button type="button" class="btn purple btn-block pill-large" data-toggle="modal" data-target="#loginModal">Ingresar</button>
-      <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
-    {%endif%}
-  </div>
-</nav>
-
-
-
-
-<!-- SIDEBAR -->
-<style type="text/css">
-  .profilepic{
-    height: 28.5px;
-    width: 28.5px;
-    border-radius: 50px;
-    border-style: none;
-    background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{profileid}});
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: center;    
-  }
-  .icon-sidebar{
-    z-index: 20;
-    left: 0;
-    width:70PX;
-    position:fixed;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: 2px 2px 7px lightgray;
-  }.subicon-sidebar{
-
-    left: 25%;
-    top: 2vh;
-    position: relative;
-    text-align: center;
-    font-size: 25px;
-    width: 50px;
-    height: 50px;
-    color: #bdbec5;
-    background-position: center;
-  }.subicon-sidebar button{
-    color: #bdbec5 !important;
-    border:none;
-    background-color: transparent;
-  }.subicon-sidebar button ::before{
-    background-color: transparent;
-  }.active{
-    border-radius: 10px;
-    /*box-shadow: 2px 2px 7px lightgray;*/
-    background-color: #f3e8ff;
-  }.active i{
-    color: #8819ff !important;
-  }
-  .subicon i{
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-  }.icon-sidebar .row{
-    height: 10vh
-  }
-</style>  
-<!-- SIDEBAR -->
+          
+          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        {% else %}
+          <style type="text/css">
+            .redirect{
+              padding:10px;
+              padding-left: 50px;
+              
+              color: white !important;
+              font-weight: 600;
+              font-family: 'Montserrat',sans-serif;
+            }
+          </style>
+          <a href="" class="redirect">Blog</a>          
+          <a href="" class="redirect">Centro de Recursos</a>
+          <div class="dropdown redirect">
+            <span>Convocatoria</span>
+            <div class="dropdown-content">
+              <a href="https://docs.google.com/document/d/18zJl4U1Hrir_VxdAv2g_XpBlj-BIcwK8rcP9E7iq_gw/edit?usp=sharing">Convocatoria</a>
+              <a href="https://docs.google.com/document/d/1sxvDrcPZFZSOw2rrBe3Lo0teG3ZaeDXXLeVCnIufr7I/edit?usp=sharing">Académicos</a>
+              <a href="https://docs.google.com/document/d/1gNJxCRYtt1v42T6lJ7u7_ghNTsaX0urrf7kIQ6ilPao/edit?usp=sharing">Instituciones</a>
+            </div>
+          </div>
+          <!-- <button type="button" class="btn btn-secondary btn-block pill-large" onclick="location.href=''">Académicos</button>
+          <button type="button" class="btn btn-secondary btn-block pill-large" onclick="'">Instituciones</button>
+          <button type="button" class="btn purple btn-block pill-large" onclick="'">Convocatoria</button>     -->  
+          <button type="button" class="btn purple btn-block pill-large" data-toggle="modal" data-target="#loginModal">Ingresar</button>
+          <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+        {%endif%}
+      </div>
+    </nav>
 
 
 
 
-{% if auth!=False%}<div class="content" id="main">{%endif%}
-  {% if auth!=False %}
-  <div class="icon-sidebar column" id="sidebar">
-    <div class="row">
-      <div class="subicon-sidebar {% if active == 1 %}active{% endif %}" id="a"><button class="subicon" onclick="cancel()"><i class="fas fa-home" aria-hidden="True" ></i></button></div>
-    </div>
-    <div class="row">
-      <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b"><button class="subicon" onclick="about()" ><i class="fas fa-address-card" aria-hidden="True"></i></button></div>       
-    </div>
-    <div class="row">
-      <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><button class="subicon" onclick="calendar()" ><i class="fas fa-calendar" aria-hidden="True"></i></button></div>
-    </div>
-    <div class="row">
-      <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><button class="subicon" onclick="create_new_note()"><i class="fas fa-comments" aria-hidden="True"></i></button></div>
-    </div>
-    <div class="row">
-      <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><button class="subicon" onclick="project()"><i class="fas fa-flask" aria-hidden="True"></i></button></div>
-    </div>    
-    <div class="row">
-      <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><button class="subicon" onclick="expo()"><i class="fas fa-store" aria-hidden="True"></i></button></div>
-    </div>  
-  </div>
-  {% endif %}
-  
-  {% if auth!=False%}
-    <div class="showbox" id="showbox">
-    <div id="particles-background" class="vertical-centered-box"></div>
-    <div id="particles-foreground" class="vertical-centered-box"></div>
-  {%endif%}
-  
-  {% block content %}
-  {% endblock %}
-  
-  {% if auth!=False%}</div>{%endif%}
+    <!-- SIDEBAR -->
+    <style type="text/css">
+      .profilepic{
+        height: 28.5px;
+        width: 28.5px;
+        border-radius: 50px;
+        border-style: none;
+        background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{profileid}});
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: center;    
+      }
+      .icon-sidebar{
+        z-index: 20;
+        left: 0;
+        width:70PX;
+        position:fixed;
+        height: 100%;
+        background-color: #fff;
+        box-shadow: 2px 2px 7px lightgray;
+      }.subicon-sidebar{
 
+        left: 25%;
+        top: 2vh;
+        position: relative;
+        text-align: center;
+        font-size: 25px;
+        width: 50px;
+        height: 50px;
+        color: #bdbec5;
+        background-position: center;
+      }.subicon-sidebar a{
+        color: #bdbec5 !important;
+        border:none;
+        background-color: transparent;
+      }.subicon-sidebar a ::before{
+        background-color: transparent;
+      }.active{
+        border-radius: 7px;
+        /*box-shadow: 2px 2px 7px lightgray;*/
+        background-color: #f3e8ff;
+      }.active i{
+        color: #8819ff !important;
+      }
+      .subicon i{
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
 
-
-{% if auth!=False%}</div>{% endif %}
-
-
-
-
-
-
-<!-- CUSTOM STYLES -->
-<style type="text/css">
-  @import url('https://fonts.googleapis.com/css2?family=Miriam+Libre&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-  .custom-control-input:checked~.custom-control-label::before {
-      color: #fff;
-      border-color: #8819ff;
-      background-color: #8819ff;
-    }    
-  .shadowed{
-    box-shadow:5px 5px 10px 1px lightgrey !important;
-    border: 0px !important; 
-  }  
-  .btn{
-    font-weight: 600 !important;
-    font-family: 'Montserrat', sans-serif !important;
-    font-size: 15px;
-    border:none ;
-    pointer-events: all;
-    max-width: 150px;
-    padding: 5px 15px !important;
-    border-radius: 20px !important;    
-  } 
-  .purple{
-    background-color: #8819ff;
-    color:white !important;    
-  }
-  .lightgreen{
-    color: #2B2B2B !important;    
-    color:#2B2B2B;
-    background-color: #67FBD1;
-  }
-  .pill-large{
-    margin:10px !important;
-    padding: 10px 10px !important;
-    border-radius: 30px !important;
-  }  
-  .card{
-    border:none !important;
-    margin-bottom: 20px;    
-    border-radius: 15px;
-  }.card-header{
-    border-top-right-radius:15px !important;
-    border-top-left-radius:15px !important;
-    border-bottom: none;
-  }
-  .alert-success{
-    background-color: #8fffdf !important;
-    color: #006145 !important;
-  }
-  .btn-success{
-    color: #2B2B2B ;
-    background-color: #67FBD1 ;
-  }.btn-success:hover{
-    background-color: #5fedc5;
-  }
-  .btn-primary{
-    background-color: #6800d8 !important;
-    color: white !important;
-  }
-  .btn-warning{
-    background-color: #DF4550!important
-  }
-  .btn-secondary{
-    background-color: #2B2B2B !important; 
-  }
-
-  .input-group{
-    font-weight: 500 !important;
-  }
-  .alert-warning{
-    background-color: #FEFEDF;
-  }
-  .form-control{
-    border:none !important;
-    background-color: #F9F8FF !important
-  }.form-control:focus{
-    outline: none !important;
-    border-color: #8fffdf;
-    box-shadow: 0 0 10px #8fffdf;    
-  }
-  .alert{
-    margin-bottom: 0rem !important;
-  }
-  .alert-danger{
-    margin-bottom: 0rem !important;
-    background-color: rgba(223, 69, 80,0.2) !important;
-    color: red;
-  }
-  .teammate{
-    color: white;
-    background-color: #e6e6e6;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    line-height: 1.33;
-    border-radius: 75px !important;    
-    text-align: center !important;
-    text-decoration: none !important;
-    display: inline;
-    border-style: none;
-    z-index: -100 !important;
-  }
-  .tooltip {
-    position: static;
-    display: inline;
-    opacity: 1 !important;
-    z-index: 100000 !important;
-  }
-  .tooltip .tooltiptext {
-    
-    font-family: 'Montserrat', sans-serif;
-    visibility: hidden;
-    width: 220px;
-    color: #fff;
-    border-radius: 10px;
-    padding: 8px 12px;
-    background-color:  #2b2b2b8c;
-    backdrop-filter: grayscale(0.5) opacity(0.5);
-
-    /* Position the tooltip */
-    position: absolute;
-
-  }
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-  }
-  .tooltip-container{
-    position: relative;
-  }
-  .bg{
-    background-color: black;
-  }
-  .content{
-    position: relative;
-    height: 40vh;
-    z-index: 10;
-  }
-  .index-image{
-    max-width: 450px;
-    width: 100%;
-  }  
-  .vertical-center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }  
-  .index-title{
-    margin-top: auto;
-    margin-bottom: auto;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500 !important;
-    font-size: 50px;
-    color: white;
-    left: 0;
-    float: left;
-    text-shadow: 3px 3px 6px black;
-  }
-
-  body{
-    font-family: 'Roboto', sans-serif;
-/*    background-image: url('https://i.imgur.com/tPCneYv.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;ss*/    
-    font-weight: 500 !important;    
-    overflow-x: hidden;
-  }
-  input{
-    font-weight: 400 !important;
-  }input:focus{
-    border-color:#8819ff !important;
-    outline: none !important;
-  }
-  select{
-    font-weight: 400 !important;
-    border:none !important;
-    background-color: #F9F8FF !important;
-  } 
-  nav{
-    z-index: 15;    
-    box-shadow:2px 2px 7px lightgrey;
-    background-color: white;
-  }
-  
-  .navbar-brand{
-    font-family: 'Montserrat', sans-serif;
-    color: #7d17fc !important;
-    font-size: 25px;
-    font-weight: 600;
-  }
-  .showbox{
-    position: relative;
-  }
-  textarea{
-    border-radius: 15px;
-    border:none;
-    padding:30px;
-  }canvas{
-    top: 0;
-    position: absolute;
-  }h2{
-    z-index: 100;
-    border-radius: 50px;
-    padding: 1vh;
-    background-color: #2B2B2B;
-    color: white;
-    max-width: 450px
-  }h4{
-    color: #404040;
-    line-height: 1.5;
-    font-weight: 500;
-  }h3{
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-  }
-  @media only screen and (max-width:1500px){
-  }.content{
-      height: 60vh;
-    }
-  @media only screen and (max-width:600px){
-    .index-title{
+      }.icon-sidebar .row{
+        height: 10vh
+      }.notif{
+        display: inline;
+        position: relative;
+        z-index: 10;
+        
+        border-radius:10px;
+        font-size: 20px;
+        text-decoration: none !important;
+      }.notif:hover{
+        
+        text-decoration: none;
+      }
+      .ping{
+        color: #fe5858;
+        position: absolute;
+        border-radius: 5px;
+        border: 2px white;
         font-size: 30px;
-    }    
-    h4{
-      color: #404040;
-      line-height: 1.5;
-      font-size: 15;
-      font-weight: 500;
-    }.content{
-      height: 80vh;
+        z-index: 20;
+        left: 60%;
+        top: 30%;
+        text-shadow: 0px 0px 4px #f3e8ff;
+      }
+      .collapse-left{
+        position: fixed;
+        z-index: 30;
+        padding: 30px;
+        bottom: 15px;
+        left: 3px;
+        color: #7d17fc !important;
+        border: solid #7d17fc54 1.5px;
+        visibility: hidden;
+        background-color: #eedeff;
+        border-radius: 10px;
+      }
+      @media only screen  and (max-width:600px ){
+        .collapse-left{
+          visibility: visible;
+        }
+      }
+      .hidden{
+        left: -100px;
+      }
+    </style>  
+    <!-- SIDEBAR -->
+
+
+
+
+    {% if auth!=False%}<div class="content" id="main">{%endif%}
+      {% if auth!=False %}
+      <div class="icon-sidebar column" id="sidebar">
+        <div class="row">
+          <div class="subicon-sidebar {% if active == 1 %}active{% endif %}" id="a">            
+            <a class="subicon" href="/"><div class="ping">•</div><i class="fas fa-home" aria-hidden="True" ></i></a></div>
+        </div>
+        <div class="row">
+          <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b">
+            <a class="subicon" href="/about" ><div class="ping">•</div><i class="fas fa-address-card" aria-hidden="True"></i></a></div>       
+        </div>
+        <div class="row">
+          <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><a class="subicon" href="/calendar" >
+            <i class="fas fa-calendar" aria-hidden="True"><div class="ping">•</div></i></a></div>
+        </div>
+        <div class="row">
+          <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><a class="subicon" href="/chat" >
+            <div class="ping">•</div><i class="fas fa-comments" aria-hidden="True"></i></a></div>
+        </div>
+        <div class="row">
+          <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><a class="subicon" href="/project" >
+            <div class="ping">•</div><i class="fas fa-flask" aria-hidden="True"></i></a></div>
+        </div>    
+        <div class="row">
+          <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><a class="subicon" href="/expo" >
+            <div class="ping">•</div><i class="fas fa-store" aria-hidden="True"></i></a></div>
+        </div>  
+      </div>
+
+      <div class="collapse-left">
+        <a class="subicon" onclick="collapse_sidebar()" id="collapse-left">
+        <i class="fas fa-arrow-left" aria-hidden="True"></i></a>
+      </div>
+
+      {% endif %}
+      
+      {% if auth!=False%}
+        <div class="showbox" id="showbox">
+        <div id="particles-background" class="vertical-centered-box"></div>
+        <div id="particles-foreground" class="vertical-centered-box"></div>
+      {%endif%}
+      
+      {% block content %}
+      {% endblock %}
+      
+      {% if auth!=False%}</div>{%endif%}
+
+
+
+    {% if auth!=False%}</div>{% endif %}
+
+
+
+
+
+
+    <!-- CUSTOM STYLES -->
+    <style type="text/css">
+      @import url('https://fonts.googleapis.com/css2?family=Miriam+Libre&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap');
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding: 12px 16px;
+        z-index: 1;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .wrapper{
+        overflow-x: hidden;
+        position: relative;
+        
+        
+      }
+      .container{
+        padding-top: 40px;
+      }
+      .custom-control-input:checked~.custom-control-label::before {
+          color: #fff;
+          border-color: #8819ff;
+          background-color: #7d17fc ;
+        }    
+      .shadowed{
+        box-shadow:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05)!important;
+        border: 0px !important; 
+      }  
+      .btn{
+        font-weight: 600 !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 15px;
+        border:none ;
+        pointer-events: all;
+        max-width: 180px;
+        mi
+        padding: 5px 15px !important;
+        border-radius: 20px !important;    
+      } 
+      .purple{
+        background-color: #8819ff;
+        color:white !important;    
+      }
+      .lightgreen{
+        color: #2B2B2B !important;    
+        color:#2B2B2B;
+        background-color: #67FBD1;
+      }
+      .pill-large{
+        margin:10px !important;
+        padding: 10px 10px !important;
+        border-radius: 30px !important;
+      }  
+
+      .alert-success{
+        background-color: #8fffdf !important;
+        color: #006145 !important;
+      }
+      .btn-success{
+        color: #2B2B2B ;
+        background-color: #67FBD1 ;
+      }.btn-success:hover{
+        background-color: #5fedc5;
+      }
+      .btn-primary{
+        background-color: #6800d8 !important;
+        color: white !important;
+      }
+      .btn-warning{
+        background-color: #DF4550!important
+      }
+      .btn-secondary{
+        background-color: #2B2B2B !important; 
+      }
+
+      .input-group{
+        font-weight: 500 !important;
+      }
+      .alert-warning{
+        background-color: #FEFEDF;
+      }
+      .form-control{
+        border:none !important;
+        background-color: #fff !important
+      }.form-control:focus{
+        outline: none !important;
+        border-color: #8fffdf;
+        box-shadow: 0 0 10px lightgrey;    
+      }
+      .alert{
+        margin-bottom: 0rem !important;
+      }
+      .alert-danger{
+        margin-bottom: 0rem !important;
+        background-color: rgba(223, 69, 80,0.2) !important;
+        color: red;
+      }
+      .teammate{
+        color: white;
+        background-color: #e6e6e6;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        line-height: 1.33;
+        border-radius: 75px !important;    
+        text-align: center !important;
+        text-decoration: none !important;
+        display: inline;
+        border-style: none;
+        z-index: -100 !important;
+      }
+      .tooltip {
+        position: static;
+        display: inline;
+        opacity: 1 !important;
+        z-index: 100000 !important;
+      }
+      .tooltip .tooltiptext {
+        
+        font-family: 'Montserrat', sans-serif;
+        visibility: hidden;
+        width: 220px;
+        color: #fff;
+        border-radius: 10px;
+        padding: 8px 12px;
+        background-color:  #2b2b2b8c;
+        backdrop-filter: grayscale(0.5) opacity(0.5);
+
+        /* Position the tooltip */
+        position: absolute;
+
+      }
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+      }
+      .tooltip-container{
+        position: relative;
+      }
+      .bg{
+        background-color: black;
+      }
+      /*.content{
+        
+        height: 40vh;
+        z-index: 10;
+      }*/
+      .index-image{
+        max-width: 450px;
+        width: 100%;
+      }  
+      .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+      }  
+      .index-title{
+        margin-top: auto;
+        margin-bottom: auto;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500 !important;
+        font-size: 50px;
+        color: white;
+        left: 0;
+        float: left;
+        text-shadow: 3px 3px 15px black;
+      }
+
+      body{
+        font-family: 'Roboto', sans-serif;
+    /*    background-image: url('https://i.imgur.com/tPCneYv.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;ss*/    
+        font-weight: 400;    
+        overflow-x: hidden;
+      }
+      input{
+        font-weight: 400 !important;
+      }input:focus{
+        border-color:#8819ff !important;
+        outline: none !important;
+      }
+      select{
+        font-weight: 400 !important;
+        border:none !important;
+        background-color: #fff !important;
+      } 
+      nav{
+        z-index: 15;    
+        box-shadow:2px 2px 7px lightgrey;
+        background-color: white;
+      }
+      
+      .navbar-brand{
+        font-family: 'Montserrat', sans-serif;
+        color: #7d17fc !important;
+        font-size: 25px;
+        font-weight: 600 !important;
+      }
+      .showbox{
+        
+        position: relative;
+      }
+      textarea{
+        border-radius: 15px;
+        border:none;
+        padding:30px;
+      }canvas{
+        position: fixed;
+        left:  0;
+        top: 0;
+        
+      }h2{
+        z-index: 100;
+        border-radius: 50px;
+        padding: 1vh;
+        background-color: #2B2B2B;
+        color: white;
+        max-width: 450px
+      }h4{
+        color: #404040;
+        line-height: 1.5;
+        font-weight: 500;
+      }h3{
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+      }
+      /*@media only screen and (max-width:1500px){
+      }.content{
+          height: 60vh;
+        }*/
+      @media only screen and (max-width:600px){
+        .index-title{
+            font-size: 30px;
+        }    
+        h4{
+          color: #404040;
+          line-height: 1.5;
+          font-size: 15;
+          font-weight: 500;
+        }.content{
+          height: 100vh;
+        }
+      }
+      p{
+        font-size: 18px;
+      }
+      p .fa{
+        font-size: 20px;
+      }
+      .modal-content{
+        backdrop-filter:opacity(0.98) blur(5px);
+        background-color:transparent;
+      }
+    </style>
+    <!-- CUSTOM STYLES -->
+
+
+
+
+
+
+
+
+
+
+
+    <!-- SLIDER STYLE{} -->
+    <style type="text/css">
+      
+    #lineCont {
+      width: 90%;
+      height: 20%;
     }
+
+    #line {
+      height: 6px;
+      width: 50%;
+      background: #e6e7ed ;
+      border-radius: 5px;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      position: relative;
+    }
+
+    #span {
+
+      display: none;
+      width: 70%;
+      margin: auto;
+      margin-top: 25%;
+      text-align: center;
+      color: white;
+    }
+
+    .circle {
+      width: 20px;
+      height: 20px;
+      background: lightgrey;
+      border-radius: 15px;
+      position: absolute;
+      top: -7px;
+      border: 3px solid white;
+      cursor: pointer;
+    }
+    .circle:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: rgb(193,25,255);
+      background: linear-gradient(90deg, rgba(193,25,255,1) 0%, rgba(125,23,252,1) 100%);
+      position: absolute;
+      border-radius: 100%;
+      top: 2px;
+      left: 2px;
+      display: none;
+    }
+    .circle .popupSpan {
+      width: auto;
+      height: auto;
+      padding: 10px;
+      white-space: nowrap;
+      display: inline-block;
+      color: black;
+      position: absolute;
+      top: 7px;
+      left: -75px;
+      display: none;
+      transition: all 0.1s ease-out;
+    }
+    .circle.hover:before, .circle.active:before {
+      display: block;
+    }
+    .circle.hover .popupSpan, .circle.active .popupSpan {
+      display: block;
+    }
+    .circle.active .popupSpan {
+      top: -30px;
+    }
+    #main{
+      position: relative;
+    }
+
+    #mainCont {
+      height: 80%;
+      width: 100%;
+      position: relative;
+      color: white;
+      font-size: 62px;
+      text-align: center;
+      transition: all 0.2s ease-out;
+    }
+    #mainCont span {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 30%;
+      transition: all 0.2s ease-out;
+    }
+    #mainCont span.right {
+      left: 200%;
+    }
+    #mainCont span.center {
+      left: 0% !important;
+    }
+    #mainCont span.left {
+      left: -100%;
+    }
+
+    </style>    
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- PROFILEPIC STYLE| -->
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+
+
+
+    .snav * {
+      box-sizing: border-box;
+      box-shadow: none;
+    }
+
+    .snav {
+      align-items: center;
+      
+      display: flex;
+      font-family: "Roboto",sans-serif;
+      font-size: 12pt;
+      box-shadow: none;
+    }
+
+    .navcontainer {
+      box-shadow: none;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      padding: 0 1vw;
+      width: 80%;
+    }
+
+    .navinner {
+      position: relative;
+    }
+
+    .navinner > a:not(.profileddtrigger):not(.ddtriggermobile) {
+      color: #7b7de5;
+      margin: 0 .25vw;
+      padding: 0 .5vw;
+    }
+
+    @media (max-width: 1000px) {
+      .navinner > a:not(.profileddtrigger):not(.ddtriggermobile) {
+        display: none;
+      }
+    }
+
+    .profileddtrigger {
+      margin: 0 .25vw;
+    }
+
+    .ddtriggermobile {
+      margin-right: .75vw;
+      position: relative;
+      top: .75vh;
+    }
+
+    @media (min-width: 1000px) {
+      .ddtriggermobile {
+        display: none;
+      }
+    }
+
+    .ddtriggermobile i {
+      color: #7b7de5;
+      font-size: 24pt;
+    }
+
+    @media (min-width: 1000px) {
+      .mobilemenudd {
+        display: none;
+      }
+    }
+
+    .profileddtrigger {
+      position: relative;
+    }
+
+    /*DROPDOWN ICON*/
+    /*.profileddtrigger:after {
+      color: #777;
+      content: '\E5C5';
+      font-family: 'Material Icons';
+      top: 50%;
+    }*/
+
+    .profileddtrigger img {
+      border: 3px solid #eee;
+      border-radius: 50%;
+      height: 52px;
+      padding: 1px;
+    }
+
+    .ddcontainer {
+      pointer-events: none;
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: 5px 5px 10px lightgrey;
+      min-width: 200px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      right: -3px;
+      top: 70px;
+      transform: translateY(-5px);
+      transition: 300ms ease;
+      z-index: -1;
+    }
+
+    .ddcontainer.active {
+      pointer-events: all;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0px);
+      z-index: 50;
+    }
+
+    .ddheader {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1.5vw;
+    }
+
+    .ddheader:hover,
+    .ddheader:focus {
+      background: #f7f7f7;
+    }
+
+    .ddheader img {
+      border-radius: 50%;
+      height: 52px;
+    }
+
+    .ddheader .ddname {
+      color: #555;
+      margin: 8px 0 4px;
+    }
+
+    .ddheader .ddtitle {
+      color: #999;
+      font-size: 10pt;
+    }
+
+    .ddnav {
+      border-top: 1px solid #e5e5e5;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ddnav a {
+      
+      color: #7b7de5;
+      display: flex;
+      padding: 8px 16px;
+    }
+
+    .ddnav a span:not(.material-icons) {
+      margin-left: 5px;
+    }
+
+    .ddnav a:hover,
+    .ddnav a:focus {
+      background: #f7f7f7;
+    }
+
+    a {
+      text-decoration: none;
+    }.notif{
+      color: #bdbec5 ;
+    }
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- PARTICLE CSS -->
+    <style type="text/css">
+      body {
+      background:#f7f8ff;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      
+      /*-webkit-user-select: none;*/
+      
+    }
+    body .vertical-centered-box {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      text-align: center;
+    }
+    body .vertical-centered-box:after {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      
+    }
+    body .vertical-centered-box .content {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: left;
+      font-size: 0;
+    }
+    * {
+      -webkit-transition: all 0.1s;
+      -moz-transition: all 0.1s;
+      -o-transition: all 0.1s;
+      transition: all 0.1s;
+    }
+
+    .loader-circle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      margin-left: -60px;
+      margin-top: -60px;
+    }
+    .loader-line-mask {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 60px;
+      height: 120px;
+      margin-left: -60px;
+      margin-top: -60px;
+      overflow: hidden;
+      -webkit-transform-origin: 60px 60px;
+      -moz-transform-origin: 60px 60px;
+      -ms-transform-origin: 60px 60px;
+      -o-transform-origin: 60px 60px;
+      transform-origin: 60px 60px;
+      -webkit-mask-image: -webkit-linear-gradient(top, #000000, rgba(0, 0, 0, 0));
+      -webkit-animation: rotate 1.2s infinite linear;
+      -moz-animation: rotate 1.2s infinite linear;
+      -o-animation: rotate 1.2s infinite linear;
+      animation: rotate 1.2s infinite linear;
+    }
+    .loader-line-mask .loader-line {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    }
+    #particles-background,
+    #particles-foreground {
+    /*  left: -51%;
+      top: -51%;
+      width: 202%;
+      height: 202%;
+      -webkit-transform: scale3d(0.5, 0.5, 1);
+      -moz-transform: scale3d(0.5, 0.5, 1);
+      -ms-transform: scale3d(0.5, 0.5, 1);
+      -o-transform: scale3d(0.5, 0.5, 1);
+      transform: scale3d(0.5, 0.5, 1);*/
+    }
+    #particles-background {
+      /*background: #f7f8ff;*/
+      /*background-image: -moz-linear-gradient(45deg, #3f3251 2%, #002025 100%);
+      background-image: -webkit-linear-gradient(45deg, #3f3251 2%, #002025 100%);
+      background-image: linear-gradient(45deg, #3f3251 2%, #002025 100%);*/
+    }
+    lesshat-selector {
+      -lh-property: 0; } 
+    @-webkit-keyframes rotate{ 0% { -webkit-transform: rotate(0deg);} 100% { -webkit-transform: rotate(360deg);}}
+    @-moz-keyframes rotate{ 0% { -moz-transform: rotate(0deg);} 100% { -moz-transform: rotate(360deg);}}
+    @-o-keyframes rotate{ 0% { -o-transform: rotate(0deg);} 100% { -o-transform: rotate(360deg);}}
+    @keyframes rotate{ 0% {-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-ms-transform: rotate(0deg);transform: rotate(0deg);} 100% {-webkit-transform: rotate(360deg);-moz-transform: rotate(360deg);-ms-transform: rotate(360deg);transform: rotate(360deg);}}
+    [not-existing] {
+      zoom: 1;
+    }
+    lesshat-selector {
+      -lh-property: 0; } 
+    @-webkit-keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
+    @-moz-keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
+    @-o-keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
+    @keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
+    [not-existing] {
+      zoom: 1;
+    }
+    lesshat-selector {
+      -lh-property: 0; } 
+    @-webkit-keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
+    @-moz-keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
+    @-o-keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
+    @keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
+    [not-existing] {
+      zoom: 1;
+    }
+
+    </style>
+
+
+
+  </div>
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+
+
+
+
+
+
+
+
+
+  <!-- NAV SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript">
+    //Sample datesx
+  var dates = ["6/12/2015", "8/15/2015", "10/22/2015", "11/2/2015", "12/22/2015"];
+  //For the purpose of stringifying MM/DD/YYYY date format
+  var monthSpan = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  //Format MM/DD/YYYY into string
+  function dateSpan(date) {
+    var month = date.split('/')[0];
+    month = monthSpan[month - 1];
+    var day = date.split('/')[1];
+    if (day.charAt(0) == '0') {
+      day = day.charAt(1);
+    }
+    var year = date.split('/')[2];
+
+    //Spit it out!
+    return month + " " + day + ", " + year;
   }
-  p{
-    font-size: 18px;
-  }
-  p .fa{
-    font-size: 20px;
-  }
-  .modal-content{
-    backdrop-filter:opacity(0.98) blur(5px);
-    background-color:transparent;
-  }
-</style>
-<!-- CUSTOM STYLES -->
 
-
-
-
-
-
-
-
-
-
-
-<!-- SLIDER STYLE{} -->
-<style type="text/css">
-  
-#lineCont {
-  width: 90%;
-  height: 20%;
-}
-
-#line {
-  height: 6px;
-  width: 50%;
-  background: #e6e7ed ;
-  border-radius: 5px;
-  margin: auto;
-  top: 50%;
-  transform: translateY(-50%);
-  position: relative;
-}
-
-#span {
-
-  display: none;
-  width: 70%;
-  margin: auto;
-  margin-top: 25%;
-  text-align: center;
-  color: white;
-}
-
-.circle {
-  width: 20px;
-  height: 20px;
-  background: lightgrey;
-  border-radius: 15px;
-  position: absolute;
-  top: -7px;
-  border: 3px solid white;
-  cursor: pointer;
-}
-.circle:before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  background: rgb(193,25,255);
-  background: linear-gradient(90deg, rgba(193,25,255,1) 0%, rgba(125,23,252,1) 100%);
-  position: absolute;
-  border-radius: 100%;
-  top: 2px;
-  left: 2px;
-  display: none;
-}
-.circle .popupSpan {
-  width: auto;
-  height: auto;
-  padding: 10px;
-  white-space: nowrap;
-  display: inline-block;
-  color: black;
-  position: absolute;
-  top: 7px;
-  left: -75px;
-  display: none;
-  transition: all 0.1s ease-out;
-}
-.circle.hover:before, .circle.active:before {
-  display: block;
-}
-.circle.hover .popupSpan, .circle.active .popupSpan {
-  display: block;
-}
-.circle.active .popupSpan {
-  top: -30px;
-}
-
-#mainCont {
-  height: 80%;
-  width: 100%;
-  position: relative;
-  color: white;
-  font-size: 62px;
-  text-align: center;
-  transition: all 0.2s ease-out;
-}
-#mainCont span {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 30%;
-  transition: all 0.2s ease-out;
-}
-#mainCont span.right {
-  left: 200%;
-}
-#mainCont span.center {
-  left: 0% !important;
-}
-#mainCont span.left {
-  left: -100%;
-}
-
-</style>    
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- PROFILEPIC STYLE| -->
-<style type="text/css">
-  @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
-
-
-
-.snav * {
-  box-sizing: border-box;
-  box-shadow: none;
-}
-
-.snav {
-  align-items: center;
-  
-  display: flex;
-  font-family: "Roboto",sans-serif;
-  font-size: 12pt;
-  box-shadow: none;
-}
-
-.navcontainer {
-  box-shadow: none;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 auto;
-  padding: 0 1vw;
-  width: 80%;
-}
-
-.navinner {
-  position: relative;
-}
-
-.navinner > a:not(.profileddtrigger):not(.ddtriggermobile) {
-  color: #7b7de5;
-  margin: 0 .25vw;
-  padding: 0 .5vw;
-}
-
-@media (max-width: 1000px) {
-  .navinner > a:not(.profileddtrigger):not(.ddtriggermobile) {
-    display: none;
-  }
-}
-
-.profileddtrigger {
-  margin: 0 .25vw;
-}
-
-.ddtriggermobile {
-  margin-right: .75vw;
-  position: relative;
-  top: .75vh;
-}
-
-@media (min-width: 1000px) {
-  .ddtriggermobile {
-    display: none;
-  }
-}
-
-.ddtriggermobile i {
-  color: #7b7de5;
-  font-size: 24pt;
-}
-
-@media (min-width: 1000px) {
-  .mobilemenudd {
-    display: none;
-  }
-}
-
-.profileddtrigger {
-  position: relative;
-}
-
-/*DROPDOWN ICON*/
-/*.profileddtrigger:after {
-  color: #777;
-  content: '\E5C5';
-  font-family: 'Material Icons';
-  top: 50%;
-}*/
-
-.profileddtrigger img {
-  border: 3px solid #eee;
-  border-radius: 50%;
-  height: 52px;
-  padding: 1px;
-}
-
-.ddcontainer {
-  pointer-events: none;
-  background: #fff;
-  border-radius: 3px;
-  box-shadow: 5px 5px 10px lightgrey;
-  min-width: 200px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  right: -3px;
-  top: 70px;
-  transform: translateY(-5px);
-  transition: 300ms ease;
-  z-index: -1;
-}
-
-.ddcontainer.active {
-  pointer-events: all;
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0px);
-  z-index: 50;
-}
-
-.ddheader {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1.5vw;
-}
-
-.ddheader:hover,
-.ddheader:focus {
-  background: #f7f7f7;
-}
-
-.ddheader img {
-  border-radius: 50%;
-  height: 52px;
-}
-
-.ddheader .ddname {
-  color: #555;
-  margin: 8px 0 4px;
-}
-
-.ddheader .ddtitle {
-  color: #999;
-  font-size: 10pt;
-}
-
-.ddnav {
-  border-top: 1px solid #e5e5e5;
-  display: flex;
-  flex-direction: column;
-}
-
-.ddnav a {
-  
-  color: #7b7de5;
-  display: flex;
-  padding: 8px 16px;
-}
-
-.ddnav a span:not(.material-icons) {
-  margin-left: 5px;
-}
-
-.ddnav a:hover,
-.ddnav a:focus {
-  background: #f7f7f7;
-}
-
-a {
-  text-decoration: none;
-}.notif{
-  color: #bdbec5 ;
-}
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- PARTICLE CSS -->
-<style type="text/css">
-  body {
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  
-  -webkit-user-select: none;
-  
-}
-body .vertical-centered-box {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
-body .vertical-centered-box:after {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -0.25em;
-}
-body .vertical-centered-box .content {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: left;
-  font-size: 0;
-}
-* {
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-}
-
-.loader-circle {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  margin-left: -60px;
-  margin-top: -60px;
-}
-.loader-line-mask {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 60px;
-  height: 120px;
-  margin-left: -60px;
-  margin-top: -60px;
-  overflow: hidden;
-  -webkit-transform-origin: 60px 60px;
-  -moz-transform-origin: 60px 60px;
-  -ms-transform-origin: 60px 60px;
-  -o-transform-origin: 60px 60px;
-  transform-origin: 60px 60px;
-  -webkit-mask-image: -webkit-linear-gradient(top, #000000, rgba(0, 0, 0, 0));
-  -webkit-animation: rotate 1.2s infinite linear;
-  -moz-animation: rotate 1.2s infinite linear;
-  -o-animation: rotate 1.2s infinite linear;
-  animation: rotate 1.2s infinite linear;
-}
-.loader-line-mask .loader-line {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-}
-#particles-background,
-#particles-foreground {
-/*  left: -51%;
-  top: -51%;
-  width: 202%;
-  height: 202%;
-  -webkit-transform: scale3d(0.5, 0.5, 1);
-  -moz-transform: scale3d(0.5, 0.5, 1);
-  -ms-transform: scale3d(0.5, 0.5, 1);
-  -o-transform: scale3d(0.5, 0.5, 1);
-  transform: scale3d(0.5, 0.5, 1);*/
-}
-#particles-background {
-  background: #f7f8ff;
-  /*background-image: -moz-linear-gradient(45deg, #3f3251 2%, #002025 100%);
-  background-image: -webkit-linear-gradient(45deg, #3f3251 2%, #002025 100%);
-  background-image: linear-gradient(45deg, #3f3251 2%, #002025 100%);*/
-}
-lesshat-selector {
-  -lh-property: 0; } 
-@-webkit-keyframes rotate{ 0% { -webkit-transform: rotate(0deg);} 100% { -webkit-transform: rotate(360deg);}}
-@-moz-keyframes rotate{ 0% { -moz-transform: rotate(0deg);} 100% { -moz-transform: rotate(360deg);}}
-@-o-keyframes rotate{ 0% { -o-transform: rotate(0deg);} 100% { -o-transform: rotate(360deg);}}
-@keyframes rotate{ 0% {-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-ms-transform: rotate(0deg);transform: rotate(0deg);} 100% {-webkit-transform: rotate(360deg);-moz-transform: rotate(360deg);-ms-transform: rotate(360deg);transform: rotate(360deg);}}
-[not-existing] {
-  zoom: 1;
-}
-lesshat-selector {
-  -lh-property: 0; } 
-@-webkit-keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
-@-moz-keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
-@-o-keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
-@keyframes fade{ 0% { opacity: 1;} 50% { opacity: 0.25;}}
-[not-existing] {
-  zoom: 1;
-}
-lesshat-selector {
-  -lh-property: 0; } 
-@-webkit-keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
-@-moz-keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
-@-o-keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
-@keyframes fade-in{ 0% { opacity: 0;} 100% { opacity: 1;}}
-[not-existing] {
-  zoom: 1;
-}
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
-
-
-
-<!-- MAIN SCRIPTS -->
-<script type="text/javascript">
-
-try{
-navbar = document.getElementById("navbar").offsetHeight;
-sidebar = document.getElementById("sidebar").offsetWidth;
-document.getElementById("main").style.paddingTop = navbar;
-document.getElementById("showbox").style.paddingLeft = sidebar;
-// document.getElementById("showbox").style.paddingTop += 20;
-}catch (error){
-  console.log(error)
-}
-
-/*
- Create a new chat  
-*/
-function create_new_note() {
-  $("#btn-create-new-chat").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creando ...');
-  fetch("/new-chat/create")
-    .then((data) => {
-      console.log(data);
-      $("#btn-create-new-chat").html("Listo!");
-      window.location = data['url'];
-    },
-      (error) => {
-        console.log(error);
-        $("#btn-create-new-chat").html("Hubo un error.");
-      });
-}
-function project(){
-  $("#btn-go-to-project").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
-  fetch("/project")
-    .then((data) => {
-      console.log(data);
-      window.location = data['url'];
-    },
-      (error) => {
-        console.log(error);
-        $("#btn-go-to-project").html("Hubo un error.");
-      });
-}
-function about(){
-$("#btn-go-to-about").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando ...');
-fetch("/about")
-  .then((data) => 
-{      console.log(data);
-    window.location = data['url'];
-  },
-    (error) => {
-      console.log(error);
-      $("#btn-go-to-about").html("Hubo un error.");
-    });
-}
-function calendar(){
-fetch("/calendar")
-  .then((data) => 
-{      console.log(data);
-    window.location = data['url'];
-  },
-    (error) => {
-      console.log(error);      
-    });
-}
-function expo(){
-fetch("/expo")
-  .then((data) => 
-{      console.log(data);
-    window.location = data['url'];
-  },
-    (error) => {
-      console.log(error);
-    });
-}
-function cancel(){
-  $("#cancel-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saliendo ...');
-  fetch("/")
-    .then((data) => {
-      console.log(data);
-      window.location = data['url'];
-    },
-      (error) => {
-        console.log(error);
-        $("#cancel").html("Error.");
-      });
-}
-
-</script>
-
-
-
-
-
-
-
-
-<!-- NAV SCRIPTS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script type="text/javascript">
-  //Sample datesx
-var dates = ["6/12/2015", "8/15/2015", "10/22/2015", "11/2/2015", "12/22/2015"];
-//For the purpose of stringifying MM/DD/YYYY date format
-var monthSpan = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-//Format MM/DD/YYYY into string
-function dateSpan(date) {
-  var month = date.split('/')[0];
-  month = monthSpan[month - 1];
-  var day = date.split('/')[1];
-  if (day.charAt(0) == '0') {
-    day = day.charAt(1);
-  }
-  var year = date.split('/')[2];
-
-  //Spit it out!
-  return month + " " + day + ", " + year;
-}
-
-//Main function. Draw your circles.
-function makeCircles() {
-  //Forget the timeline if there's only one date. Who needs it!?
-  if (dates.length < 2) {
-    $("#line").hide();
-    $("#span").show().text(dateSpan(dates[0]));
-    //This is what you really want.
-  } else if (dates.length >= 2) {
-    //Set day, month and year variables for the math
-    var first = dates[0];
-    var last = dates[dates.length - 1];
-
-    var firstMonth = parseInt(first.split('/')[0]);
-    var firstDay = parseInt(first.split('/')[1]);
-
-    var lastMonth = parseInt(last.split('/')[0]);
-    var lastDay = parseInt(last.split('/')[1]);
-
-    //Integer representation of the last day. The first day is represnted as 0
-    var lastInt = ((lastMonth - firstMonth) * 30) + (lastDay - firstDay);
-
-    //Draw first date circle
-    $("#line").append('<div class="circle" id="circle0" style="left: ' + 0 + '%;"><div class="popupSpan">' + dateSpan(dates[0]) + '</div></div>');
-    
-    $("#mainCont").append('<span id="span0" class="center">' + dateSpan(dates[0]) + '</span>');
-
-    //Loop through middle dates
-    for (i = 1; i < dates.length - 1; i++) {
-      var thisMonth = parseInt(dates[i].split('/')[0]);
-      var thisDay = parseInt(dates[i].split('/')[1]);
-
-      //Integer representation of the date
-      var thisInt = ((thisMonth - firstMonth) * 30) + (thisDay - firstDay);
-
-      //Integer relative to the first and last dates
-      var relativeInt = thisInt / lastInt;
-
-      //Draw the date circle
-      $("#line").append('<div class="circle" id="circle' + i + '" style="left: ' + relativeInt * 100 + '%;"><div class="popupSpan">' + dateSpan(dates[i]) + '</div></div>');
+  //Main function. Draw your circles.
+  function makeCircles() {
+    //Forget the timeline if there's only one date. Who needs it!?
+    if (dates.length < 2) {
+      $("#line").hide();
+      $("#span").show().text(dateSpan(dates[0]));
+      //This is what you really want.
+    } else if (dates.length >= 2) {
+      //Set day, month and year variables for the math
+      var first = dates[0];
+      var last = dates[dates.length - 1];
+
+      var firstMonth = parseInt(first.split('/')[0]);
+      var firstDay = parseInt(first.split('/')[1]);
+
+      var lastMonth = parseInt(last.split('/')[0]);
+      var lastDay = parseInt(last.split('/')[1]);
+
+      //Integer representation of the last day. The first day is represnted as 0
+      var lastInt = ((lastMonth - firstMonth) * 30) + (lastDay - firstDay);
+
+      //Draw first date circle
+      $("#line").append('<div class="circle" id="circle0" style="left: ' + 0 + '%;"><div class="popupSpan">' + dateSpan(dates[0]) + '</div></div>');
+      
+      $("#mainCont").append('<span id="span0" class="center">' + dateSpan(dates[0]) + '</span>');
+
+      //Loop through middle dates
+      for (i = 1; i < dates.length - 1; i++) {
+        var thisMonth = parseInt(dates[i].split('/')[0]);
+        var thisDay = parseInt(dates[i].split('/')[1]);
+
+        //Integer representation of the date
+        var thisInt = ((thisMonth - firstMonth) * 30) + (thisDay - firstDay);
+
+        //Integer relative to the first and last dates
+        var relativeInt = thisInt / lastInt;
+
+        //Draw the date circle
+        $("#line").append('<div class="circle" id="circle' + i + '" style="left: ' + relativeInt * 100 + '%;"><div class="popupSpan">' + dateSpan(dates[i]) + '</div></div>');
+        
+        $("#mainCont").append('<span id="span' + i + '" class="right">' + dateSpan(dates[i]) + '</span>');
+      }
+
+      //Draw the last date circle
+      $("#line").append('<div class="circle" id="circle' + i + '" style="left: ' + 99 + '%;"><div class="popupSpan">' + dateSpan(dates[dates.length - 1]) + '</div></div>'); 
       
       $("#mainCont").append('<span id="span' + i + '" class="right">' + dateSpan(dates[i]) + '</span>');
     }
 
-    //Draw the last date circle
-    $("#line").append('<div class="circle" id="circle' + i + '" style="left: ' + 99 + '%;"><div class="popupSpan">' + dateSpan(dates[dates.length - 1]) + '</div></div>'); 
+    $(".circle:first").addClass("active");
+  }
+
+  makeCircles();
+
+  $(".circle").mouseenter(function() {
+    $(this).addClass("hover");
+  });
+
+  $(".circle").mouseleave(function() {
+    $(this).removeClass("hover");
+  });
+
+  $(".circle").click(function() {
+    var spanNum = $(this).attr("id");
+    selectDate(spanNum);
+  });
+
+  function selectDate(selector) {
+    $selector = "#" + selector;
+    $spanSelector = $selector.replace("circle", "span");
+    var current = $selector.replace("circle", "");
     
-    $("#mainCont").append('<span id="span' + i + '" class="right">' + dateSpan(dates[i]) + '</span>');
+    $(".active").removeClass("active");
+    $($selector).addClass("active");
+    
+    if ($($spanSelector).hasClass("right")) {
+      $(".center").removeClass("center").addClass("left")
+      $($spanSelector).addClass("center");
+      $($spanSelector).removeClass("right")
+    } else if ($($spanSelector).hasClass("left")) {
+      $(".center").removeClass("center").addClass("right");
+      $($spanSelector).addClass("center");
+      $($spanSelector).removeClass("left");
+    }; 
+  };
+
+  console.log()
+
+  </script>
+
+
+
+
+
+
+
+
+  <!-- PROFILEPIC SCRIPT -->
+  <script type="text/javascript">
+  function dropdownClick(target, other) {
+    if(document.querySelectorAll(other)[0].classList.contains('active')){
+      document.querySelectorAll(other)[0].classList.remove('active');
+    }
+    document.querySelectorAll(target)[0].classList.toggle('active');
   }
-
-  $(".circle:first").addClass("active");
-}
-
-makeCircles();
-
-$(".circle").mouseenter(function() {
-  $(this).addClass("hover");
-});
-
-$(".circle").mouseleave(function() {
-  $(this).removeClass("hover");
-});
-
-$(".circle").click(function() {
-  var spanNum = $(this).attr("id");
-  selectDate(spanNum);
-});
-
-function selectDate(selector) {
-  $selector = "#" + selector;
-  $spanSelector = $selector.replace("circle", "span");
-  var current = $selector.replace("circle", "");
-  
-  $(".active").removeClass("active");
-  $($selector).addClass("active");
-  
-  if ($($spanSelector).hasClass("right")) {
-    $(".center").removeClass("center").addClass("left")
-    $($spanSelector).addClass("center");
-    $($spanSelector).removeClass("right")
-  } else if ($($spanSelector).hasClass("left")) {
-    $(".center").removeClass("center").addClass("right");
-    $($spanSelector).addClass("center");
-    $($spanSelector).removeClass("left");
-  }; 
-};
-
-console.log()
-
-</script>
-
-
-
-
-
-
-
-
-<!-- PROFILEPIC SCRIPT -->
-<script type="text/javascript">
-function dropdownClick(target, other) {
-  if(document.querySelectorAll(other)[0].classList.contains('active')){
-    document.querySelectorAll(other)[0].classList.remove('active');
+  try{
+    document.querySelector(".profileddtrigger").addEventListener("click", function() {
+      dropdownClick('.profiledd', '.mobilemenudd');
+    });
+    document.querySelector(".ddtriggermobile").addEventListener("click", function() {
+      dropdownClick('.mobilemenudd', '.profiledd');
+    });
+  }catch(error){
+    console.log(error)
   }
-  document.querySelectorAll(target)[0].classList.toggle('active');
-}
-try{
-  document.querySelector(".profileddtrigger").addEventListener("click", function() {
-    dropdownClick('.profiledd', '.mobilemenudd');
-  });
-  document.querySelector(".ddtriggermobile").addEventListener("click", function() {
-    dropdownClick('.mobilemenudd', '.profiledd');
-  });
-}catch(error){
-  console.log(error)
-}
-</script>
+  </script>
+
+
+
+
+
+  <!-- MAIN SCRIPTS -->
+  <script type="text/javascript">
+  /*
+   Create a new chat  
+  */
+  function create_new_note() {
+    $("#btn-create-new-chat").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creando ...');
+    fetch("/new-chat/create")
+      .then((data) => {
+        console.log(data);
+        $("#btn-create-new-chat").html("Listo!");
+        window.location = data['url'];
+      },
+        (error) => {
+          console.log(error);
+          $("#btn-create-new-chat").html("Hubo un error.");
+        });
+  }
+  function cancel(){
+    $("#cancel-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saliendo ...');
+    fetch("/")
+      .then((data) => {
+        console.log(data);
+        window.location = data['url'];
+      },
+        (error) => {
+          console.log(error);
+          $("#cancel").html("Error.");
+        });
+  }
+  // <i class="fas fa-arrow-left" aria-hidden="True"></i>
+  function collapse_sidebar(){
+    var sidebar = document.getElementById('sidebar');
+    var button = document.getElementById('collapse-left')
+    var box = document.getElementById('showbox');
+
+    sidebar.classList.add('hidden');
+    box.setAttribute('style','padding-left:0px');
+    button.setAttribute('onclick','open_sidebar()');
+    button.innerHTML = '<i class="fas fa-arrow-right" aria-hidden="True"></i>';
+    // button.setAttribute()
+    
+  }
+  function open_sidebar(){
+    var sidebar = document.getElementById('sidebar');
+    var sidebar_lenght = document.getElementById('sidebar').offsetWidth;
+    var button = document.getElementById('collapse-left')
+    var box = document.getElementById('showbox');
+
+    sidebar.classList.remove('hidden');
+    box.setAttribute('style','padding-left:70px');
+    button.setAttribute('onclick','collapse_sidebar()');
+    button.innerHTML = '<i class="fas fa-arrow-left" aria-hidden="True"></i>';
+    console.log(sidebar_lenght.toString());
+  }
+  </script>
 
 
 
@@ -1140,260 +1236,289 @@ try{
 
 
 
+  <!-- PARTICLE SCRIPT -->
+  <script type="text/javascript">
+  try{
+      ! function(a, b) {
+        "use strict";
+
+        function c(a) {
+            a = a || {};
+            for (var b = 1; b < arguments.length; b++) {
+                var c = arguments[b];
+                if (c)
+                    for (var d in c) c.hasOwnProperty(d) && ("object" == typeof c[d] ? deepExtend(a[d], c[d]) : a[d] = c[d])
+            }
+            return a
+        }
+
+        function d(d, g) {
+            function h() {
+                if (y) {
+                    r = b.createElement("canvas"),r.id="pg-canvas", r.className = "pg-canvas", r.style.display = "block", d.insertBefore(r, d.firstChild), s = r.getContext("2d"), i();
+                    for (var c = Math.round(r.width * r.height / g.density), e = 0; c > e; e++) {
+                        var f = new n;
+                        f.setStackPos(e), z.push(f)
+                    }
+                    a.addEventListener("resize", function() {
+                        k()
+                    }, !1), b.addEventListener("mousemove", function(a) {
+                        A = a.pageX, B = a.pageY
+                    }, !1), D && !C && a.addEventListener("deviceorientation", function() {
+                        F = Math.min(Math.max(-event.beta, -30), 30), E = Math.min(Math.max(-event.gamma, -30), 30)
+                    }, !0), j(), q("onInit")
+                }
+            }
+
+            function i() {
+              console.log(d);
+
+              r.height = document.getElementById('sidebar').offsetHeight,r.width = d.offsetWidth, s.fillStyle = g.dotColor, s.strokeStyle = g.lineColor, s.lineWidth = g.lineWidth
+            }
+
+            function j() {
+                if (y) {
+                    u = a.innerWidth, v = a.innerHeight, s.clearRect(0, 0, r.width, r.height);
+                    for (var b = 0; b < z.length; b++) z[b].updatePosition();
+                    for (var b = 0; b < z.length; b++) z[b].draw();
+                    G || (t = requestAnimationFrame(j))
+                }
+            }
+
+            function k() {
+                i();
+                for (var a = d.offsetWidth, b = d.offsetHeight, c = z.length - 1; c >= 0; c--)(z[c].position.x > a || z[c].position.y > b) && z.splice(c, 1);
+                var e = Math.round(r.width * r.height / g.density);
+                if (e > z.length)
+                    for (; e > z.length;) {
+                        var f = new n;
+                        z.push(f)
+                    } else e < z.length && z.splice(e);
+                for (c = z.length - 1; c >= 0; c--) z[c].setStackPos(c)
+            }
+
+            function l() {
+                G = !0
+            }
+
+            function m() {
+                G = !1, j()
+            }
+
+            function n() {
+                switch (this.stackPos, this.active = !0, this.layer = Math.ceil(3 * Math.random()), this.parallaxOffsetX = 0, this.parallaxOffsetY = 0, this.position = {
+                    x: Math.ceil(Math.random() * r.width),
+                    y: Math.ceil(Math.random() * r.height)
+                }, this.speed = {}, g.directionX) {
+                    case "left":
+                        this.speed.x = +(-g.maxSpeedX + Math.random() * g.maxSpeedX - g.minSpeedX).toFixed(2);
+                        break;
+                    case "right":
+                        this.speed.x = +(Math.random() * g.maxSpeedX + g.minSpeedX).toFixed(2);
+                        break;
+                    default:
+                        this.speed.x = +(-g.maxSpeedX / 2 + Math.random() * g.maxSpeedX).toFixed(2), this.speed.x += this.speed.x > 0 ? g.minSpeedX : -g.minSpeedX
+                }
+                switch (g.directionY) {
+                    case "up":
+                        this.speed.y = +(-g.maxSpeedY + Math.random() * g.maxSpeedY - g.minSpeedY).toFixed(2);
+                        break;
+                    case "down":
+                        this.speed.y = +(Math.random() * g.maxSpeedY + g.minSpeedY).toFixed(2);
+                        break;
+                    default:
+                        this.speed.y = +(-g.maxSpeedY / 2 + Math.random() * g.maxSpeedY).toFixed(2), this.speed.x += this.speed.y > 0 ? g.minSpeedY : -g.minSpeedY
+                }
+            }
+
+            function o(a, b) {
+                return b ? void(g[a] = b) : g[a]
+            }
+
+            function p() {
+                console.log("destroy"), r.parentNode.removeChild(r), q("onDestroy"), f && f(d).removeData("plugin_" + e)
+            }
+
+            function q(a) {
+                void 0 !== g[a] && g[a].call(d)
+            }
+            var r, s, t, u, v, w, x, y = !!b.createElement("canvas").getContext,
+                z = [],
+                A = 0,
+                B = 0,
+                C = !navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|BB10|mobi|tablet|opera mini|nexus 7)/i),
+                D = !!a.DeviceOrientationEvent,
+                E = 0,
+                F = 0,
+                G = !1;
+            return g = c({}, a[e].defaults, g), n.prototype.draw = function() {
+                s.beginPath(), s.arc(this.position.x + this.parallaxOffsetX, this.position.y + this.parallaxOffsetY, g.particleRadius / 2, 0, 2 * Math.PI, !0), s.closePath(), s.fill(), s.beginPath();
+                for (var a = z.length - 1; a > this.stackPos; a--) {
+                    var b = z[a],
+                        c = this.position.x - b.position.x,
+                        d = this.position.y - b.position.y,
+                        e = Math.sqrt(c * c + d * d).toFixed(2);
+                    e < g.proximity && (s.moveTo(this.position.x + this.parallaxOffsetX, this.position.y + this.parallaxOffsetY), g.curvedLines ? s.quadraticCurveTo(Math.max(b.position.x, b.position.x), Math.min(b.position.y, b.position.y), b.position.x + b.parallaxOffsetX, b.position.y + b.parallaxOffsetY) : s.lineTo(b.position.x + b.parallaxOffsetX, b.position.y + b.parallaxOffsetY))
+                }
+                s.stroke(), s.closePath()
+            }, n.prototype.updatePosition = function() {
+                if (g.parallax) {
+                    if (D && !C) {
+                        var a = (u - 0) / 60;
+                        w = (E - -30) * a + 0;
+                        var b = (v - 0) / 60;
+                        x = (F - -30) * b + 0
+                    } else w = A, x = B;
+                    this.parallaxTargX = (w - u / 2) / (g.parallaxMultiplier * this.layer), this.parallaxOffsetX += (this.parallaxTargX - this.parallaxOffsetX) / 10, this.parallaxTargY = (x - v / 2) / (g.parallaxMultiplier * this.layer), this.parallaxOffsetY += (this.parallaxTargY - this.parallaxOffsetY) / 10
+                }
+                var c = d.offsetWidth,
+                    e = d.offsetHeight;
+                switch (g.directionX) {
+                    case "left":
+                        this.position.x + this.speed.x + this.parallaxOffsetX < 0 && (this.position.x = c - this.parallaxOffsetX);
+                        break;
+                    case "right":
+                        this.position.x + this.speed.x + this.parallaxOffsetX > c && (this.position.x = 0 - this.parallaxOffsetX);
+                        break;
+                    default:
+                        (this.position.x + this.speed.x + this.parallaxOffsetX > c || this.position.x + this.speed.x + this.parallaxOffsetX < 0) && (this.speed.x = -this.speed.x)
+                }
+                switch (g.directionY) {
+                    case "up":
+                        this.position.y + this.speed.y + this.parallaxOffsetY < 0 && (this.position.y = e - this.parallaxOffsetY);
+                        break;
+                    case "down":
+                        this.position.y + this.speed.y + this.parallaxOffsetY > e && (this.position.y = 0 - this.parallaxOffsetY);
+                        break;
+                    default:
+                        (this.position.y + this.speed.y + this.parallaxOffsetY > e || this.position.y + this.speed.y + this.parallaxOffsetY < 0) && (this.speed.y = -this.speed.y)
+                }
+                this.position.x += this.speed.x, this.position.y += this.speed.y
+            }, n.prototype.setStackPos = function(a) {
+                this.stackPos = a
+            }, h(), {
+                option: o,
+                destroy: p,
+                start: m,
+                pause: l
+            }
+        }
+        var e = "particleground",
+            f = a.jQuery;
+        a[e] = function(a, b) {
+            return new d(a, b)
+        }, a[e].defaults = {
+            minSpeedX: .1,
+            maxSpeedX: .7,
+            minSpeedY: .1,
+            maxSpeedY: .7,
+            directionX: "center",
+            directionY: "center",
+            density: 1e4,
+            dotColor: "#666666",
+            lineColor: "#666666",
+            particleRadius: 7,
+            lineWidth: 1,
+            curvedLines: !1,
+            proximity: 100,
+            parallax: !0,
+            parallaxMultiplier: 5,
+            onInit: function() {},
+            onDestroy: function() {}
+        }, f && (f.fn[e] = function(a) {
+            if ("string" == typeof arguments[0]) {
+                var b, c = arguments[0],
+                    g = Array.prototype.slice.call(arguments, 1);
+                return this.each(function() {
+                    f.data(this, "plugin_" + e) && "function" == typeof f.data(this, "plugin_" + e)[c] && (b = f.data(this, "plugin_" + e)[c].apply(this, g))
+                }), void 0 !== b ? b : this
+            }
+            return "object" != typeof a && a ? void 0 : this.each(function() {
+                f.data(this, "plugin_" + e) || f.data(this, "plugin_" + e, new d(this, a))
+            })
+        })
+    }(window, document),
+    /**
+     * requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+     * @see: http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+     * @see: http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+     * @license: MIT license
+     */
+    function() {
+        for (var a = 0, b = ["ms", "moz", "webkit", "o"], c = 0; c < b.length && !window.requestAnimationFrame; ++c) window.requestAnimationFrame = window[b[c] + "RequestAnimationFrame"], window.cancelAnimationFrame = window[b[c] + "CancelAnimationFrame"] || window[b[c] + "CancelRequestAnimationFrame"];
+        window.requestAnimationFrame || (window.requestAnimationFrame = function(b) {
+            var c = (new Date).getTime(),
+                d = Math.max(0, 16 - (c - a)),
+                e = window.setTimeout(function() {
+                    b(c + d)
+                }, d);
+            return a = c + d, e
+        }), window.cancelAnimationFrame || (window.cancelAnimationFrame = function(a) {
+            clearTimeout(a)
+        })
+    }();
 
 
+    particleground(document.getElementById('particles-foreground'), {
+        dotColor: 'rgba(136, 25, 255, 1)',
+        lineColor: 'rgba(147, 66, 235, 0.1)',
+        minSpeedX: 0.3,
+        maxSpeedX: 0.6,
+        minSpeedY: 0.3,
+        maxSpeedY: 0.6,
+        density: 50000, // One particle every n pixels
+        curvedLines: false,
+        proximity: 250, // How close two dots need to be before they join
+        parallaxMultiplier: 10, // Lower the number is more extreme parallax
+        particleRadius: 4, // Dot size
+    });
 
-<!-- PARTICLE SCRIPT -->
-<script type="text/javascript">
-try{
-    ! function(a, b) {
-      "use strict";
-
-      function c(a) {
-          a = a || {};
-          for (var b = 1; b < arguments.length; b++) {
-              var c = arguments[b];
-              if (c)
-                  for (var d in c) c.hasOwnProperty(d) && ("object" == typeof c[d] ? deepExtend(a[d], c[d]) : a[d] = c[d])
-          }
-          return a
-      }
-
-      function d(d, g) {
-          function h() {
-              if (y) {
-                  r = b.createElement("canvas"), r.className = "pg-canvas", r.style.display = "block", d.insertBefore(r, d.firstChild), s = r.getContext("2d"), i();
-                  for (var c = Math.round(r.width * r.height / g.density), e = 0; c > e; e++) {
-                      var f = new n;
-                      f.setStackPos(e), z.push(f)
-                  }
-                  a.addEventListener("resize", function() {
-                      k()
-                  }, !1), b.addEventListener("mousemove", function(a) {
-                      A = a.pageX, B = a.pageY
-                  }, !1), D && !C && a.addEventListener("deviceorientation", function() {
-                      F = Math.min(Math.max(-event.beta, -30), 30), E = Math.min(Math.max(-event.gamma, -30), 30)
-                  }, !0), j(), q("onInit")
-              }
-          }
-
-          function i() {
-              r.width = d.offsetWidth, r.height = d.offsetHeight, s.fillStyle = g.dotColor, s.strokeStyle = g.lineColor, s.lineWidth = g.lineWidth
-          }
-
-          function j() {
-              if (y) {
-                  u = a.innerWidth, v = a.innerHeight, s.clearRect(0, 0, r.width, r.height);
-                  for (var b = 0; b < z.length; b++) z[b].updatePosition();
-                  for (var b = 0; b < z.length; b++) z[b].draw();
-                  G || (t = requestAnimationFrame(j))
-              }
-          }
-
-          function k() {
-              i();
-              for (var a = d.offsetWidth, b = d.offsetHeight, c = z.length - 1; c >= 0; c--)(z[c].position.x > a || z[c].position.y > b) && z.splice(c, 1);
-              var e = Math.round(r.width * r.height / g.density);
-              if (e > z.length)
-                  for (; e > z.length;) {
-                      var f = new n;
-                      z.push(f)
-                  } else e < z.length && z.splice(e);
-              for (c = z.length - 1; c >= 0; c--) z[c].setStackPos(c)
-          }
-
-          function l() {
-              G = !0
-          }
-
-          function m() {
-              G = !1, j()
-          }
-
-          function n() {
-              switch (this.stackPos, this.active = !0, this.layer = Math.ceil(3 * Math.random()), this.parallaxOffsetX = 0, this.parallaxOffsetY = 0, this.position = {
-                  x: Math.ceil(Math.random() * r.width),
-                  y: Math.ceil(Math.random() * r.height)
-              }, this.speed = {}, g.directionX) {
-                  case "left":
-                      this.speed.x = +(-g.maxSpeedX + Math.random() * g.maxSpeedX - g.minSpeedX).toFixed(2);
-                      break;
-                  case "right":
-                      this.speed.x = +(Math.random() * g.maxSpeedX + g.minSpeedX).toFixed(2);
-                      break;
-                  default:
-                      this.speed.x = +(-g.maxSpeedX / 2 + Math.random() * g.maxSpeedX).toFixed(2), this.speed.x += this.speed.x > 0 ? g.minSpeedX : -g.minSpeedX
-              }
-              switch (g.directionY) {
-                  case "up":
-                      this.speed.y = +(-g.maxSpeedY + Math.random() * g.maxSpeedY - g.minSpeedY).toFixed(2);
-                      break;
-                  case "down":
-                      this.speed.y = +(Math.random() * g.maxSpeedY + g.minSpeedY).toFixed(2);
-                      break;
-                  default:
-                      this.speed.y = +(-g.maxSpeedY / 2 + Math.random() * g.maxSpeedY).toFixed(2), this.speed.x += this.speed.y > 0 ? g.minSpeedY : -g.minSpeedY
-              }
-          }
-
-          function o(a, b) {
-              return b ? void(g[a] = b) : g[a]
-          }
-
-          function p() {
-              console.log("destroy"), r.parentNode.removeChild(r), q("onDestroy"), f && f(d).removeData("plugin_" + e)
-          }
-
-          function q(a) {
-              void 0 !== g[a] && g[a].call(d)
-          }
-          var r, s, t, u, v, w, x, y = !!b.createElement("canvas").getContext,
-              z = [],
-              A = 0,
-              B = 0,
-              C = !navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|BB10|mobi|tablet|opera mini|nexus 7)/i),
-              D = !!a.DeviceOrientationEvent,
-              E = 0,
-              F = 0,
-              G = !1;
-          return g = c({}, a[e].defaults, g), n.prototype.draw = function() {
-              s.beginPath(), s.arc(this.position.x + this.parallaxOffsetX, this.position.y + this.parallaxOffsetY, g.particleRadius / 2, 0, 2 * Math.PI, !0), s.closePath(), s.fill(), s.beginPath();
-              for (var a = z.length - 1; a > this.stackPos; a--) {
-                  var b = z[a],
-                      c = this.position.x - b.position.x,
-                      d = this.position.y - b.position.y,
-                      e = Math.sqrt(c * c + d * d).toFixed(2);
-                  e < g.proximity && (s.moveTo(this.position.x + this.parallaxOffsetX, this.position.y + this.parallaxOffsetY), g.curvedLines ? s.quadraticCurveTo(Math.max(b.position.x, b.position.x), Math.min(b.position.y, b.position.y), b.position.x + b.parallaxOffsetX, b.position.y + b.parallaxOffsetY) : s.lineTo(b.position.x + b.parallaxOffsetX, b.position.y + b.parallaxOffsetY))
-              }
-              s.stroke(), s.closePath()
-          }, n.prototype.updatePosition = function() {
-              if (g.parallax) {
-                  if (D && !C) {
-                      var a = (u - 0) / 60;
-                      w = (E - -30) * a + 0;
-                      var b = (v - 0) / 60;
-                      x = (F - -30) * b + 0
-                  } else w = A, x = B;
-                  this.parallaxTargX = (w - u / 2) / (g.parallaxMultiplier * this.layer), this.parallaxOffsetX += (this.parallaxTargX - this.parallaxOffsetX) / 10, this.parallaxTargY = (x - v / 2) / (g.parallaxMultiplier * this.layer), this.parallaxOffsetY += (this.parallaxTargY - this.parallaxOffsetY) / 10
-              }
-              var c = d.offsetWidth,
-                  e = d.offsetHeight;
-              switch (g.directionX) {
-                  case "left":
-                      this.position.x + this.speed.x + this.parallaxOffsetX < 0 && (this.position.x = c - this.parallaxOffsetX);
-                      break;
-                  case "right":
-                      this.position.x + this.speed.x + this.parallaxOffsetX > c && (this.position.x = 0 - this.parallaxOffsetX);
-                      break;
-                  default:
-                      (this.position.x + this.speed.x + this.parallaxOffsetX > c || this.position.x + this.speed.x + this.parallaxOffsetX < 0) && (this.speed.x = -this.speed.x)
-              }
-              switch (g.directionY) {
-                  case "up":
-                      this.position.y + this.speed.y + this.parallaxOffsetY < 0 && (this.position.y = e - this.parallaxOffsetY);
-                      break;
-                  case "down":
-                      this.position.y + this.speed.y + this.parallaxOffsetY > e && (this.position.y = 0 - this.parallaxOffsetY);
-                      break;
-                  default:
-                      (this.position.y + this.speed.y + this.parallaxOffsetY > e || this.position.y + this.speed.y + this.parallaxOffsetY < 0) && (this.speed.y = -this.speed.y)
-              }
-              this.position.x += this.speed.x, this.position.y += this.speed.y
-          }, n.prototype.setStackPos = function(a) {
-              this.stackPos = a
-          }, h(), {
-              option: o,
-              destroy: p,
-              start: m,
-              pause: l
-          }
-      }
-      var e = "particleground",
-          f = a.jQuery;
-      a[e] = function(a, b) {
-          return new d(a, b)
-      }, a[e].defaults = {
-          minSpeedX: .1,
-          maxSpeedX: .7,
-          minSpeedY: .1,
-          maxSpeedY: .7,
-          directionX: "center",
-          directionY: "center",
-          density: 1e4,
-          dotColor: "#666666",
-          lineColor: "#666666",
-          particleRadius: 7,
-          lineWidth: 1,
-          curvedLines: !1,
-          proximity: 100,
-          parallax: !0,
-          parallaxMultiplier: 5,
-          onInit: function() {},
-          onDestroy: function() {}
-      }, f && (f.fn[e] = function(a) {
-          if ("string" == typeof arguments[0]) {
-              var b, c = arguments[0],
-                  g = Array.prototype.slice.call(arguments, 1);
-              return this.each(function() {
-                  f.data(this, "plugin_" + e) && "function" == typeof f.data(this, "plugin_" + e)[c] && (b = f.data(this, "plugin_" + e)[c].apply(this, g))
-              }), void 0 !== b ? b : this
-          }
-          return "object" != typeof a && a ? void 0 : this.each(function() {
-              f.data(this, "plugin_" + e) || f.data(this, "plugin_" + e, new d(this, a))
-          })
-      })
-  }(window, document),
-  /**
-   * requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
-   * @see: http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-   * @see: http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-   * @license: MIT license
-   */
-  function() {
-      for (var a = 0, b = ["ms", "moz", "webkit", "o"], c = 0; c < b.length && !window.requestAnimationFrame; ++c) window.requestAnimationFrame = window[b[c] + "RequestAnimationFrame"], window.cancelAnimationFrame = window[b[c] + "CancelAnimationFrame"] || window[b[c] + "CancelRequestAnimationFrame"];
-      window.requestAnimationFrame || (window.requestAnimationFrame = function(b) {
-          var c = (new Date).getTime(),
-              d = Math.max(0, 16 - (c - a)),
-              e = window.setTimeout(function() {
-                  b(c + d)
-              }, d);
-          return a = c + d, e
-      }), window.cancelAnimationFrame || (window.cancelAnimationFrame = function(a) {
-          clearTimeout(a)
-      })
-  }();
-
-
-  particleground(document.getElementById('particles-foreground'), {
-      dotColor: 'rgba(136, 25, 255, 1)',
-      lineColor: 'rgba(147, 66, 235, 0.1)',
-      minSpeedX: 0.3,
-      maxSpeedX: 0.6,
-      minSpeedY: 0.3,
-      maxSpeedY: 0.6,
-      density: 50000, // One particle every n pixels
+    particleground(document.getElementById('particles-background'), {
+      dotColor: '#8fffdf',
+      lineColor: '#8fffdf',
+      minSpeedX: 0.075,
+      maxSpeedX: 0.15,
+      minSpeedY: 0.075,
+      maxSpeedY: 0.15,
+      density: 30000, // One particle every n pixels
       curvedLines: false,
-      proximity: 250, // How close two dots need to be before they join
-      parallaxMultiplier: 10, // Lower the number is more extreme parallax
-      particleRadius: 4, // Dot size
-  });
+      proximity: 20, // How close two dots need to be before they join
+      parallaxMultiplier: 20, // Lower the number is more extreme parallax
+      particleRadius: 5, // Dot size
+    });
+  }catch(error){
+    console.log(error);
+  }
+  </script>
 
-  particleground(document.getElementById('particles-background'), {
-    dotColor: '#8fffdf',
-    lineColor: '#8fffdf',
-    minSpeedX: 0.075,
-    maxSpeedX: 0.15,
-    minSpeedY: 0.075,
-    maxSpeedY: 0.15,
-    density: 30000, // One particle every n pixels
-    curvedLines: false,
-    proximity: 20, // How close two dots need to be before they join
-    parallaxMultiplier: 20, // Lower the number is more extreme parallax
-    particleRadius: 5, // Dot size
-  });
-}catch(error){
-  console.log(error);
-}
+<script type="text/javascript">
+  try{
+  navbar = document.getElementById("navbar").offsetHeight;
+  sidebar = document.getElementById("sidebar").offsetWidth;
+  
+  old_main = document.getElementById('main').offsetHeight;
+  old_showbox = document.getElementById('showbox').offsetWidth;
+  document.getElementById("main").setAttribute('style','height:'+old_main-navbar+'px');
+  document.getElementById("showbox").setAttribute('style','width:'+old_showbox-sidebar+'px');  
+  // old_bg = document.getElementById("particles-background").offsetWidth;
+  // old_fg = document.getElementById("particles-foreground").offsetWidth;
+  
+  // document.getElementById("particles-background").setAttribute('style','width:'+old_bg-sidebar+'px');
+  // document.getElementById("particles-foreground").setAttribute('style','width:'+old_fg-sidebar+'px');
+
+  document.getElementById("main").setAttribute('style','padding-top:'+navbar+'px');
+  document.getElementById("showbox").setAttribute('style','padding-left:'+sidebar+'px');
+  // document.getElementById("particles-background").setAttribute('style','padding-left:'+sidebar+'px');
+  // document.getElementById("particles-foreground").setAttribute('style','padding-left:'+sidebar+'px');  
+
+  document.getElementById('snav').setAttribute('style','visibility:visible');
+
+  console.log('main generated');
+  // document.getElementById("showbox").style.paddingTop += 20;
+  }catch (error){
+    console.log(error)
+  }
+  
 </script>
 
 
@@ -1408,20 +1533,7 @@ try{
 
 
 
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  </html>

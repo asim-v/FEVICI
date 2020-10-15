@@ -1,11 +1,11 @@
-from flask import Blueprint
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
-
-teams = Blueprint('teams',__name__)
+from init import *
 
 
+teamsBP = Blueprint('teamsBP',__name__)
 
-@teams.route("/recieve_invite/<invite_id>")
+
+
+@teamsBP.route("/recieve_invite/<invite_id>")
 def recieve_invite(invite_id):
     '''
         TODO: Dos opciones de invitación:
@@ -16,7 +16,7 @@ def recieve_invite(invite_id):
 
 
 
-@teams.route("/send_invite/<invite_to>")
+@teamsBP.route("/send_invite/<invite_to>")
 def send_invite(invite_to):
 	with teams.app_context():
 
@@ -44,10 +44,3 @@ def send_invite(invite_to):
 		except Exception as e:
 			return str(e)
 
-class team(object):
-    def __init__(self,id):
-        self.doc = user_doc = users_coll.document(id)
-        self.name = user_doc.get().to_dict().get("name")
-        self.email = user_doc.get().to_dict().get("email")
-        self.color = random.choice(["#6772E5","#D869D0","#FF71A6","#FF967B","#FFC761"])
-        self.initials = ''.join([x[0].upper() for x in self.name.split(' ')][:3])

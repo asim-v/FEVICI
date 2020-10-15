@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div class="row" style="margin-top:40px">
+  <div class="row" >
     <div class="col-lg-2"></div>
       <div class="col-lg-8">
 <!--       {% if project %}    DEBUG
@@ -31,7 +31,7 @@
 
 
 
-        <form method="POST" action="{{ url_for('update_about') }}" enctype=multipart/form-data>        
+        <form method="POST" action="{{ url_for('aboutBP.update_about') }}" enctype=multipart/form-data>        
           <div class="modal-content borderless shadowed">
             <div class="modal-header">
               <h3>Sobre Ti! &#128125;</h3>
@@ -64,7 +64,14 @@
             <div class="modal-body mx-3">
                 <div class="md-form"> 
                     <div class="row">
-                      <div class="col-sm-9">
+                      <div class="col-sm-9 order-2">
+                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Nombre(s)</label>
+                          {% if project['Nombres']|length > 0 %}
+                            <input name="nombres" placeholder="{{project['Nombres']}}" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
+                          {% else %}
+                            <input name="nombres" placeholder="" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
+                          {% endif %}                        
+                        <br>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Apellido(s)</label>
                           {% if project['Apellidos']|length > 0 %}
                             <input name="apellidos" placeholder="{{project['Apellidos']}}" value="{{project['Apellidos']}}" type="text" autofocus class="form-control">
@@ -72,15 +79,10 @@
                             <input name="apellidos" placeholder="" value="{{project['Apellidos']}}" type="text" autofocus class="form-control">
                           {% endif %}
 
-                        <br>
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Nombre(s)</label>
-                          {% if project['Nombres']|length > 0 %}
-                            <input name="nombres" placeholder="{{project['Nombres']}}" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
-                          {% else %}
-                            <input name="nombres" placeholder="" value="{{project['Nombres']}}" type="text" autofocus class="form-control">
-                          {% endif %}
+
+
                       </div>
-                      <div class="col-sm-3">
+                      <div class="col-sm-3 order-1 " >
 
 
 
@@ -94,6 +96,7 @@
 
 <style type="text/css">
     .upload {
+    left: 50%;transform: translateX(-50%);position: relative;
     background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{profileid}});
     background-size: auto 100%;
     background-repeat: no-repeat;
@@ -104,8 +107,8 @@
     --border-radius:50%;
     border-radius: 50%;
     border: dotted lightgrey;
-    width: 125px; 
-    height: 125px;
+    width: 115px; 
+    height: 115px;
     position: relative;
     display: -webkit-box;
     display: flex;
@@ -447,7 +450,7 @@ function start() {
                         color: #c00;
                         border: none;
                     }.pretty{
-                      background-color: #F9F8FF;
+                      background-color: #fff;
                       border-style: none;
                       padding:.375rem .75rem;
                       border-radius: 15px;  
@@ -459,6 +462,7 @@ function start() {
                       {% else %}
                         <input id="Fecha" type="date" name="Fecha" class="pretty"><br>
                       {% endif %}
+                                  
                     <script type="text/javascript">
                     yepnope({ // or Modernizr.load
                         test: Modernizr.inputtypes.date,

@@ -1,0 +1,81 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style type="text/css">
+  canvas {
+    position: absolute;
+    z-index: -10;
+  }
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<aside class="note">
+  <h1>Mapa de Hénon</h1>
+
+  <p>El mapa de Hénon es un sistema dinámico discreto en el tiempo. Es uno de los ejemplos de sistemas dinámicos más estudiado que muestra comportamiento caótico.El mapa depende de dos parámetros, a y b, el cual para el mapa clásico de Hénon tiene valores de a = 1.4 y b = 0.3. Para los valores clásicos el mapa de Hénon es caótico. Para otros valores de a y b el mapa puede ser caótico, intermitente, o converger a una órbita periódica.</p>
+  <p><a href="https://github.com/timseverien">Créditos</a>.</p>
+</aside>
+<script type="text/javascript">
+// Inspired by:
+// - https://codepen.io/pimskie/pen/aWNbBw
+// - http://paulbourke.net/fractals/henonphase
+
+const birand = () => (Math.random() * 2) - 1;
+const lerp = (min, max, t) => min + (t * (max - min));
+
+const canvas = document.createElement('canvas');
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth * window.devicePixelRatio;
+const context = canvas.getContext('2d');
+context.globalCompositeOperation = 'lighter';
+context.globalAlpha = .25;
+
+const canvasSizeMin = Math.min(canvas.width, canvas.height);
+const scale = canvasSizeMin / 3;
+
+const a = 1.2;
+const acos = Math.cos(a);
+const asin = Math.sin(a);
+const radiusMax = 3;
+
+let x = birand();
+let y = birand();
+let n = 0;
+
+const render = () => {
+  x = birand();
+  y = birand();
+  
+  for (let i = 0; i < 1000; i++) {
+    const radius = (x * x) + (y * y);
+
+    if (radius > radiusMax) break;
+    
+    const tRadius = radius / radiusMax;
+    
+    const b = y - (x * x);
+    const xNew = (x * acos) - (b * asin);
+    const yNew = (x * asin) + (b * acos);
+    
+    x = xNew;
+    y = yNew;
+
+    context.save();
+    
+    const hue = lerp(180, 240, Math.sqrt(tRadius));
+    context.fillStyle = `hsl(${hue}, 100%, 50%)`;
+    
+    context.translate(canvas.width * 0.3, canvas.height * 0.5);
+    context.beginPath();
+    context.arc(x * scale, y * scale, 0.5, 0, Math.PI * 2, false);
+    context.fill();
+
+    context.restore();
+  }
+  
+  if (++n < 1000) requestAnimationFrame(render);
+};
+
+document.body.appendChild(canvas);
+render();  
+</script>
+

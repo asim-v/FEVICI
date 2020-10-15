@@ -1,12 +1,12 @@
-from flask import Blueprint,request
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory
-import random
-
-login = Blueprint('login',__name__)
+from init import *
 
 
 
-@login.route('/login', methods=["GET","POST"])
+loginBP = Blueprint('loginBP',__name__)
+
+
+
+@loginBP.route('/login', methods=["GET","POST"])
 def user_login():
     if (request.method == "POST"):
         user_email = request.form['userEmail']
@@ -23,7 +23,7 @@ def user_login():
             session['session_id'] = user_session_cookie
 
             # if username passwd valid then redirect to index page
-            return redirect(url_for('index_page'))
+            return redirect(url_for('indexBP.index_page'))
 
         except requests.HTTPError as e:
             if ("EMAIL_NOT_FOUND" in str(e)):
@@ -45,11 +45,11 @@ def user_login():
     # 7 - Mandelbrot set
     # 8 - Stars
 
-    return render_template("login.html",auth = False,visualization = random.choice([1]))
+    return render_template("login.html",auth = False)
     
 
-@login.route('/logout')
+@loginBP.route('/logout')
 def user_logout():
     session.pop('session_id', None)
     session.clear()
-    return redirect(url_for('index_page'))
+    return redirect(url_for('indexBP.index_page'))
