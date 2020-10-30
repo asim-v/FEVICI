@@ -30,6 +30,10 @@ def user_register():
                                 "image_id":"default.png",
                                 "image_name":"default.png"
                             },
+                            "project_cover":{
+                                "image_id":"default_cover4.png",
+                                "image_name":"default_cover4.png"
+                            },                            
                             "connected_chats": [],
                             "project_desc":{},
                             "project_file":{"project_id":0,"project_team":[session['id']],"project_name":''}

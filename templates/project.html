@@ -33,8 +33,24 @@
 
         <form method="POST" action="{{ url_for('projectBP.update') }}" enctype=multipart/form-data>        
           <div class="modal-content borderless shadowed">
-            <div class="modal-header">
-              <h3>Tu proyecto! &#128640;</h3>
+            <div class="modal-header project-header" style="background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{coverid}});">
+              <div class="intro-header"><h3>Tu proyecto! &#128640;</h3></div>
+         
+              <!-- <button class="change-picture"><i class="fa fa-camera"></i></button> -->
+              <!-- <div class="change-picture"><a href=""><i class="fa fa-camera"></i></a></div> -->
+              <label id="thumb" class="change-picture"><input type="file" name="thumbnail" title="thumbnail" id="thumbnail" placeholder="" /><i class="fa fa-camera"></i></label>
+<script type="text/javascript">
+  $("#thumbnail").on("change", function(){
+  // Name of file and placeholder
+  var file = this.files[0].name;
+  var dflt = $(this).attr("placeholder");
+  if($(this).val()!=""){
+    $("#thumb").text(file);
+  } else {    
+    $(this).next().text(dflt);
+  }
+});
+</script>                   
             </div>
             <div class="modal-header">
               <h8 class="modal-title" id="exampleModalLabel">Esta parte del proyecto ayuda a los jueces a entenderlo mejor así que por favor se breve y específico.<br><br>Puedes guardar tu progreso y regresar las veces que necesites, antes de la fecha límite</h7>

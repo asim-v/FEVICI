@@ -1,6 +1,7 @@
 from init import *
 
 
+
 projectBP = Blueprint('projectBP',__name__)
 
 class team(object):
@@ -21,16 +22,13 @@ def project():
     proj_desc= proj["project_desc"]
     proj_file = proj["project_file"]
 
+    about_file_ID = proj["project_cover"]["image_id"]
+    session['project_cover_ID'] = about_file_ID
+
     #generates team list object for visualizing teammates
     team_list = [team(x) for x in proj_file["project_team"]]
 
-    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5,profileid=session["about_file_ID"])
-
-def allowed_file(filename):
-    '''
-        Extensión en extensiones permitidas?
-    '''
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return render_template("project.html",user_name=session["user_name"],team_list = team_list,project = proj_desc,limit=limit,status = session['status'],proj_file = proj_file,active=5,profileid=session["about_file_ID"],coverid=session["project_cover_ID"])
 
 
 @projectBP.route("/update", methods=["POST"])
@@ -55,7 +53,7 @@ def update():
 
 
 
-            if request.files['file'] and not allowed_file(request.files['file'].filename):
+            if request.files['file'] and (not allowed_file(request.files['file'].filename) or allowed_image(request.files['thumbnail'].filename)):
 
                 save_json({"project_desc":data})
                 
@@ -65,21 +63,33 @@ def update():
             else:                
                 try:
                     #Obtener spec para guardar
-                    user_doc = users_coll.document(session['id'])
-                    project_details = user_doc.get().to_dict().get("project_file")
+                    user_doc = users_coll.document(session['id'])                                    
                 except Exception as e:return "DB error"+str(e)
 
+
+
                 try:
-                    # return save_file(request.files['file']) #DEBUG
-                    #Save file devuelve el id del archivo que se guarda con la func                    
-                    project_details["project_id"] = save_file(request.files['file'])              
-                    project_details["project_name"] = request.files['file'].filename
-                except Exception as e:pass
+                    if request.files['file'] != None:
+                        # return save_file(request.files['file']) #DEBUG
+                        #Save file devuelve el id del archivo que se guarda con la func                    
+                        project_details = user_doc.get().to_dict().get("project_file")
+                        project_details["project_id"] = save_file(request.files['file'])              
+                        return jsonify(str(save_file(request.files['file'])))
+                        project_details["project_name"] = request.files['file'].filename                    
+                        save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
+                except Exception as e:return "Project File"+str(e)
                     
-                try:            
-                    
-                    save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
-                    save_json({"project_desc":data})  #Guardar el data parseado de los forms
+
+                try:
+                    if request.files['thumbnail'] != None:
+                        project_cover = user_doc.get().to_dict().get("project_cover")
+                        project_cover["image_id"] = save_file(request.files['thumbnail'])
+                        project_cover["image_name"] = request.files['thumbnail'].filename
+                        save_json({"project_cover":project_cover})
+                except Exception as e:return "Thumbnail error"+str(e)
+
+                try:                                                
+                    save_json({"project_desc":data})  #Guardar el data parseado de los forms                    
                 except Exception as e:return "Json error"+str(e)
 
                 #guarda rque salio bien en status

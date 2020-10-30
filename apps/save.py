@@ -1,3 +1,6 @@
+from ..init import *
+
+
 ALLOWED_EXTENSIONS = ['pdf','docx']
 ALLOWED_IMAGES = ['png','jpg','jpeg']
 
@@ -6,6 +9,7 @@ def save_json(data,uid = None):
         INPUT = dict
         Guardar data json en id[default el de la sesion] de la bd, se hace la asignacion de este modo para evitar el sessionoutofcontext error
     '''
+    global users_coll
     try:
         u_id = session['id'] if (uid == None) else uid
         user_doc = users_coll.document(u_id)
@@ -19,6 +23,7 @@ def save_file(file,uid = None):
         Devuelve el id de donde ha sido guardado
     '''
     # gets the id of he old file to delete it
+    global users_coll
     user_doc = users_coll.document(session['id'])
     user_details = user_doc.get().to_dict()   
     try:

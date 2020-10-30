@@ -2,11 +2,11 @@ pycryptodome==3.6.6
 werkzeug==0.16.0
 flask_mail
 flask
-werkzeug
 firebase_admin
 firebase
 gcloud
 flask_socketio
-firebase_user_auth
 requests
 requests_toolbelt
+python_jwt
+sseclient
