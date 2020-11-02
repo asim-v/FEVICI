@@ -116,12 +116,12 @@ def save_file(file,uid = None):
     
     user_doc = users_coll.document(session['id'])
     user_details = user_doc.get().to_dict()   
-    try:
-        project = user_details.get("project_file")['project_id']
-        blob = bucket.blob(project) 
-        blob.delete()
-    except Exception as e:return str(e)
-    # gets the old file and deletes it
+    # try:
+    #     project = user_details.get("project_file")['project_id']
+    #     blob = bucket.blob(project) 
+    #     blob.delete()
+    # except Exception as e:return str(e)
+    # # gets the old file and deletes it
     
 
     new_filename = ''.join([str(int(random.random()*1000000))])                    
@@ -140,6 +140,7 @@ def allowed_image(filename):
     '''
         Extensión en extensiones permitidas?
     '''
+    if filename in ('',None):return False
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
 
 
@@ -147,4 +148,5 @@ def allowed_file(filename):
     '''
         Extensión en extensiones permitidas?
     '''
+    if filename in ('',None):return False
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

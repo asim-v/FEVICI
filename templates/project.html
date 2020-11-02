@@ -38,19 +38,28 @@
          
               <!-- <button class="change-picture"><i class="fa fa-camera"></i></button> -->
               <!-- <div class="change-picture"><a href=""><i class="fa fa-camera"></i></a></div> -->
-              <label id="thumb" class="change-picture"><input type="file" name="thumbnail" title="thumbnail" id="thumbnail" placeholder="" /><i class="fa fa-camera"></i></label>
-<script type="text/javascript">
-  $("#thumbnail").on("change", function(){
-  // Name of file and placeholder
-  var file = this.files[0].name;
-  var dflt = $(this).attr("placeholder");
-  if($(this).val()!=""){
-    $("#thumb").text(file);
-  } else {    
-    $(this).next().text(dflt);
-  }
-});
-</script>                   
+              
+              <label class="change-picture">
+                <input type="file" name="thumbnail" id="thumbnail" title="thumbnail"  placeholder="" /><i class="fa fa-camera"><span id="thumb" ></span></i>
+              </label>
+
+              <script type="text/javascript">
+                $("#thumbnail").on("change", function(){
+                // Name of file and placeholder
+                var file = this.files[0].name;
+                var dflt = "";
+                if($(this).val()!=""){
+                  try{
+                    newfile = file.slice(0,5) + '...' +file.slice(file.length-7)
+                    document.getElementById("thumb").classList.add("description");
+                    $("#thumb").text(newfile);
+                  }catch(err){
+                    $("#thumb").text(file);  
+                  }
+                  
+                } 
+              });
+              </script>                   
             </div>
             <div class="modal-header">
               <h8 class="modal-title" id="exampleModalLabel">Esta parte del proyecto ayuda a los jueces a entenderlo mejor así que por favor se breve y específico.<br><br>Puedes guardar tu progreso y regresar las veces que necesites, antes de la fecha límite</h7>

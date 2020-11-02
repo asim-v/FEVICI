@@ -38,63 +38,74 @@ def update():
         {'Nombre':nombre,...}
         - El formulario está hecho para tener dentro la información previa del usuario 
     '''
+    def verifyForm(form):       
+        data = {}
+        for field in form: 
+            try:
+                if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  
+                     # Solo subir si no está vacio el formulario
+                    data[field[0].upper()+field[1:]] = request.form[field]
+            except Exception as e:return str(e)#;print(str(request.form[field]))        
+
+
     if request.method == "POST":
         try: 
 
-            data = {}
+            
             form = request.form
+            data = verifyForm(form)
+
+            try:
+                #Obtener spec para guardar
+                user_doc = users_coll.document(session['id'])                                    
+            except Exception as e:return "DB error"+str(e)
 
 
-            for field in form: 
-                try:
-                    if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
-                        data[field[0].upper()+field[1:]] = request.form[field]
-                except Exception as e:return str(e)#;print(str(request.form[field]))
+            # return jsonify(str(request.files))
+            try:file = request.files['file'].filename                
+            except:file = ''
+            try:image = request.files['thumbnail'].filename
+            except:image = ''
 
 
-
-            if request.files['file'] and (not allowed_file(request.files['file'].filename) or allowed_image(request.files['thumbnail'].filename)):
-
-                save_json({"project_desc":data})
-                
-                session["status"] = "Se guardaron los datos pero el archivo subido no es compatible, los formatos aceptados son PDF,DOCX"
-                return redirect(url_for("projectBP.project"))  
-
-            else:                
-                try:
-                    #Obtener spec para guardar
-                    user_doc = users_coll.document(session['id'])                                    
-                except Exception as e:return "DB error"+str(e)
-
-
-
-                try:
-                    if request.files['file'] != None:
-                        # return save_file(request.files['file']) #DEBUG
-                        #Save file devuelve el id del archivo que se guarda con la func                    
-                        project_details = user_doc.get().to_dict().get("project_file")
-                        project_details["project_id"] = save_file(request.files['file'])              
-                        return jsonify(str(save_file(request.files['file'])))
-                        project_details["project_name"] = request.files['file'].filename                    
-                        save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
-                except Exception as e:return "Project File"+str(e)
-                    
-
-                try:
-                    if request.files['thumbnail'] != None:
-                        project_cover = user_doc.get().to_dict().get("project_cover")
-                        project_cover["image_id"] = save_file(request.files['thumbnail'])
-                        project_cover["image_name"] = request.files['thumbnail'].filename
-                        save_json({"project_cover":project_cover})
+            if allowed_image(image):
+                try:                
+                    project_cover = user_doc.get().to_dict().get("project_cover")
+                    project_cover["image_id"] = save_file(request.files['thumbnail'])
+                    project_cover["image_name"] = image
+                    save_json({"project_cover":project_cover})
                 except Exception as e:return "Thumbnail error"+str(e)
-
-                try:                                                
-                    save_json({"project_desc":data})  #Guardar el data parseado de los forms                    
-                except Exception as e:return "Json error"+str(e)
-
-                #guarda rque salio bien en status
+                
                 session["status"] = "Success"
                 return redirect(url_for("projectBP.project"))  
+
+
+            if allowed_file(file):
+                try:                
+                    # return save_file(request.files['file']) #DEBUG
+                    #Save file devuelve el id del archivo que se guarda con la func                    return jsonify(str(save_file(request.files['file'])))
+                    project_details = user_doc.get().to_dict().get("project_file")
+                    project_details["project_id"] = save_file(request.files['file'])                                      
+                    project_details["project_name"] = file                    
+                    save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
+                except Exception as e:return "Project File"+str(e)                                       
+                session["status"] = "Success"
+                return redirect(url_for("projectBP.project"))  
+
+            
+            if not allowed_file(file) and not allowed_image(image):
+                save_json({"project_desc":data})            
+                session["status"] = "Se guardaron los datos pero ninguno de los archivos son compatibles"
+                return redirect(url_for("projectBP.project"))                  
+                            
+
+            try:                                                
+                save_json({"project_desc":data})  #Guardar el data parseado de los forms                    
+            except Exception as e:return "Json error"+str(e)
+
+            #guarda rque salio bien en status
+            session["status"] = "Success"
+            return redirect(url_for("projectBP.project"))  
 
         except Exception as e:return "FORM EXCEPTION: "+str(e)
     else: return 
