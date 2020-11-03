@@ -23,6 +23,7 @@ def send_invite(invite_to):
 		'''
 		    La pagina genera un id de invitación que al ser usado por otro usuario, sobreescribe su proyecto con el id del proyecto con el del enviado
 		'''
+		return jsonify('1')
 		invite_to = str(invite_to)
 		# invite_to = str(invite_to)
 		msg = Message("Sup Famille",
