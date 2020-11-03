@@ -107,7 +107,9 @@ def save_json(data,uid = None):
     except:
         return 'Save_json error'
 
-def save_file(file,uid = None):
+
+
+def save_file(file,uid = None,doc = False):
     '''
         Dado objeto file, guardar en base de datos fevici en proyectos
         Devuelve el id de donde ha sido guardado
@@ -116,12 +118,13 @@ def save_file(file,uid = None):
     
     user_doc = users_coll.document(session['id'])
     user_details = user_doc.get().to_dict()   
-    # try:
-    #     project = user_details.get("project_file")['project_id']
-    #     blob = bucket.blob(project) 
-    #     blob.delete()
-    # except Exception as e:return str(e)
-    # # gets the old file and deletes it
+    if doc:
+        try:
+            project = user_details.get("project_file")['project_id']
+            blob = bucket.blob(project) 
+            blob.delete()
+        except Exception as e:pass
+        # gets the old file and deletes it
     
 
     new_filename = ''.join([str(int(random.random()*1000000))])                    

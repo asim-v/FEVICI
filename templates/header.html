@@ -180,15 +180,18 @@
         text-decoration: none;
       }
       .ping{
-        color: #fe5858;
+        background-color: #fe5858;
         position: absolute;
         border-radius: 5px;
-        border: 2px white;
-        font-size: 30px;
+        border: 2px solid white;
+        /* font-size: 30px; */
+        border-radius: 50%;
         z-index: 20;
         left: 60%;
-        top: 30%;
+        height: 10px;
+        top: 64%;
         text-shadow: 0px 0px 4px #f3e8ff;
+        width: 10px;
       }
       .collapse-left{
         position: fixed;
@@ -221,27 +224,27 @@
       <div class="icon-sidebar column" id="sidebar">
         <div class="row">
           <div class="subicon-sidebar {% if active == 1 %}active{% endif %}" id="a">            
-            <a class="subicon" href="/"><div class="ping">•</div><i class="fas fa-home" aria-hidden="True" ></i></a></div>
+            <a class="subicon" href="/"><div class="ping"></div><i class="fas fa-home" aria-hidden="True" ></i></a></div>
         </div>
         <div class="row">
           <div class="subicon-sidebar {% if active == 2 %}active{% endif %}" id="b">
-            <a class="subicon" href="/about" ><div class="ping">•</div><i class="fas fa-address-card" aria-hidden="True"></i></a></div>       
+            <a class="subicon" href="/about" ><div class="ping"></div><i class="fas fa-address-card" aria-hidden="True"></i></a></div>       
         </div>
         <div class="row">
           <div class="subicon-sidebar {% if active == 3 %}active{% endif %}"><a class="subicon" href="/calendar" >
-            <i class="fas fa-calendar" aria-hidden="True"><div class="ping">•</div></i></a></div>
+            <i class="fas fa-calendar" aria-hidden="True"><div class="ping"></div></i></a></div>
         </div>
         <div class="row">
           <div class="subicon-sidebar {% if active == 4 %}active{% endif %}"><a class="subicon" href="/chat" >
-            <div class="ping">•</div><i class="fas fa-comments" aria-hidden="True"></i></a></div>
+            <div class="ping"></div><i class="fas fa-comments" aria-hidden="True"></i></a></div>
         </div>
         <div class="row">
           <div class="subicon-sidebar {% if active == 5 %}active{% endif %}"><a class="subicon" href="/project" >
-            <div class="ping">•</div><i class="fas fa-flask" aria-hidden="True"></i></a></div>
+            <div class="ping"></div><i class="fas fa-flask" aria-hidden="True"></i></a></div>
         </div>    
         <div class="row">
           <div class="subicon-sidebar {% if active == 6 %}active{% endif %}"><a class="subicon" href="/expo" >
-            <div class="ping">•</div><i class="fas fa-store" aria-hidden="True"></i></a></div>
+            <div class="ping"></div><i class="fas fa-store" aria-hidden="True"></i></a></div>
         </div>  
       </div>
 
@@ -448,8 +451,9 @@
       }
       .tooltip .tooltiptext {
         
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Roboto', sans-serif;
         visibility: hidden;
+        transition: all;
         width: 220px;
         color: #fff;
         border-radius: 10px;
@@ -459,7 +463,7 @@
 
         /* Position the tooltip */
         position: absolute;
-
+        z-index: 100;
       }
       .tooltip:hover .tooltiptext {
         visibility: visible;
@@ -848,7 +852,8 @@
 
     .ddheader img {
       border-radius: 50%;
-      height: 52px;
+      height: 50px;
+      width: 50px;
     }
 
     .ddheader .ddname {

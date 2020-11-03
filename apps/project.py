@@ -85,7 +85,7 @@ def update():
                     # return save_file(request.files['file']) #DEBUG
                     #Save file devuelve el id del archivo que se guarda con la func                    return jsonify(str(save_file(request.files['file'])))
                     project_details = user_doc.get().to_dict().get("project_file")
-                    project_details["project_id"] = save_file(request.files['file'])                                      
+                    project_details["project_id"] = save_file(request.files['file'],doc=True)                                      
                     project_details["project_name"] = file                    
                     save_json({"project_file":project_details})  #Guardar el nuevo data con el id agregado                
                 except Exception as e:return "Project File"+str(e)                                       
