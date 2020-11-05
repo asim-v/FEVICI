@@ -90,345 +90,401 @@
 
 
 
-
-
-
-
 <style type="text/css">
-    .upload {
-    left: 50%;transform: translateX(-50%);position: relative;
-    background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{profileid}});
-    background-size: auto 100%;
-    background-repeat: no-repeat;
-    --text-drop: #CAC8CA;
-    --text-upload: #2D2C2F;
-    --progress-color: #E7E5E7;
-    --check-color: var(--text-upload);
-    --border-radius:50%;
-    border-radius: 50%;
-    border: solid #d3d4db 5px;
-    width: 115px; 
-    height: 115px;
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-            align-items: center;
-  }
-  .upload::before {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: var(--background);
-    border-radius: var(--border-radius);
-    -webkit-transition: all .3s ease-out;
-    transition: all .3s ease-out;
-    box-shadow: var(--shadow-x, 0px) var(--shadow-y, 1px) var(--shadow-blur, 3px) rgba(0, 0, 0, 0.1);
-    -webkit-transform: scale(var(--scale, 1));
-            transform: scale(var(--scale, 1));
-  }
-  .upload .drop-here {
-    position: absolute;
-    width: 100%;
-    
-    outline: none;
-    border-radius: var(--border-radius);
-    opacity: var(--opacity, 0);
-    overflow: hidden;
-    cursor: pointer;
-    text-indent: -9999px;
-    z-index: 1;
-  }
-  .upload .text {
-    position: absolute;
-    font-size: 21px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: bold;
-  }
-  .upload .text.text-drop {
-    color: var(--text-drop);
-    opacity: var(--opacity, 1);
-    -webkit-transition: opacity .15s ease-out .15s;
-    transition: opacity .15s ease-out .15s;
-  }
-  .upload .text.text-upload {
-    color: var(--text-upload);
-    opacity: var(--opacity, 0);
-    -webkit-transition: opacity .15s ease-out;
-    transition: opacity .15s ease-out;
-  }
-  .upload .progress-wrapper {
-    position: absolute;
-  }
-  .upload .progress-wrapper .progress {
-    fill: none;
-    stroke: var(--progress-color);
-    stroke-width: 3;
-    stroke-dasharray: 722;
-    stroke-dashoffset: 722;
-  }
-  .upload .check-wrapper {
-    position: absolute;
-    opacity: var(--opacity, 0);
-    -webkit-transform: scale(var(--scale, 0.9)) rotate(var(--rotate, 3deg));
-            transform: scale(var(--scale, 0.9)) rotate(var(--rotate, 3deg));
-    -webkit-transition: opacity .15s ease-in, -webkit-transform .15s ease-in-out;
-    transition: opacity .15s ease-in, -webkit-transform .15s ease-in-out;
-    transition: transform .15s ease-in-out, opacity .15s ease-in;
-    transition: transform .15s ease-in-out, opacity .15s ease-in, -webkit-transform .15s ease-in-out;
-  }
-  .upload .check-wrapper .check {
-    width: 100px;
-    width: 100px;
-    fill: none;
-    background-clip: red;
-    stroke: #8fffdf;
-    stroke-width: 5;
-    stroke-dasharray: 50 0;
-    stroke-dashoffset: 50;
-  }
-  .upload .shadow {
-    opacity: var(--opacity, 0);
-    overflow: hidden;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    border-radius: var(--border-radius);
-    -webkit-filter: blur(25px);
-            filter: blur(25px);
-    z-index: -1;
-    -webkit-transition: all .5s ease;
-    transition: all .5s ease;
-  }
-  .upload .shadow::before {
-    content: '';
-    position: absolute;
-    top: -25%;
-    left: -25%;
-    height: 150%;
-    width: 150%;
-    background: conic-gradient(#4b82d4, #6a29e9, #4b82d4, #6a29e9, #c58357, #FFC940, #4b82d4);
-    -webkit-animation: shadow-animate 5s linear infinite;
-            animation: shadow-animate 5s linear infinite;
-  }
-  .upload.drag {
-    --scale: 1.03;
-    --shadow-y: 5px;
-    --shadow-blur: 20px;
-  }
-  .upload.drop .text.text-drop {
-    --opacity: 0;
-    -webkit-transition: opacity .15s ease-out;
-    transition: opacity .15s ease-out;
-  }
-  .upload.drop .text.text-upload {
-    --opacity: 1;
-    -webkit-transition: opacity .15s ease-out .15s;
-    transition: opacity .15s ease-out .15s;
-  }
-  .upload.drop .shadow {
-    --opacity: 1;
-  }
-  .upload.drop .progress-wrapper {
-    opacity: var(--opacity, 1);
-    -webkit-transform: scale(var(--scale, 1)) rotate(var(--rotate, -90deg));
-            transform: scale(var(--scale, 1)) rotate(var(--rotate, -90deg));
-  }
-  .upload.drop .progress-wrapper .progress {
-    -webkit-animation: progress-animate 3s ease .3s forwards;
-            animation: progress-animate 3s ease .3s forwards;
-  }
-  .upload.done {
-    --opacity: 0.5;
-    top: 50%;
-  }
-  .upload.done .text.text-upload {
-    --opacity: 0;
-  }
-  .upload.done .shadow {
-    --opacity: 0;
-  }
-  .upload.done .progress-wrapper {
-    --scale: .95;
-    -webkit-transition: opacity .3s, -webkit-transform .3s;
-    transition: opacity .3s, -webkit-transform .3s;
-    transition: transform .3s, opacity .3s;
-    transition: transform .3s, opacity .3s, -webkit-transform .3s;
-  }
-  .upload.done .check-wrapper {
-    --opacity: 1;
-    --scale: 1;
-    --rotate: 0deg;
-    -webkit-transition: opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
-    transition: opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
-    transition: transform .5s ease-in-out .3s, opacity .5s ease-in .3s;
-    transition: transform .5s ease-in-out .3s, opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
-  }
-  .upload.done .check-wrapper .check {
-    -webkit-animation: check-animate .5s ease-in-out .3s forwards;
-            animation: check-animate .5s ease-in-out .3s forwards;
-  }
-
-  @-webkit-keyframes shadow-animate {
-    0% {
-      -webkit-transform: rotate(0deg);
-              transform: rotate(0deg);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-              transform: rotate(360deg);
-    }
-  }
-
-  @keyframes shadow-animate {
-    0% {
-      -webkit-transform: rotate(0deg);
-              transform: rotate(0deg);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-              transform: rotate(360deg);
-    }
-  }
-  @-webkit-keyframes progress-animate {
-    0% {
-      stroke-dashoffset: 722;
-    }
-    20% {
-      stroke-dashoffset: 500;
-    }
-    50% {
-      stroke-dashoffset: 322;
-    }
-    55% {
-      stroke-dashoffset: 300;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-  @keyframes progress-animate {
-    0% {
-      stroke-dashoffset: 722;
-    }
-    20% {
-      stroke-dashoffset: 500;
-    }
-    50% {
-      stroke-dashoffset: 322;
-    }
-    55% {
-      stroke-dashoffset: 300;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-  @-webkit-keyframes check-animate {
-    0% {
-      stroke-dasharray: 0 100;
-      stroke-dashoffset: 0;
-    }
-    100% {
-      stroke-dasharray: 100 0;
-      stroke-dashoffset: 100;
-    }
-  }
-  @keyframes check-animate {
-    0% {
-      stroke-dasharray: 0 100;
-      stroke-dashoffset: 0;
-    }
-    100% {
-      stroke-dasharray: 100 0;
-      stroke-dashoffset: 100;
-    }
-  }
-
-  body .socials {
-    position: fixed;
-    display: block;
-    left: 20px;
-    bottom: 20px;
-  }
-  body .socials > a {
-    display: block;
-    width: 30px;
-    opacity: .2;
-    -webkit-transform: scale(var(--scale, 0.8));
-            transform: scale(var(--scale, 0.8));
-    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-    transition: -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-    transition: transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-    transition: transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91), -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-  }
-  body .socials > a:hover {
-    --scale: 1;
-  }
-  .profile{
-    height: 200px ; 
-    left: 50%;
-    z-index: 10;
-  }
-</style>   
-<!-- 
-style="background-image: url(https://storage.googleapis.com/fevici.appspot.com/{{id}});background-size: 100%" -->
-
-<label class="my-1 mr-2" for="inlineFormCustomSelectPref">Foto de perfil:<br>{{name}}</label>
-
-<div class="upload" id="upload">
-  <input type="file" name="file" title="file" class="drop-here">
-  {% if name %}
-    <div class="text text-drop" ></div>
-  {%else%}
-    <div class="text text-drop">Soltar archivo aqui</div>
-  {%endif%}
-  <div class="text text-upload">Cargando...</div>
-  <svg class="progress-wrapper" width="50" height="50">
-    <circle class="progress" r="115" cx="150" cy="150"></circle>
-  </svg>
-  <svg class="check-wrapper" width="130" height="130">
-    <polyline class="check" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-  </svg>
-  <div class="shadow"></div>
-</div>
-
-
-
-
-<!--- ## DRIBBBLE + TWITTER ############# -->
-<!-- <div class="socials">
-  <a class="dribbble" href="https://dribbble.com/shots/8571590-Upload-Animation" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 32 32"><path fill-rule="evenodd" clip-rule="evenodd" fill="black" d="M16 0C7.16703 0 0 7.16703 0 16C0 24.833 7.16703 32 16 32C24.8156 32 32 24.833 32 16C32 7.16703 24.8156 0 16 0ZM26.5683 7.37527C28.4772 9.70065 29.6226 12.6681 29.6573 15.8785C29.2061 15.7918 24.6941 14.872 20.1475 15.4447C20.0434 15.2191 19.9566 14.9761 19.8525 14.7332C19.5748 14.0738 19.2625 13.397 18.9501 12.7549C23.9826 10.7072 26.2733 7.75705 26.5683 7.37527ZM16 2.36009C19.4707 2.36009 22.6464 3.66161 25.0586 5.7961C24.8156 6.14317 22.7505 8.90239 17.8915 10.7245C15.6529 6.61171 13.1714 3.24512 12.7896 2.72451C13.8134 2.48156 14.8894 2.36009 16 2.36009ZM10.1866 3.64425C10.551 4.13015 12.9805 7.5141 15.2538 11.5401C8.86768 13.2408 3.22777 13.2061 2.62039 13.2061C3.50542 8.9718 6.36876 5.44902 10.1866 3.64425ZM2.32538 16.0174C2.32538 15.8785 2.32538 15.7397 2.32538 15.6009C2.9154 15.6182 9.54447 15.705 16.3644 13.6573C16.7636 14.4208 17.128 15.2017 17.4751 15.9826C17.3015 16.0347 17.1106 16.0868 16.9371 16.1388C9.89154 18.4121 6.14317 24.6247 5.8308 25.1453C3.6616 22.7332 2.32538 19.5228 2.32538 16.0174ZM16 29.6746C12.8416 29.6746 9.92625 28.5987 7.61822 26.7939C7.86117 26.2907 10.6377 20.9458 18.3427 18.256C18.3774 18.2386 18.3948 18.2386 18.4295 18.2213C20.3557 23.2017 21.1367 27.3839 21.3449 28.5813C19.6963 29.2928 17.8915 29.6746 16 29.6746ZM23.6182 27.3319C23.4794 26.4989 22.7505 22.5076 20.9631 17.5965C25.2495 16.9197 28.9978 18.0304 29.4664 18.1866C28.8764 21.987 26.6898 25.2668 23.6182 27.3319Z" fill="#EA4C89"></path></svg></a>
-</div> -->
-<script type="text/javascript">
-  var fileUpload = document.querySelector(".upload");
-
-fileUpload.addEventListener("dragover", function() {
-  this.classList.add("drag");
-  this.classList.remove("drop", "done");
-});
-
-fileUpload.addEventListener("dragleave", function() {
-  this.classList.remove("drag");
-});
-
-fileUpload.addEventListener("drop", start, false);
-fileUpload.addEventListener("change", start, false);
-
-function start() { 
-  this.classList.remove("drag");
-  this.classList.add("drop");
-  setTimeout(() => this.classList.add("done"), 3000);
+  body{
+  margin: 0px;
+  position: relative;
 }
 
+.bar{
+  display: block;
+  background-color: #00cccf;
+}
+
+.bar h1{
+  margin: 0px;
+  font-family: helvetica, sans-serif;
+  font-size: 22px;
+  padding: 10px;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
+}
+
+.profile-photo-div{
+  position: relative;
+  /*margin: 50px auto 10px auto;*/
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  border-radius: 10px;
+  -webkit-transition: ease .3s;
+  -o-transition: ease .3s;
+  transition: ease .3s;
+}
+
+.profile-img-div{
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+#loader{
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #00cccf;
+  z-index:10;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+#profile-img{
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: auto;
+  top: 0;
+  left: 0;
+}
+
+#change-photo{
+  display: none;
+}
+
+.profile-buttons-div{
+  position: relative;
+  display: block;
+}
+
+.button{
+    position: relative;
+    display: block;
+    font-family: 'Inter-Loom';
+    font-size: 13px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    background-color: #8819ff;
+    cursor: pointer;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -webkit-transition: .5s;
+    -o-transition: .5s;
+    transition: .5s;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.button:hover{
+  letter-spacing: 1px;
+}
+
+.button:after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+
+
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 50%;
+  opacity: 0;
+  -webkit-transition: .9s;
+  -o-transition: .9s;
+  transition: .9s;
+}
+
+.button:hover:after{
+  -webkit-transform: scale(50);
+  -ms-transform: scale(50);
+  transform: scale(50);
+  opacity: 1;
+}
+
+.button.half{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  width: 50%;
+}
+
+.green{
+  background-color: #15ae6b;
+}
+
+.red{
+  background-color: #ae0000;
+}
+
+#x-position{
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  display: none;
+}
+
+#y-position{
+  position: absolute;
+  right: -50px;
+  top: 50%;
+  -webkit-transform: translateY(-50%) rotate(90deg);
+  -ms-transform: translateY(-50%) rotate(90deg);
+  transform: translateY(-50%) rotate(90deg);
+  display: none;
+}
+
+canvas{
+  position: fixed;
+  top: -2000px;
+  left: -2000px;
+  z-index: -1;
+}
+
+.profile-img-confirm{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+
+.error{
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
+  color: red;
+  text-align:center;
+  display: none;
+}
+</style>
+
+<div class="profile-photo-div" id="profile-photo-div">
+  <div class="profile-img-div" id="profile-img-div">
+    <div id="loader"></div><img id="profile-img" src="https://storage.googleapis.com/fevici.appspot.com/{{profileid}}"/>
+    <input id="x-position" type="range" name="x-position" value="0" min="0"/>
+    <input id="y-position" type="range" name="y-position" value="0" min="0"/>
+  </div>
+  <div class="profile-buttons-div">
+    <div class="profile-img-input" id="profile-img-input">
+      <label class="button" id="change-photo-label" for="change-photo">UPLOAD PHOTO</label>
+      <input id="change-photo" type="file" style="visibility: hidden;" accept="image/*"/>      
+    </div>
+
+    <div class="profile-img-confirm" id="profile-img-confirm" style="display: none">
+      <div class="button half green" id="save-img"><i class="fa fa-check" aria-hidden="true"></i></div>
+      <div class="button half red" id="cancel-img"><i class="fa fa-remove" aria-hidden="true"></i></div>
+    </div>
+  </div>
+</div>
+<input id="uploaded" name="image" type="text" title="image" style="visibility: hidden;"  />
+<div class="error" id="error">min sizes 400*400px</div>
+<canvas id="croppedPhoto" width="400" height="400" style="visibility: hidden;"></canvas>
+
+<script type="text/javascript">
+  var $profileImgDiv = document.getElementById("profile-img-div"),
+    $profileImg = document.getElementById("profile-img"),
+    $uploaded = document.getElementById("uploaded"),
+    $changePhoto = document.getElementById("change-photo"),
+    $xPosition = document.getElementById("x-position"),
+    $yPosition = document.getElementById("y-position"),
+    $saveImg = document.getElementById("save-img"),
+    $loader = document.getElementById("loader"),
+    $cancelImg = document.getElementById("cancel-img"),
+    $profileImgInput = document
+      .getElementById("profile-img-input"),
+    $profileImgConfirm = document
+      .getElementById("profile-img-confirm"),
+    $error = document.getElementById("error");
+
+var currentProfileImg = "",
+    profileImgDivW = getSizes($profileImgDiv).elW,
+    NewImgNatWidth = 0,
+    NewImgNatHeight = 0,
+    NewImgNatRatio = 0,
+    NewImgWidth = 0,
+    NewImgHeight = 0,
+    NewImgRatio = 0,
+    xCut = 0,
+    yCut = 0;
+
+makeSquared($profileImgDiv);
+
+$changePhoto.addEventListener("change", function() {
+  currentProfileImg = $profileImg.src;
+  showPreview(this, $profileImg);
+  $loader.style.width = "100%";
+  $profileImgInput.style.display = "none";
+  $profileImgConfirm.style.display = "flex";
+  $error.style.display = "none";
+});
+
+$xPosition.addEventListener("input", function() {
+  $profileImg.style.left = -this.value + "px";
+  xCut = this.value;
+  yCut = 0;
+});
+
+$yPosition.addEventListener("input", function() {
+  $profileImg.style.top = -this.value + "px";
+  yCut = this.value;
+  xCut = 0;
+});
+
+$saveImg.addEventListener("click", function() {
+  cropImg($profileImg);
+  resetAll(true);
+});
+
+$cancelImg.addEventListener("click", function() {
+  resetAll(false);
+});
+
+window.addEventListener("resize", function() {
+  makeSquared($profileImgDiv);
+  profileImgDivW = getSizes($profileImgDiv).elW;
+});
+
+function makeSquared(el) {
+  var elW = el.clientWidth;
+  el.style.height = elW + "px";
+}
+
+function showPreview(input, el) {
+  var reader = new FileReader();
+  reader.readAsDataURL(input.files[0]);
+  if (input.files && input.files[0]) {
+    reader.onload = function(e) {
+      setTimeout(function() {
+        el.src = e.target.result;
+      }, 300);
+
+      var poll = setInterval(function() {
+        if (el.naturalWidth && el.src != currentProfileImg) {
+          clearInterval(poll);
+          setNewImgSizes(el);
+          setTimeout(function() {
+            $loader.style.width = "0%";
+            $profileImg.style.opacity = "1";
+          }, 1000);
+        }
+      }, 100);
+    };
+  } else {
+    return;
+  }
+}
+
+function setNewImgSizes(el) {
+  if (getNatSizes(el).elR > 1) {
+    el.style.width = "auto";
+    el.style.height = "100%";
+    newImgWidth = getSizes(el).elW;
+    $xPosition.style.display = "block";
+    $yPosition.style.display = "none";
+    $xPosition.max = newImgWidth - profileImgDivW;
+  } else if (getNatSizes(el).elR < 1) {
+    el.style.width = "100%";
+    el.style.height = "auto";
+    newImgHeight = getSizes(el).elH;
+    $xPosition.style.display = "none";
+    $yPosition.style.display = "block";
+    $yPosition.max = newImgHeight - profileImgDivW;
+  } else if (getNatSizes(el).elR == 1) {
+    el.style.width = "100%";
+    el.style.height = "100%";
+    $xPosition.style.display = "none";
+    $yPosition.style.display = "none";
+  }
+}
+
+function getNatSizes(el) {
+  var elW = el.naturalWidth,
+    elH = el.naturalHeight,
+    elR = elW / elH;
+  return {
+    elW: elW,
+    elH: elH,
+    elR: elR
+  };
+}
+
+function getSizes(el) {
+  var elW = el.clientWidth,
+    elH = el.clientHeight,
+    elR = elW / elH;
+  return {
+    elW: elW,
+    elH: elH,
+    elR: elR
+  };
+}
+
+function cropImg(el) {
+  var natClientImgRatio = getNatSizes(el).elW / getSizes(el).elW;
+  (myCanvas = document.getElementById("croppedPhoto")),
+    (ctx = myCanvas.getContext("2d"));
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, 400, 400);
+  ctx.drawImage(
+    el,
+    xCut * natClientImgRatio,
+    yCut * natClientImgRatio,
+    profileImgDivW * natClientImgRatio,
+    profileImgDivW * natClientImgRatio,
+    0,
+    0,
+    400,
+    400 
+  );
+  var newProfileImgUrl = myCanvas.toDataURL("image/jpeg");
+  console.log(newProfileImgUrl);
+  $changePhoto.src = newProfileImgUrl;
+  $uploaded.value = newProfileImgUrl;
+  $profileImg.src = newProfileImgUrl;
+}
+
+function resetAll(confirm) {
+  if (!confirm) {
+    $profileImg.src = currentProfileImg;
+  }
+  $changePhoto.value = "";
+  $profileImgInput.style.display = "block";
+  $profileImgConfirm.style.display = "none";
+  $profileImg.style.left = "0";
+  $profileImg.style.top = "0";
+  $profileImg.style.width = "100%";
+  $profileImg.style.height = "100%";
+  $xPosition.style.display = "none";
+  $yPosition.style.display = "none";
+  $xPosition.value = "0";
+  $yPosition.value = "0";
+  xCut = "0";
+  yCut = "0";
+}
+
+function checkMinSizes(el) {
+  if (getNatSizes(el).elW > 400 && getNatSizes(el).elH > 400) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 </script>
-
-
 
 
 
@@ -587,7 +643,7 @@ function start() {
                 <br>          
             </div>
             <div class="modal-footer">
-              <button onclick="cancel()" type="button" class="btn btn-secondary mr-auto" id="cancel-button" data-dismiss="modal">Salir</button>
+              <!-- <button onclick="cancel()" type="button" class="btn btn-secondary mr-auto" id="cancel-button" data-dismiss="modal">Salir</button> -->
               {% if status=="Success" %}
                 <button onclick="validate()" type="submit" href="/update_about" class="btn btn-success " id="save_button">Guardar de nuevo?</button>
               {% elif status != None %}
