@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, url_for, redirect, flash, ses
 from flask_mail import Mail, Message
 #For File Management
 from werkzeug.utils import secure_filename
+import base64
 
 # imports for firebase
 from firebase_admin import credentials, firestore, auth
@@ -108,33 +109,53 @@ def save_json(data,uid = None):
         return 'Save_json error'
 
 
-
-def save_file(file,uid = None,doc = False):
+def save_file(file,uid = None):
     '''
         Dado objeto file, guardar en base de datos fevici en proyectos
         Devuelve el id de donde ha sido guardado
     '''
-    # gets the id of he old file to delete it
-    
+
+    # return (file.__class__.__name__)
+    # gets the id of he old file to delete it    
     user_doc = users_coll.document(session['id'])
     user_details = user_doc.get().to_dict()   
-    if doc:
+    if file.filename.split('.')[-1] in ALLOWED_IMAGES:    
+        try:
+            project = user_details.get("about_file")['image_id']
+            blob = bucket.blob(project) 
+            blob.delete()
+        except Exception as e:pass
+    elif file.filename.split('.')[-1] in ALLOWED_EXTENSIONS:
         try:
             project = user_details.get("project_file")['project_id']
             blob = bucket.blob(project) 
             blob.delete()
         except Exception as e:pass
-        # gets the old file and deletes it
+        
     
 
-    new_filename = ''.join([str(int(random.random()*1000000))])                    
+    new_filename = ''.join([str(int(random.random()*99999999999))])                    
     while new_filename in all_projects: new_filename = ''.join([str(int(random.random()*1000000))])                    
         
     old_filename = file.filename
 
     extension = old_filename.rsplit('.', 1)[1].lower()
     blob = bucket.blob(new_filename+'.'+extension) 
-    blob.upload_from_file(file)    
+    try:
+        if file.__class__.__name__=='fwrap':            
+            '''
+                Esta función toma como entrada los bytes de mi wrapper y los cuarda como se debe:)
+            '''
+            blob.upload_from_string(file.stream) 
+        else:
+            '''
+                Esta otra función toma como entrada el FileStorage object de werkzeug, en caso de que sea un objecto 
+                posteado de forma regular para el que está optimizado
+            '''
+            blob.upload_from_file(file)    
+    except Exception as e:
+        # return file.stream
+        return 'save_file error> '+str(e)
 
 
     return new_filename+'.'+extension

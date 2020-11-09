@@ -1,5 +1,9 @@
 from init import *
-import werkzeug
+
+import base64
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
+
 
 aboutBP = Blueprint('aboutBP',__name__)
 
@@ -19,6 +23,7 @@ def about():
 
 
 
+
 @aboutBP.route("/update_about", methods=["POST"])
 def update_about():    
     '''
@@ -29,50 +34,46 @@ def update_about():
             IN> Image string in base64
             OUT> FileStorage object 
         '''
-
-        from io import StringIO 
-        from werkzeug.datastructures import FileStorage
-
-
+        class fwrap(object):    
+            '''
+                Wraps:
+                    -filename:(str):the name of the file with the exteison
+                    -stream(bytes):the bytes decoded base64 version
+            '''
+            def __init__(self,stream,filename):
+                self.stream = stream
+                self.filename = filename
         
-        file_data = StringIO(imgstring)
-        filename = secure_filename(str(random.random()*10000000)+".jpg")
-        file = FileStorage(file_data, filename=filename)
-
-        if file :            
-            return file
-
-
-        # import base64
-        # imgdata = base64.b64decode(imgstring)
-        # filename = str(random.random()*10000000)+".png"  # I assume you have a way of picking unique filenames
-        # with open(filename,'wb') as f:
-        #     f.write(imgdata)
-        #     res = werkzeug.datastructures.FileStorage(stream=f,filename = filename)
-
-        # return res
         
-        # with open(filename, 'wb') as f:
-        #     f.write(imgdata)
-        # f gets closed when you exit the with statement
-        # Now save the value of filename to your database        
+        data = ''.join(str(x) for x in imgstring.split(',')[1:])
+        file_data = base64.b64decode(data)
+        ending = imgstring.split(';')[0].split('/')[1]
+        filename = secure_filename('image'+'.'+ending)
+
+        return fwrap(file_data,filename)
+        # return FileStorage(stream=file_data, filename=filename,content_type='image/'+ending)  ##No Funciona!!!
+
 
     if request.method == "POST":
         try: 
 
             data = {}
             form = request.form
-
             res = []
+
+
 
             for field in form: 
                 try:
                     if request.form[field] not in ['Ingresa Valor...','','Elegir categoría primero...']:  # Solo subir si no está vacio el formulario
-                        if field == 'image': image_file = ProcessImage(request.form[field])
+                        if field == 'image':                             
+                            image_file = ProcessImage(request.form[field])
+                            # return str('image_file: '+str(image_file.stream))
                         else: data[field[0].upper()+field[1:]] = request.form[field]
-                except Exception as e:return str(e)#;print(str(request.form[field]))
+                except Exception as e:return 'forms'+str(e)#;print(str(request.form[field]))
 
-            
+            # return str(type(image_file.stream))
+            # return save_file(image_file) #DEBUG
 
             if image_file and not allowed_image(image_file.filename):
 
@@ -91,7 +92,7 @@ def update_about():
                     project_details["image_name"] = image_file.filename
                 except Exception as e:return jsonify(str(e))
 
-                #return save_file(image_file) #DEBUG
+                # return save_file(image_file) #DEBUG
                 save_json({"about_file":project_details})  #Guardar el nuevo data con el id agregado                
                 save_json({"about_user":data})  #Guardar el data parseado de los forms
 
