@@ -144,13 +144,13 @@ def save_file(file,uid = None):
     try:
         if file.__class__.__name__=='fwrap':            
             '''
-                Esta función toma como entrada los bytes de mi wrapper y los cuarda como se debe:)
+                Esta función toma como entrada los bytes de mi wrapper y los guarda como se debe:)
             '''
             blob.upload_from_string(file.stream) 
         else:
             '''
                 Esta otra función toma como entrada el FileStorage object de werkzeug, en caso de que sea un objecto 
-                posteado de forma regular para el que está optimizado
+                posteado de forma regular para el que está optimizado, creo
             '''
             blob.upload_from_file(file)    
     except Exception as e:

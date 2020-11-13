@@ -1,0 +1,123 @@
+
+.green{
+	--main:#04e1bc;
+	--text:#02b194;
+	--light:#36e8cf4d;
+}
+
+.orange{
+	--main:#FFC75F;
+	--text:#d48c4d;
+	--light:#ffc4714a;
+
+}
+
+.yellow{
+	--main:#F9F871;
+	--text:#a1a11f;
+	--light:#f9f87182;
+}
+
+
+
+.card{
+	width: 320px;
+	height: 235px;
+	
+	margin: 15px;
+
+	border-top: 10px solid var(--main);
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	transition: transform .1s;
+	z-index: 10;
+	pointer-events:all;
+	box-shadow:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+
+	color: #000;
+	background-color: white;
+	text-decoration: none !important;
+
+}
+
+.card .top{
+	height: 50%;
+	background-image: url('https://dafi4qalmitzb.cloudfront.net/variants/ampch9npx6jropwpwnomwlujyf2z/505f62c0e47a9373c6b61d321c9c280e78025ec5d7c0b70172af89d1b0c0577d');
+	background-size:cover;	
+	background-position: 50%;
+}
+.card:hover{
+	color: #000;
+	transform:  scale(1.02);
+}
+.card .title{
+	font-size: 1.125rem;
+	font-weight: 500;
+	margin-bottom: .25rem;
+	line-height:1.25;
+}
+.card .description{
+	color: #6b7280;
+	font-size: .875rem;
+	line-height:1.25;
+	margin-bottom: 1.25rem;
+}
+.card .contacts{
+	font-size: .75rem;
+	font-weight: 700;
+}
+.card .card-content{
+	padding: 1.25rem;
+}
+.card .subcategory{
+	text-align: right;
+	color: var(--text);
+	background-color:var(--light);
+	font-size: .875rem;
+	width: fit-content;
+	padding: 2px;
+	padding-right: 5px;
+	padding-left: 5px;
+	right: 0;
+	float: right;
+	border-radius: 5px;
+    font-weight: 500;	
+}
+.h-2{
+    height: .5rem;
+}
+.w-2{
+	width: .5rem;
+}
+@media  only screen and (max-width: 1200px){
+	.card{
+		width: 270px;
+		height: 250px;
+
+	}
+}
+
+@media  only screen and (max-width: 700px){
+	.card{
+		width: 100%;
+		height: 250px;
+	}
+}
+.contacts{
+	position: absolute;
+	width: 150px;
+	padding-left: 15px;
+}
+.author{
+    background-color: red;
+    /* margin: 10px; */
+    display: inline-flex;
+    border:solid white 3px;
+    border-radius: 35px;
+    position: static;
+    margin-left: -15px;
+    height: 30px;
+    width: 30px;
+}
+}

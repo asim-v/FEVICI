@@ -83,150 +83,6 @@
 
 
                   <div class="tooltip">
-<style type="text/css">
-  *, *:before, *:after {
-  box-sizing: border-box;
-}
-.input-icons i { 
-    position: absolute;                       
-    color: #b0b0b0;
-}.input-icons i:hover{
-  background-color:#b0b0b0;
-  color: white; 
-}
-  
-.input-icons { 
-    text-align: right;
-    padding-right: 40px;
-    width: 100%; 
-    margin-bottom: 10px; 
-} 
-  
-.icon { 
-    padding: 10px; 
-    min-width: 40px; 
-} 
-  
-.input-field { 
-    width: 100%; 
-} 
-
-
-.modal-container {
-  display: inline-grid;
-  width: fit-content;
-  position: relative;
-}
-.modal-container .modal-btn {
-  display: block;
-  margin: 0 auto;
-  color: #fff;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  background: #d5d6da;
-  font-size: 22px;
-  border: 0;
-  border-radius: 50px;
-  cursor: pointer;
-  text-align: center;
-  box-shadow: 0 5px 5px -5px #33333382;
-  transition: background 0.2s ease-in;
-
-}
-.modal-container .modal-btn:hover {
-  background: #a8aaae;
-}
-.modal-container .modal-content,
-.modal-container .modal-backdrop {
-  height: 0;
-  width: 0;
-  opacity: 0;
-  visibility: hidden;
-  overflow: hidden;
-  cursor: pointer;
-  transition: opacity 0.2s ease-in;
-}
-.modal-container .modal-close {
-  color: #aaa;
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  padding-top: 3px;
-  background: #fff;
-  font-size: 16px;
-  width: 25px;
-  height: 25px;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
-}
-.modal-container .modal-close:hover {
-  color: #333;
-}
-.modal-container .modal-content-btn {
-  position: absolute;
-  text-align: center;
-  cursor: pointer;
-  bottom: 20px;
-  right: 30px;
-  background: #446CB3;
-  color: #fff;
-  width: 50px;
-  border-radius: 2px;
-  font-size: 14px;
-  height: 32px;
-  padding-top: 9px;
-  font-weight: normal;
-}
-.modal-container .modal-content-btn:hover {
-  color: #fff;
-  background: #365690;
-}
-.modal-container #modal-toggle {
-  display: none;
-}
-.modal-container #modal-toggle.active ~ .modal-backdrop, .modal-container #modal-toggle:checked ~ .modal-backdrop {
-    background-color: #f7f4ffad;
-    backdrop-filter: blur(1px) opacity(9);
-    width: 150vw;
-    height: 150vh;
-    overflow: hidden;
-    position: fixed;
-    left: -300px;
-    top: -100px;
-    z-index: 9;
-    /* overflow: hidden; */
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.2s ease-in;
-}
-.modal-container #modal-toggle.active ~ .modal-content, .modal-container #modal-toggle:checked ~ .modal-content {
-opacity: 1;
-    background-color: #f8f8f8d4;
-    max-width: 400px;
-    width: 400px;
-    height: fit-content;
-    padding: 10px 30px;
-    position: fixed;
-    left: calc(50% - 200px);
-    top: 12%;
-    border-radius: 10px;
-    z-index: 999;
-    border: none;
-    pointer-events: auto;
-    backdrop-filter: blur(6px);
-    cursor: auto;
-    visibility: visible;
-    box-shadow: 0 3px 7px rgb(0 0 0 / 16%);
-}
-@media (max-width: 400px) {
-  .modal-container #modal-toggle.active ~ .modal-content, .modal-container #modal-toggle:checked ~ .modal-content {
-    left: 0;
-  }
-}
-
-</style>                    
                     <div class="modal-container">
                       <input id="modal-toggle" type="checkbox">
                       <label class="modal-btn" for="modal-toggle" id="modal-toggle-label">+</label> 
@@ -266,42 +122,12 @@ opacity: 1;
 
                         </div>
                         <div  class="row pt-4">                          
-                          <button  type="button" onclick="sendMail()" id = "sendmail" class="btn btn-success" style="right: 0">Enviar</button>                          
-                        </div>
-                      
-
-
-<!--                   <div class="modal-content "  id="supermodal" >
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Invitar al equipo</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body mx-3">
-                        <div class="md-form">
-
-                            <label class="my-1 mr-2" for="code">Código de equipo</label>
-                            <div class="input-icons" >
-                              <i class="fa fa-copy icon" onclick="copy()" id="copied"></i> 
-                              <input name="userEmail" id ="code" value ="124355" placeholder="124355" type="readonly" autofocus class="form-control input-field" readonly>
-                            </div>
-                            <br>
-                            <label class="my-1 mr-2" for="invitation">Enviar invitación por correo?</label>
-                            <input name="userPassword" id="invitation" placeholder="miembro@correo.com" class="form-control">
-                          </div>              
-                        <br>          
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                      <button type="button" onclick="sendMail()" id = "sendmail" class="btn btn-success">Enviar</button>
-                    </div>
-                  </div>
-                     -->
+                          <button  type="button" onclick="sendMail()" id = "sendmail" class="btn btn-success" style="right: 0">Enviar</button>
+                        </div>                    
 
 
                       </div>          
-                    </div>  
+                    </div> 
                     <span class="tooltiptext">Invitar más personas al equipo (Max 5)</span>
                   </div>
                 </div>
@@ -314,21 +140,8 @@ opacity: 1;
                 </div>
               </div>
             </div>
+
               <!-- Modal for Share  -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <div class="modal  shadowed " id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog custom-modal" role="document">
                   
@@ -361,33 +174,6 @@ opacity: 1;
                   
                 </div>
               </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
               <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 El <strong>{{limit}}</strong> cierra la edición de proyectos!
@@ -530,331 +316,47 @@ opacity: 1;
                     <br>
                     <div class="container">
                       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Sube tu proyecto en PDF por este medio</label>
-                      <div class="row">
-                        
+                      <div class="row">                      
 
-<style type="text/css">
-    .upload {
-    --background: #F9F8FF;
-    --text-drop: #CAC8CA;
-    --text-upload: #2D2C2F;
-    --progress-color: #E7E5E7;
-    --check-color: var(--text-upload);
-    --border-radius: 10px;
-    border-radius: 10px;
-    border: dotted lightgrey;
-    width: 100%;
-    height: 100px;
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-            align-items: center;
-  }
-  .upload::before {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: var(--background);
-    border-radius: var(--border-radius);
-    -webkit-transition: all .3s ease-out;
-    transition: all .3s ease-out;
-    box-shadow: var(--shadow-x, 0px) var(--shadow-y, 1px) var(--shadow-blur, 3px) rgba(0, 0, 0, 0.1);
-    -webkit-transform: scale(var(--scale, 1));
-            transform: scale(var(--scale, 1));
-  }
-  .upload .drop-here {
-    position: absolute;
-    width: 100%;
-    
-    outline: none;
-    border-radius: var(--border-radius);
-    opacity: var(--opacity, 0);
-    overflow: hidden;
-    cursor: pointer;
-    text-indent: -9999px;
-    z-index: 1;
-  }
-  .upload .text {
-    position: absolute;
-    font-size: 21px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: bold;
-  }
-  .upload .text.text-drop {
-    color: var(--text-drop);
-    opacity: var(--opacity, 1);
-    -webkit-transition: opacity .15s ease-out .15s;
-    transition: opacity .15s ease-out .15s;
-  }
-  .upload .text.text-upload {
-    color: var(--text-upload);
-    opacity: var(--opacity, 0);
-    -webkit-transition: opacity .15s ease-out;
-    transition: opacity .15s ease-out;
-  }
-  .upload .progress-wrapper {
-    position: absolute;
-  }
-  .upload .progress-wrapper .progress {
-    fill: none;
-    stroke: var(--progress-color);
-    stroke-width: 3;
-    stroke-dasharray: 722;
-    stroke-dashoffset: 722;
-  }
-  .upload .check-wrapper {
-    position: absolute;
-    opacity: var(--opacity, 0);
-    -webkit-transform: scale(var(--scale, 0.9)) rotate(var(--rotate, 3deg));
-            transform: scale(var(--scale, 0.9)) rotate(var(--rotate, 3deg));
-    -webkit-transition: opacity .15s ease-in, -webkit-transform .15s ease-in-out;
-    transition: opacity .15s ease-in, -webkit-transform .15s ease-in-out;
-    transition: transform .15s ease-in-out, opacity .15s ease-in;
-    transition: transform .15s ease-in-out, opacity .15s ease-in, -webkit-transform .15s ease-in-out;
-  }
-  .upload .check-wrapper .check {
-    width: 100px;
-    width: 100px;
-    fill: none;
-    background-clip: red;
-    stroke: #8fffdf; /*Color paloma*/
-    stroke-width: 5;
-    stroke-dasharray: 50 0;
-    stroke-dashoffset: 50;
-  }
-  .upload .shadow {
-    opacity: var(--opacity, 0);
-    overflow: hidden;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    border-radius: var(--border-radius);
-    -webkit-filter: blur(25px);
-            filter: blur(25px);
-    z-index: -1;
-    -webkit-transition: all .5s ease;
-    transition: all .5s ease;
-  }
-  .upload .shadow::before {
-    content: '';
-    position: absolute;
-    top: -25%;
-    left: -25%;
-    height: 150%;
-    width: 150%;
-    background: conic-gradient(#4b82d4, #6a29e9, #4b82d4, #6a29e9, #c58357, #FFC940, #4b82d4);
-    -webkit-animation: shadow-animate 5s linear infinite;
-            animation: shadow-animate 5s linear infinite;
-  }
-  .upload.drag {
-    --scale: 1.03;
-    --shadow-y: 5px;
-    --shadow-blur: 20px;
-  }
-  .upload.drop .text.text-drop {
-    --opacity: 0;
-    -webkit-transition: opacity .15s ease-out;
-    transition: opacity .15s ease-out;
-  }
-  .upload.drop .text.text-upload {
-    --opacity: 1;
-    -webkit-transition: opacity .15s ease-out .15s;
-    transition: opacity .15s ease-out .15s;
-  }
-  .upload.drop .shadow {
-    --opacity: 1;
-  }
-  .upload.drop .progress-wrapper {
-    opacity: var(--opacity, 1);
-    -webkit-transform: scale(var(--scale, 1)) rotate(var(--rotate, -90deg));
-            transform: scale(var(--scale, 1)) rotate(var(--rotate, -90deg));
-  }
-  .upload.drop .progress-wrapper .progress {
-    -webkit-animation: progress-animate 3s ease .3s forwards;
-            animation: progress-animate 3s ease .3s forwards;
-  }
-  .upload.done {
-    --opacity: 0.5;
-    top: 50%;
-  }
-  .upload.done .text.text-upload {
-    --opacity: 0;
-  }
-  .upload.done .shadow {
-    --opacity: 0;
-  }
-  .upload.done .progress-wrapper {
-    --scale: .95;
-    -webkit-transition: opacity .3s, -webkit-transform .3s;
-    transition: opacity .3s, -webkit-transform .3s;
-    transition: transform .3s, opacity .3s;
-    transition: transform .3s, opacity .3s, -webkit-transform .3s;
-  }
-  .upload.done .check-wrapper {
-    --opacity: 1;
-    --scale: 1;
-    --rotate: 0deg;
-    -webkit-transition: opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
-    transition: opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
-    transition: transform .5s ease-in-out .3s, opacity .5s ease-in .3s;
-    transition: transform .5s ease-in-out .3s, opacity .5s ease-in .3s, -webkit-transform .5s ease-in-out .3s;
-  }
-  .upload.done .check-wrapper .check {
-    -webkit-animation: check-animate .5s ease-in-out .3s forwards;
-            animation: check-animate .5s ease-in-out .3s forwards;
-  }
+                        <div class="upload">
 
-  @-webkit-keyframes shadow-animate {
-    0% {
-      -webkit-transform: rotate(0deg);
-              transform: rotate(0deg);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-              transform: rotate(360deg);
-    }
-  }
+                          <input type="file" name="file" title="file" class="drop-here">
+                          {%if proj_file['project_name'] != '' %}
+                            <div class="text text-drop">{{proj_file['project_name']}}</div>
+                          {%else%}
+                            <div class="text text-drop">Soltar archivo aqui</div>
+                          {%endif%}
+                          <div class="text text-upload">Cargando...</div>
+                          <svg class="progress-wrapper" width="50" height="50">
+                            <circle class="progress" r="115" cx="150" cy="150"></circle>
+                          </svg>
+                          <svg class="check-wrapper" width="130" height="130">
+                            <polyline class="check" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                          </svg>
+                          <div class="shadow"></div>
+                        </div>
 
-  @keyframes shadow-animate {
-    0% {
-      -webkit-transform: rotate(0deg);
-              transform: rotate(0deg);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-              transform: rotate(360deg);
-    }
-  }
-  @-webkit-keyframes progress-animate {
-    0% {
-      stroke-dashoffset: 722;
-    }
-    20% {
-      stroke-dashoffset: 500;
-    }
-    50% {
-      stroke-dashoffset: 322;
-    }
-    55% {
-      stroke-dashoffset: 300;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-  @keyframes progress-animate {
-    0% {
-      stroke-dashoffset: 722;
-    }
-    20% {
-      stroke-dashoffset: 500;
-    }
-    50% {
-      stroke-dashoffset: 322;
-    }
-    55% {
-      stroke-dashoffset: 300;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-  @-webkit-keyframes check-animate {
-    0% {
-      stroke-dasharray: 0 100;
-      stroke-dashoffset: 0;
-    }
-    100% {
-      stroke-dasharray: 100 0;
-      stroke-dashoffset: 100;
-    }
-  }
-  @keyframes check-animate {
-    0% {
-      stroke-dasharray: 0 100;
-      stroke-dashoffset: 0;
-    }
-    100% {
-      stroke-dasharray: 100 0;
-      stroke-dashoffset: 100;
-    }
-  }
+                        <script type="text/javascript">
+                          var fileUpload = document.querySelector(".upload");
 
-  body .socials {
-    position: fixed;
-    display: block;
-    left: 20px;
-    bottom: 20px;
-  }
-  body .socials > a {
-    display: block;
-    width: 30px;
-    opacity: .2;
-    -webkit-transform: scale(var(--scale, 0.8));
-            transform: scale(var(--scale, 0.8));
-    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-    transition: -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-    transition: transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-    transition: transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91), -webkit-transform 0.3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
-  }
-  body .socials > a:hover {
-    --scale: 1;
-  }
-</style>   
+                        fileUpload.addEventListener("dragover", function() {
+                          this.classList.add("drag");
+                          this.classList.remove("drop", "done");
+                        });
 
+                        fileUpload.addEventListener("dragleave", function() {
+                          this.classList.remove("drag");
+                        });
 
+                        fileUpload.addEventListener("drop", start, false);
+                        fileUpload.addEventListener("change", start, false);
 
-<div class="upload">
-
-  <input type="file" name="file" title="file" class="drop-here">
-  {%if proj_file['project_name'] != '' %}
-    <div class="text text-drop">{{proj_file['project_name']}}</div>
-  {%else%}
-    <div class="text text-drop">Soltar archivo aqui</div>
-  {%endif%}
-  <div class="text text-upload">Cargando...</div>
-  <svg class="progress-wrapper" width="50" height="50">
-    <circle class="progress" r="115" cx="150" cy="150"></circle>
-  </svg>
-  <svg class="check-wrapper" width="130" height="130">
-    <polyline class="check" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-  </svg>
-  <div class="shadow"></div>
-</div>
-
-
-
-
-<!--- ## DRIBBBLE + TWITTER ############# -->
-<!-- <div class="socials">
-  <a class="dribbble" href="https://dribbble.com/shots/8571590-Upload-Animation" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 32 32"><path fill-rule="evenodd" clip-rule="evenodd" fill="black" d="M16 0C7.16703 0 0 7.16703 0 16C0 24.833 7.16703 32 16 32C24.8156 32 32 24.833 32 16C32 7.16703 24.8156 0 16 0ZM26.5683 7.37527C28.4772 9.70065 29.6226 12.6681 29.6573 15.8785C29.2061 15.7918 24.6941 14.872 20.1475 15.4447C20.0434 15.2191 19.9566 14.9761 19.8525 14.7332C19.5748 14.0738 19.2625 13.397 18.9501 12.7549C23.9826 10.7072 26.2733 7.75705 26.5683 7.37527ZM16 2.36009C19.4707 2.36009 22.6464 3.66161 25.0586 5.7961C24.8156 6.14317 22.7505 8.90239 17.8915 10.7245C15.6529 6.61171 13.1714 3.24512 12.7896 2.72451C13.8134 2.48156 14.8894 2.36009 16 2.36009ZM10.1866 3.64425C10.551 4.13015 12.9805 7.5141 15.2538 11.5401C8.86768 13.2408 3.22777 13.2061 2.62039 13.2061C3.50542 8.9718 6.36876 5.44902 10.1866 3.64425ZM2.32538 16.0174C2.32538 15.8785 2.32538 15.7397 2.32538 15.6009C2.9154 15.6182 9.54447 15.705 16.3644 13.6573C16.7636 14.4208 17.128 15.2017 17.4751 15.9826C17.3015 16.0347 17.1106 16.0868 16.9371 16.1388C9.89154 18.4121 6.14317 24.6247 5.8308 25.1453C3.6616 22.7332 2.32538 19.5228 2.32538 16.0174ZM16 29.6746C12.8416 29.6746 9.92625 28.5987 7.61822 26.7939C7.86117 26.2907 10.6377 20.9458 18.3427 18.256C18.3774 18.2386 18.3948 18.2386 18.4295 18.2213C20.3557 23.2017 21.1367 27.3839 21.3449 28.5813C19.6963 29.2928 17.8915 29.6746 16 29.6746ZM23.6182 27.3319C23.4794 26.4989 22.7505 22.5076 20.9631 17.5965C25.2495 16.9197 28.9978 18.0304 29.4664 18.1866C28.8764 21.987 26.6898 25.2668 23.6182 27.3319Z" fill="#EA4C89"></path></svg></a>
-</div> -->
-<script type="text/javascript">
-  var fileUpload = document.querySelector(".upload");
-
-fileUpload.addEventListener("dragover", function() {
-  this.classList.add("drag");
-  this.classList.remove("drop", "done");
-});
-
-fileUpload.addEventListener("dragleave", function() {
-  this.classList.remove("drag");
-});
-
-fileUpload.addEventListener("drop", start, false);
-fileUpload.addEventListener("change", start, false);
-
-function start() { 
-  this.classList.remove("drag");
-  this.classList.add("drop");
-  setTimeout(() => this.classList.add("done"), 3000);
-}
-</script>
+                        function start() { 
+                          this.classList.remove("drag");
+                          this.classList.add("drop");
+                          setTimeout(() => this.classList.add("done"), 3000);
+                        }
+                        </script>
                         </div>
                       </div>
 
@@ -885,151 +387,8 @@ function start() {
 
       </div>
     <div class="col-lg-2"></div>
-
   </div>
 
-<script type="text/javascript">
-
-//var strUser = e.options[e.selectedIndex].value;  
-function invite(){
-  document.getElementById("supermodal").style.backdropFilter = "";
-  // $("#invite_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-}
-function validate(){
-  $("#save_button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando ...');
-}
-
-function cancel(){
-  $("#cancel-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saliendo ...');
-  fetch("/")
-    .then((data) => {
-      console.log(data);
-      window.location = data['url'];
-    },
-      (error) => {
-        console.log(error);
-        $("#cancel").html("Error.");
-      });
-}
-
-
-prioritatias = ["COVID-19","Medio Ambiente","Conservación Ambiental","Salud","Alimentación","Oportunidades Laborales"]
-ciencias = ["Ciencia de los Materiales","Ciencias Terrestres y Ambientales","Física y Astronomía","Matemáticas","Energía Química","Energía Física"]
-biologias = ["Biología Celular y Molecular","Bioquímica","Química"]
-medicas = ["Ciencias Biomédicas y de la Salud","Ciencia Medica Traslacional","Neurociencias"]
-humanidades = ["Historia"]
-csociales = ["Comportamiento y Ciencia Sociales","Psicología Social","Psicología Clínica"]
-biotech = ["Biología Computacional y Bioinformatica","Ciencias Animales","Ciencias de las Plantas"]
-ingenierias = ["Ingeniería Ambiental","Ingeniería Biomédica","Robótica y Máquinas Inteligentes","Sistemas de Software","Sistemas Embedidos"]
-
-function createCats(array){
-  var id = "subcat";
-  var sel = document.getElementById(id);
-  while(sel.hasChildNodes()){
-    sel.removeChild(sel.firstChild);   
-  }
-  
-  for (index = 0; index < array.length; index++) { 
-    var opt = document.createElement('option');
-    opt.appendChild( document.createTextNode(array[index]) );
-    opt.value = array[index]; 
-    sel.appendChild(opt);   
-  } 
-}
-
-function getIndex(){
-  var e = document.getElementById("cat").selectedIndex;
-  if (e===1){
-    createCats(prioritatias);
-  }if (e===2){
-    createCats(ciencias);
-  }if (e===3){
-    createCats(biologias);
-  }if (e===4){
-    createCats(medicas);
-  }if (e===5){
-    createCats(humanidades);
-  }if (e===6){
-    createCats(csociales);
-  }if (e===7){
-    createCats(biotech);
-  }if (e===8){
-    createCats(ingenierias);
-  }
-
-  console.log(e);
-}
-
-function checkMaterials(){
-  if (document.getElementById('Materials').checked){
-    document.getElementById('invisible').style.display = 'inline';
-  }else{
-    document.getElementById('invisible').style.display = 'none';
-  }
-}
-
-function copy() {
-  /* Get the text field */
-  var copyText = document.getElementById("code");
-
-  /* Select the text field */
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-
-  /* Copy the text inside the text field */
-  document.execCommand("copy");
-
-  /* Alert the copied text */
-  element = document.getElementById('copied').classList;
-  element.remove('fa-copy');
-  element.add('fa-check');
-
-  
-}
-function validateEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-}
-
-function sendMail(){
-  mailto = document.getElementById("invitation").value;
-  $("#sendmail").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando ...');
-  if (validateEmail(mailto)){
-    fetch("/send_invite/"+mailto)
-      .then((data) => {
-        console.log(data);
-        $("#sendmail").html('Enviado!🔥');
-        document.getElementById("sendmail").style.backgroundColor = "#67FBD1 "
-        document.getElementById("sendmail").style.color = "#2B2B2B "        
-        // window.location = data['url'];
-      },
-        (error) => {
-          console.log(error);
-          $("#sendmail").html("Error.");
-        }
-      );  
-  }
-  else{
-    $("#sendmail").html("Correo no válido");
-    document.getElementById("sendmail").style.backgroundColor = "#DF4550 "
-    document.getElementById("sendmail").style.color = "#fff "
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
 
 </div>
 {% endblock %}
