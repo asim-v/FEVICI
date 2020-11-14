@@ -1,6 +1,6 @@
 
 # imports for flask
-from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint,jsonify
+from flask import Flask, render_template, request, url_for, redirect, flash, session, jsonify,send_from_directory,Blueprint,jsonify,current_app
 from flask_mail import Mail, Message
 #For File Management
 from werkzeug.utils import secure_filename
@@ -28,7 +28,7 @@ import random
 
 
 
- 
+
 
 CONFIG = {
   "type": "service_account",

@@ -63,8 +63,9 @@ from apps.teams import teamsBP # Recive y envía invitaciones
 
 
 #INTI FLASK with socketio for rt msg
-app = Flask(__name__)
-app.secret_key = b'\xbd\x93K)\xd3\xeeE_\xfb0\xa6\xab\xa5\xa9\x1a\t'
+app = Flask(__name__,instance_relative_config=True)
+app.config.from_object('config') #Normal Config
+app.config.from_pyfile('config.py') #Secret keys Config
 
 #Registra Blueprints
 #Cada app se inicializa con liberias y variables globales con init.py
@@ -80,20 +81,6 @@ app.register_blueprint(teamsBP)
 
 
 
-#MAIL
-#CONFIGURAR MAILSERVER
-app.config['MAIL_SERVER'] = 'smtpout.secureserver.net'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_DEBUG'] = True
-app.config['MAIL_USERNAME'] = 'contacto@fevici.org'
-app.config['MAIL_PASSWORD'] = '$#!(!_V)SADSa33'
-# app.config['MAIL_DEFAULT_SENDER']
-app.config['MAIL_MAX_EMAILS'] = 2
-app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['TESTING'] = False
-# app.config['MAIL_ASCII_ATTACHMENTS']
-mail = Mail(app)
 
 
 #Init Socketio
