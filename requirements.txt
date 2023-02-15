@@ -1,5 +1,5 @@
 pycryptodome==3.6.6
-werkzeug==0.16.0
+werkzeug==2.2.3
 flask_mail
 flask
 firebase_admin
